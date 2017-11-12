@@ -96,4 +96,23 @@ var init = (val) => {
 }
 
 document.getElementById('sel').value = root.structure
-init()
+// init()
+
+
+
+
+var drawB = (p1, p2) => {
+  console.log('~~')
+  var el = document.getElementById('test')
+  var svg = SVG(el).spof().style({ display: 'block' })
+
+  var path = new SVG.Path()
+  var d = 'M 100 100 C 100 50 150 50 150 100'
+
+  // var d = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} Z`
+  path.attr({ d, stroke: 'black' })
+
+  svg.add(path)
+}
+
+drawB()
