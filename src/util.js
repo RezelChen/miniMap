@@ -1,38 +1,44 @@
-const isArray = (obj) => obj.length !== undefined
-const isUndef = (v) => v === undefined || v === null
+export const isArray = (obj) => obj.length !== undefined
+export const isUndef = (v) => v === undefined || v === null
+export const isDef = (v) => v !== undefined && v !== null
 
-const isEven = (n) => n%2 === 0
-const copy = (obj) => Array.isArray(obj) ? obj.slice() : Object.assign({}, obj)
-const flatten = (arr) => arr.reduce((a, b) => a.concat(b), [])
+export const isEven = (n) => n % 2 === 0
+export const copy = (obj) => Array.isArray(obj) ? obj.slice() : Object.assign({}, obj)
+export const flatten = (arr) => arr.reduce((a, b) => a.concat(b), [])
 
-const posAdd = (p1, p2) => { return { x: p1.x + p2.x, y: p1.y + p2.y } }
-const posSub = (p1, p2) => { return { x: p1.x - p2.x, y: p1.y - p2.y } }
+export const mapFlat = (arr, fn) => flatten(arr.map(fn))
+
+export const posAdd = (p1, p2) => { return { x: p1.x + p2.x, y: p1.y + p2.y } }
+export const posSub = (p1, p2) => { return { x: p1.x - p2.x, y: p1.y - p2.y } }
+
+export const isNull = (arr) => arr.length === 0
+
+export const logErr = (description, fn, ...others) => console.error(description)
+
+export const rand = (n, m) => n + parseInt(Math.random() * m)
+
+export const car = (arr) => {
+  if (isNull(arr)) {
+    logErr(car, 'can not car null', arr)
+  }
+  return arr[0]
+}
+
+export const cdr = (arr) => {
+  if (isNull(arr)) {
+    logErr(cdr, 'can not cdr null', arr)
+  }
+  return arr.slice(1)
+}
+
+export const cons = (a, arr) => [a, ...arr]
+
 
 const merge = (...arrList) => {
   return arrList.reduce((arr1, arr2) => {
     return arr1.concat(arr2)
   }, [])
 }
-
-const isNull = (arr) => {
-  return arr.length === 0
-}
-
-const car = (arr) => {
-  if (arr.length === 0) {
-    console.error('CAR -- can not car null')
-  }
-  return arr[0]
-}
-
-const cdr = (arr) => {
-  if (arr.length === 0) {
-    console.error('CDR -- can not cdr null')
-  }
-  return arr.slice(1)
-}
-
-const cons = (a, arr) => [a, ...arr]
 
 
 // ============ padding margin ============

@@ -6,7 +6,7 @@ var s5 = { width: 33, height: 53 }
 
 var initPos = { x: 0, y: 0 }
 
-var root = {
+var roots = {
   structure: 'TIME_H',
   size: s1,
   // boundaries: [
@@ -15,16 +15,17 @@ var root = {
   // ],
   children: [
     // { size: s2 },
-    { size: s2,
+    {
+      size: s2,
       // structure: 'ORG',
       children: [
-        { 
+        {
           size: s4,
           children: [
-            { 
+            {
               size: s4,
               children: [
-                { 
+                {
                   size: s4,
                   children: [
                     { size: s4, },
@@ -40,7 +41,8 @@ var root = {
         { size: s4, },
       ],
     },
-    { size: s5,
+    {
+      size: s5,
       children: [
         { size: s4, },
         { size: s4, },
@@ -48,14 +50,16 @@ var root = {
         { size: s4, },
       ]
     },
-    { size: s3,
+    {
+      size: s3,
       // structure: 'TREE_L',
       children: [
         { size: s4, },
         { size: s4, },
       ]
     },
-    { size: s2,
+    {
+      size: s2,
       children: [
         { size: s4, },
         { size: s4, },
@@ -69,50 +73,39 @@ var root = {
   ],
 }
 
-// var nomalize = (root) => {
+import { driver } from './src/driver'
+import { LOGIC_R, LOGIC_L, MAP } from './src/constant'
 
-// }
+
+// createNode
+const c = (c = []) => {
+  return { children: c }
+}
+
+const root = c([
+  c(),
+  c([
+    c([
+      c(), c(), c(), c(),
+    ]),
+    c(),
+  ]),
+  c(),
+  c([
+    c(), c(), c(),
+  ]),
+])
+
+root.struct = MAP
+// root.struct = LOGIC_L
 
 
-var init = (val) => {
-  if (val) { root.structure = val }
-
-  // nomalize(root)
-  var tok = trans(root, [])
-  var size = getSize(tok)
-  setOutSize(tok, size)
-  setPos(tok, initPos)
-
-  var toks = getToks(tok)
-  toks.forEach((t) => reCalPos(t))
-
-  var el = document.getElementById('test')
+const init = () => {
+  const g = driver(root)
+  const el = document.getElementById('test')
   el.innerHTML = ''
-  initRender(el)
-
-  toks.forEach((t) => render(t))
-  renderConn(root)
-  // console.log(tok, toks)
+  const svg = SVG(el).spof().style({ display: 'block' })
+  svg.add(g)
 }
 
-document.getElementById('sel').value = root.structure
-// init()
-
-
-
-
-var drawB = (p1, p2) => {
-  console.log('~~')
-  var el = document.getElementById('test')
-  var svg = SVG(el).spof().style({ display: 'block' })
-
-  var path = new SVG.Path()
-  var d = 'M 100 100 C 100 50 150 50 150 100'
-
-  // var d = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} Z`
-  path.attr({ d, stroke: 'black' })
-
-  svg.add(path)
-}
-
-drawB()
+init()
