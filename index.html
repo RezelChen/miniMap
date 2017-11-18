@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
+
 <body>
   <style>
     #test {
       height: 700px;
       padding-top: 50px;
     }
+
     #sel {
       position: absolute;
       top: 50px;
@@ -19,25 +22,21 @@
     }
   </style>
 
-  <select id="sel" onchange="init(this.value)">
+  <select id="sel">
     <option value="MAP">MAP</option>
-    <option value="ORG">ORG</option>
-    <option value="ORG_UP">ORG_UP</option>
     <option value="LOGIC_R">LOGIC_R</option>
     <option value="LOGIC_L">LOGIC_L</option>
+    <!-- <option value="ORG">ORG</option>
+    <option value="ORG_UP">ORG_UP</option>
     <option value="TREE_R">TREE_R</option>
     <option value="TREE_L">TREE_L</option>
     <option value="TIME_V">TIME_V</option>
-    <option value="TIME_H">TIME_H</option>
+    <option value="TIME_H">TIME_H</option> -->
   </select>
 
   <div id="test"></div>
-  <!--<script src='./util.js'></script>
-  <script src='./render.js'></script>
-  <script src='./atom.js'></script>
-  <script src='./tok.js'></script>
-  <script src='./layout2.js'></script> -->
   <script src='./lib/svg.js'></script>
   <script src='./output/index.js'></script>
 </body>
+
 </html>
