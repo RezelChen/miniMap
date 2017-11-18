@@ -1,2 +1,2 @@
-export const GROUP_PADDING = 20
-export const CONN_GAP = 10
+export const GROUP_PADDING = 30
+export const CONN_GAP = 15

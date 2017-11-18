@@ -1,4 +1,7 @@
-import { LOGIC_R, LOGIC_L, RIGHT, LEFT, MAP, DOWN } from './constant'
+import {
+  LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP,
+  RIGHT, LEFT, DOWN, UP
+} from './constant'
 import { logErr } from './util'
 
 export const getOUTS = (ctx) => {
@@ -7,6 +10,10 @@ export const getOUTS = (ctx) => {
       return [RIGHT]
     case LOGIC_L:
       return [LEFT]
+    case ORG:
+      return [DOWN]
+    case ORG_UP:
+      return [UP]
     case MAP:
       return [RIGHT, LEFT]
     default:
@@ -20,6 +27,10 @@ export const getGroupIN = (ctx) => {
       return LEFT
     case LOGIC_L:
       return RIGHT
+    case ORG:
+      return UP
+    case ORG_UP:
+      return DOWN
     default:
       logErr('Unknown ctx', getGroupIN, ctx)
   }
@@ -30,6 +41,9 @@ export const getGroupDir = (ctx) => {
     case LOGIC_R:
     case LOGIC_L:
       return DOWN
+    case ORG:
+    case ORG_UP:
+      return RIGHT
     default:
       logErr('Unknown ctx', getGroupDir, ctx)
   }
@@ -41,6 +55,10 @@ export const getIN = (ctx) => {
       return LEFT
     case LOGIC_L:
       return RIGHT
+    case ORG:
+      return UP
+    case ORG_UP:
+      return DOWN
     default:
       logErr('Unknown ctx', getInDir, ctx)
   }
