@@ -90,8 +90,6 @@ export const getBranchJoint = (tok, dir) => {
   const { x, y } = posAdd(pos, joint)
   const { width, height } = tok.size
 
-  // return { x, y }
-
   switch (dir) {
     case UP:
       return { x, y: 0 }

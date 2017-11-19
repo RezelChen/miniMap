@@ -120,3 +120,18 @@ export const createRandTok = () => {
     margin: [5, 20, 5, 5],
   })
 }
+
+export const createTokByLayer = (n) => {
+  const layerSize = [
+    { width: 100, height: 50 },
+    { width: 60, height: 30 },
+    { width: 40, height: 20 },
+  ]
+
+  n = Math.min(n, 2)
+
+  return new Topic({
+    size: layerSize[n],
+    margin: [5, 5, 5, 5],
+  })
+}

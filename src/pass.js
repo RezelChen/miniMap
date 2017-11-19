@@ -1,5 +1,5 @@
 import { posAdd, mapFlat, isDef } from './util'
-import { createRandTok, isTopic, Conn } from './tok'
+import { isTopic, Conn, createTokByLayer } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch } from './layoutUtil'
 
@@ -63,10 +63,10 @@ const imposeInPos = (tok, outPos) => {
 
 //  =========== imposeTok ===========
 
-export const imposeTok = (node) => {
-  const tok = createRandTok()
+export const imposeTok = (node, i = 0) => {
+  const tok = createTokByLayer(i)
   node.tok = tok
-  node.children.forEach(imposeTok)
+  node.children.forEach((child) => imposeTok(child, i + 1))
   return node
 }
 
@@ -121,12 +121,11 @@ const getRandColor = () => {
 const createRect = (tok) => {
   const { x, y } = tok.pos
   const { width, height } = tok.size
-  const d = `M ${x} ${y} l ${width} 0 l 0 ${height} l ${-width} 0 Z`
   const fill = getRandColor()
 
-  const path = new SVG.Path()
-  path.attr({ d, fill })
-  return path
+  const rect = new SVG.Rect().attr({ width, height, fill })
+  rect.translate(x, y).radius(3)
+  return rect
 }
 
 const createPath = (tok) => {

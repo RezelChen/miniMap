@@ -12,27 +12,35 @@
   <style>
     #test {
       height: 700px;
-      padding-top: 50px;
+      padding: 100px;
     }
 
-    #sel {
-      position: absolute;
-      top: 50px;
-      right: 10px;
+    .sel-container {
+      position: relative;
+      left: 700px;
+    }
+
+    .sel-container p {
+      display: inline-block;
+      padding-right: 10px;
     }
   </style>
 
-  <select id="sel">
-    <option value="MAP">MAP</option>
-    <option value="LOGIC_R">LOGIC_R</option>
-    <option value="LOGIC_L">LOGIC_L</option>
-    <option value="ORG">ORG</option>
-    <option value="ORG_UP">ORG_UP</option>
-    <!-- <option value="TREE_R">TREE_R</option>
-    <option value="TREE_L">TREE_L</option>
-    <option value="TIME_V">TIME_V</option>
-    <option value="TIME_H">TIME_H</option> -->
-  </select>
+  <div class="sel-container">
+    <p>Structure</p>
+    <select id="sel">
+      <option value="MAP">MAP</option>
+      <option value="LOGIC_R">LOGIC_R</option>
+      <option value="LOGIC_L">LOGIC_L</option>
+      <option value="ORG">ORG</option>
+      <option value="ORG_UP">ORG_UP</option>
+      <!-- <option value="TREE_R">TREE_R</option>
+      <option value="TREE_L">TREE_L</option>
+      <option value="TIME_V">TIME_V</option>
+      <option value="TIME_H">TIME_H</option> -->
+    </select>
+  </div>
+
 
   <div id="test"></div>
   <script src='./lib/svg.js'></script>
