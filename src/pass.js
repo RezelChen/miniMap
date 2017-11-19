@@ -64,7 +64,7 @@ const imposeInPos = (tok, outPos) => {
 //  =========== imposeTok ===========
 
 export const imposeTok = (node, i = 0) => {
-  const tok = createTokByLayer(i)
+  const tok = createTokByLayer(node, i)
   node.tok = tok
   node.children.forEach((child) => imposeTok(child, i + 1))
   return node
@@ -87,41 +87,19 @@ export const flattenBranch = (tok) => {
 
 // =========== exposeConn ===========
 export const exposeConn = (toks) => {
-  const conns = toks.filter((tok) => isDef(tok.conn)).map((t) => {
-    return t.conn.generate()
-    // const { outPos, inPos } = t.conn
-    // return {
-    //   p1: posAdd(outPos.tok.pos, outPos.pos),
-    //   p2: posAdd(inPos.tok.pos, inPos.pos),
-    //   type: 'path',
-    // }
-  })
-
-  const Oconns = mapFlat(toks.filter((tok) => isDef(tok.connOUTS)), (t) => {
-    return t.connOUTS.map((c) => {
-      return c.generate()
-      // return {
-      //   p1: posAdd(t.pos, c.p1),
-      //   p2: posAdd(t.pos, c.p2),
-      //   type: 'path',
-      // }
-    })
-  })
+  const conns = toks.filter((tok) => isDef(tok.conn)).map((t) => t.conn.generate())
+  const filterTok = toks.filter((tok) => isDef(tok.connOUTS))
+  const Oconns = mapFlat(filterTok, (t) => t.connOUTS.map((c) => c.generate()))
 
   return [...conns, ...Oconns, ...toks]
 }
 
 // =========== render ===========
 
-const getRandColor = () => {
-  const randNum = () => rand(100, 155)
-  return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
-}
-
 const createRect = (tok) => {
   const { x, y } = tok.pos
   const { width, height } = tok.size
-  const fill = getRandColor()
+  const fill = tok.color
 
   const rect = new SVG.Rect().attr({ width, height, fill })
   rect.translate(x, y).radius(3)

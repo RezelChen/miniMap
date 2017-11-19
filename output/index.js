@@ -3847,6 +3847,7 @@ class Topic extends Tok {
   constructor(opts) {
     super(opts);
     this.type = __WEBPACK_IMPORTED_MODULE_3__constant__["l" /* TOPIC */];
+    this.color = opts.color;
   }
 
   getJoint() {
@@ -3963,14 +3964,16 @@ const createRandTok = () => {
 /* unused harmony export createRandTok */
 
 
-const createTokByLayer = n => {
-  const layerSize = [{ width: 100, height: 50 }, { width: 60, height: 30 }, { width: 40, height: 20 }];
+const createTokByLayer = (node, n) => {
+  const offset = Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* rand */])(0, 20);
+  const layerSize = [{ width: 100 + offset, height: 50 }, { width: 60 + offset, height: 30 }, { width: 40 + offset, height: 20 }];
 
   n = Math.min(n, 2);
 
   return new Topic({
     size: layerSize[n],
-    margin: [5, 5, 5, 5]
+    margin: [5, 5, 5, 5],
+    color: node.color
   });
 };
 /* harmony export (immutable) */ __webpack_exports__["d"] = createTokByLayer;
@@ -9615,18 +9618,22 @@ module.exports = function (regExp, replace) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_driver__ = __webpack_require__(332);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_constant__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_util__ = __webpack_require__(50);
 
 
+
+
+const getRandColor = () => {
+  const randNum = () => Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["h" /* rand */])(100, 155);
+  return `rgb(${randNum()}, ${randNum()}, ${randNum()})`;
+};
 
 // createNode
 const c = (c = []) => {
-  return { children: c };
+  return { children: c, color: getRandColor() };
 };
 
-const root = c([c(), c([c([c(), c(), c(), c()]), c()]), c(), c([c(), c(), c()])]);
-
-const init = (struct = __WEBPACK_IMPORTED_MODULE_1__src_constant__["h" /* MAP */]) => {
-  root.struct = struct;
+const render = () => {
   const g = Object(__WEBPACK_IMPORTED_MODULE_0__src_driver__["a" /* driver */])(root);
   const el = document.getElementById('test');
   el.innerHTML = '';
@@ -9634,11 +9641,43 @@ const init = (struct = __WEBPACK_IMPORTED_MODULE_1__src_constant__["h" /* MAP */
   svg.add(g);
 };
 
+const addTopicRandly = () => {
+
+  const iter = (node, depth) => {
+    if (Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["b" /* isNull */])(node.children)) {
+      return node.children.push(c());
+    }
+    const index = Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["h" /* rand */])(0, node.children.length - 1);
+    if (depth === 0) {
+      return node.children.splice(index, 0, c());
+    } else {
+      return iter(node.children[index], depth - 1);
+    }
+  };
+
+  const depth = Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["h" /* rand */])(1, 3);
+  iter(root, depth);
+  render();
+};
+
+let root;
+const init = () => {
+  root = c([c(), c([c([c(), c(), c()]), c()]), c(), c([c(), c()])]);
+  root.struct = __WEBPACK_IMPORTED_MODULE_1__src_constant__["h" /* MAP */];
+  render();
+};
+
 init();
 const sel = document.getElementById('sel');
 sel.addEventListener('change', e => {
   const { value } = e.target;
-  init(value);
+  root.struct = value;
+  render();
+});
+
+const btn = document.getElementById('addBtn');
+btn.addEventListener('click', e => {
+  addTopicRandly();
 });
 
 /***/ }),
@@ -9739,7 +9778,7 @@ const imposeInPos = (tok, outPos) => {
 //  =========== imposeTok ===========
 
 const imposeTok = (node, i = 0) => {
-  const tok = Object(__WEBPACK_IMPORTED_MODULE_1__tok__["d" /* createTokByLayer */])(i);
+  const tok = Object(__WEBPACK_IMPORTED_MODULE_1__tok__["d" /* createTokByLayer */])(node, i);
   node.tok = tok;
   node.children.forEach(child => imposeTok(child, i + 1));
   return node;
@@ -9769,26 +9808,9 @@ const flattenBranch = tok => {
 
 // =========== exposeConn ===========
 const exposeConn = toks => {
-  const conns = toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */])(tok.conn)).map(t => {
-    return t.conn.generate();
-    // const { outPos, inPos } = t.conn
-    // return {
-    //   p1: posAdd(outPos.tok.pos, outPos.pos),
-    //   p2: posAdd(inPos.tok.pos, inPos.pos),
-    //   type: 'path',
-    // }
-  });
-
-  const Oconns = Object(__WEBPACK_IMPORTED_MODULE_0__util__["e" /* mapFlat */])(toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */])(tok.connOUTS)), t => {
-    return t.connOUTS.map(c => {
-      return c.generate();
-      // return {
-      //   p1: posAdd(t.pos, c.p1),
-      //   p2: posAdd(t.pos, c.p2),
-      //   type: 'path',
-      // }
-    });
-  });
+  const conns = toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */])(tok.conn)).map(t => t.conn.generate());
+  const filterTok = toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */])(tok.connOUTS));
+  const Oconns = Object(__WEBPACK_IMPORTED_MODULE_0__util__["e" /* mapFlat */])(filterTok, t => t.connOUTS.map(c => c.generate()));
 
   return [...conns, ...Oconns, ...toks];
 };
@@ -9797,15 +9819,10 @@ const exposeConn = toks => {
 
 // =========== render ===========
 
-const getRandColor = () => {
-  const randNum = () => Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* rand */])(100, 155);
-  return `rgb(${randNum()}, ${randNum()}, ${randNum()})`;
-};
-
 const createRect = tok => {
   const { x, y } = tok.pos;
   const { width, height } = tok.size;
-  const fill = getRandColor();
+  const fill = tok.color;
 
   const rect = new SVG.Rect().attr({ width, height, fill });
   rect.translate(x, y).radius(3);
@@ -9849,7 +9866,7 @@ const render = toks => {
 const GROUP_PADDING = 30;
 /* harmony export (immutable) */ __webpack_exports__["b"] = GROUP_PADDING;
 
-const CONN_GAP = 15;
+const CONN_GAP = 10;
 /* harmony export (immutable) */ __webpack_exports__["a"] = CONN_GAP;
 
 

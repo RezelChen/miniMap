@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>miniMap</title>
 </head>
 
 <body>
@@ -15,8 +15,12 @@
       padding: 0;
     }
 
+    p {
+      margin: 5px 0;
+    }
+
     .container {
-      width: 800px;
+      width: 1024px;
       margin: 0 auto;
     }
 
@@ -26,21 +30,19 @@
       color: rgb(130, 103, 176);
     }
 
-    .description p {
-      margin: 10px 0;
-    }
-
     .description span {
       font-size: 30px;
     }
 
     #test {
-      height: 400px;
-      padding: 70px 100px 0;
+      height: 500px;
+      padding: 10px 10px 10px 100px;
     }
 
     .sel-container {
-      float: right;
+      width: 270px;
+      margin: 0 0 0 auto;
+      text-align: right;
     }
 
     .sel-container p {
@@ -59,7 +61,7 @@
       </p>
     </div>
     <div class="sel-container">
-      <p>Structure</p>
+      <p>Select to change Structure:</p>
       <select id="sel">
         <option value="MAP">MAP</option>
         <option value="LOGIC_R">LOGIC_R</option>
@@ -71,6 +73,8 @@
             <option value="TIME_V">TIME_V</option>
             <option value="TIME_H">TIME_H</option> -->
       </select>
+      <p>Add Topic randly:</p>
+      <button id="addBtn">add Topic</button>
     </div>
     <div id="test"></div>
   </div>
