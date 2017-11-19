@@ -9798,8 +9798,8 @@ const exposeConn = toks => {
 // =========== render ===========
 
 const getRandColor = () => {
-  const rand = () => parseInt(Math.random() * 255);
-  return `rgb(${rand()}, ${rand()}, ${rand()})`;
+  const randNum = () => Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* rand */])(100, 155);
+  return `rgb(${randNum()}, ${randNum()}, ${randNum()})`;
 };
 
 const createRect = tok => {

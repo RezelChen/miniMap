@@ -1,4 +1,4 @@
-import { posAdd, mapFlat, isDef } from './util'
+import { posAdd, mapFlat, isDef, rand } from './util'
 import { isTopic, Conn, createTokByLayer } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch } from './layoutUtil'
@@ -114,8 +114,8 @@ export const exposeConn = (toks) => {
 // =========== render ===========
 
 const getRandColor = () => {
-  const rand = () => parseInt(Math.random() * 255)
-  return `rgb(${rand()}, ${rand()}, ${rand()})`
+  const randNum = () => rand(100, 155)
+  return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
 }
 
 const createRect = (tok) => {
