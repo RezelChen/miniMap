@@ -12,3 +12,5 @@ webpack -w
 在浏览器中打开 index.html
 可通过修改 test.js 来调试
 ```
+
+[demo地址](https://rezelchen.github.io/miniMap/)

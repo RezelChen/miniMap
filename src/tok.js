@@ -123,11 +123,10 @@ export const createRandTok = () => {
 }
 
 export const createTokByLayer = (node, n) => {
-  const offset = rand(0, 20)
   const layerSize = [
-    { width: 100 + offset, height: 50 },
-    { width: 60 + offset, height: 30 },
-    { width: 40 + offset, height: 20 },
+    { width: 100, height: 50 },
+    { width: 60, height: 30 },
+    { width: 40, height: 20 },
   ]
 
   n = Math.min(n, 2)
