@@ -1,5 +1,5 @@
 import { posSub, posAdd, logErr, isUndef } from './util'
-import { UP, RIGHT, DOWN, LEFT, GROUP, BRANCH } from './constant'
+import { UP, RIGHT, DOWN, LEFT, GROUP, BRANCH, LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP } from './constant'
 
 const getDeltaVertical = (tok1, tok2, ratio) => {
   const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]
@@ -105,6 +105,18 @@ export const getBranchJoint = (tok, dir) => {
 }
 
 export const getGroupJoint = (tok, dir, delta = 0) => {
+  const { width, height } = tok.size
+
+  switch (dir) {
+    case LEFT_UP:
+      return { x: -delta, y: -delta }
+    case LEFT_DOWN:
+      return { x: -delta, y: height + delta }
+    case RIGHT_UP:
+      return { x: width + delta, y: -delta }
+    case RIGHT_DOWN:
+      return { x: width + delta, y: height + delta }
+  }
 
   const fackToks = tok.getTopics().map((topic) => {
     return {
@@ -118,7 +130,6 @@ export const getGroupJoint = (tok, dir, delta = 0) => {
   const x = cp.x1 + tSize.width / 2
   const y = cp.y1 + tSize.height / 2
 
-  const { width, height } = tok.size
 
   switch (dir) {
     case UP:

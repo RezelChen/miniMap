@@ -4,7 +4,7 @@ import { getOUTS, getIN, getGroupIN, getGroupDir, splitTactic } from './structUt
 import {
   BRANCH, TOPIC, GROUP,
   DOWN, RIGHT, LEFT,
-  LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP
+  LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP, TREE_L, TREE_R
 } from './constant'
 
 
@@ -22,7 +22,9 @@ export const transNode = (node, ctx = MAP) => {
       case LOGIC_R:
       case LOGIC_L:
       case ORG:
-      case ORG_UP: {
+      case ORG_UP:
+      case TREE_L:
+      case TREE_R: {
         const group = transList(node.children, ctx)
         return new Branch({ elts: [topic, group], OUTS })
       }
