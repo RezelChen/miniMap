@@ -16,3 +16,20 @@ export const isNull = (arr) => arr.length === 0
 export const logErr = (description, fn, ...others) => console.error(description)
 
 export const rand = (n, m) => n + parseInt(Math.random() * m)
+
+export const getMaxPoint = (...points) => {
+  if (points.length === 0) { logErr('Arguments are empty', getMaxPoint) }
+  else {
+    const ds = points.map((p) => p.x * p.x + p.y * p.y)
+    let maxIndex = 0
+    let max = ds[0]
+    ds.forEach((d, i) => {
+      if (d > max) {
+        max = d
+        maxIndex = i
+      }
+    })
+
+    return points[maxIndex]
+  }
+}

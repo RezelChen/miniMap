@@ -1,7 +1,11 @@
-import { posSub, posAdd, logErr, isUndef } from './util'
-import { UP, RIGHT, DOWN, LEFT, GROUP, BRANCH, LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP } from './constant'
+import { posSub, posAdd, logErr, isUndef, isDef, getMaxPoint } from './util'
+import {
+  UP, RIGHT, DOWN, LEFT,
+  GROUP, BRANCH,
+  LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP
+} from './constant'
 
-const getDeltaVertical = (tok1, tok2, ratio) => {
+const getDeltaV = (tok1, tok2, ratio) => {
   const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]
   const dir = ratio.y > 0 ? 1 : -1
 
@@ -14,7 +18,20 @@ const getDeltaVertical = (tok1, tok2, ratio) => {
   return { x: dx, y: dy }
 }
 
-const getDeltaHorizon = (tok1, tok2, ratio) => {
+const getDeltaV0 = (tok1, tok2, ratio) => {
+  const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]
+  const dir = ratio.y > 0 ? 1 : -1
+
+  const margin = Math.max(tokUp.margin[2], tokDown.margin[0])
+  const dy0 = tokUp.getTopic().size.height - tokUp.getJoint().y
+  const dy1 = tokDown.getJoint().y
+  const dy = dir * (dy0 + margin + dy1)
+
+  const dx = dy / ratio.y * ratio.x
+  return { x: dx, y: dy }
+}
+
+const getDeltaH = (tok1, tok2, ratio) => {
   const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1]
   const dir = ratio.x > 0 ? 1 : -1
 
@@ -27,23 +44,87 @@ const getDeltaHorizon = (tok1, tok2, ratio) => {
   return { x: dx, y: dy }
 }
 
+
+const getDeltaH0 = (tok1, tok2, ratio) => {
+  const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1]
+  const dir = ratio.x > 0 ? 1 : -1
+
+  const margin = Math.max(tokLeft.margin[1], tokRight.margin[3])
+  const dx0 = tokLeft.getTopic().size.width - tokLeft.getJoint().x
+  const dx1 = tokRight.getJoint().x
+  const dx = dir * (dx0 + margin + dx1)
+
+  const dy = dx / ratio.x * ratio.y
+  return { x: dx, y: dy }
+}
+
+const getDatumsCreator = (getDelta) => {
+  return (toks, ratio) => {
+    const datums = [{ x: 0, y: 0 }]
+    for (let i = 1; i < toks.length; i++) {
+      const dPos = getDelta(toks[i - 1], toks[i], ratio)
+      datums.push(posAdd(datums[i - 1], dPos))
+    }
+    return datums
+  }
+}
+
+const getDatumsInterCreator = (getDelta, getDelta0) => {
+  return (toks, ratio) => {
+    const d0 = { x: 0, y: 0 }
+    if (toks.length === 0) { return [] }
+    if (toks.length === 1) { return [d0] }
+    else {
+      const d1 = posAdd(d0, getDelta0(toks[0], toks[1], ratio))
+      const datums = [d0, d1]
+      for (let i = 2; i < toks.length; i++) {
+        const t0 = toks[i - 2]
+        const t1 = toks[i - 1]
+        const t2 = toks[i]
+
+        const d0 = datums[i - 2]
+        const d1 = datums[i - 1]
+
+        const d2 = getMaxPoint(
+          posAdd(d0, getDelta(t0, t2, ratio)),
+          posAdd(d1, getDelta0(t1, t2, ratio)),
+        )
+        datums.push(d2)
+      }
+      return datums
+    }
+  }
+}
+
+const getDatumsHorizon = getDatumsCreator(getDeltaH)
+const getDatumsVertical = getDatumsCreator(getDeltaV)
+const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH, getDeltaH0)
+const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV, getDeltaV0)
+
+
 export const calGroup = (tok) => {
 
   const getRadianFn = (dir) => {
+    // temporary, not good enough
+    const [direction, inter] = dir.split('_')
+    const fnArr = isDef(inter) ?
+      [getDatumsVerticalInter, getDatumsHorizonInter] :
+      [getDatumsVertical, getDatumsHorizon]
+
     let radian
-    switch (dir) {
+    switch (direction) {
       case DOWN:
         radian = 1 / 2 * Math.PI
-        return [radian, getDeltaVertical]
+        return [radian, fnArr[0]]
       case UP:
         radian = 3 / 2 * Math.PI
-        return [radian, getDeltaVertical]
+        return [radian, fnArr[0]]
       case RIGHT:
         radian = 0
-        return [radian, getDeltaHorizon]
+        return [radian, fnArr[1]]
       case LEFT:
         radian = Math.PI
-        return [radian, getDeltaHorizon]
+        return [radian, fnArr[1]]
     }
   }
 
@@ -242,61 +323,16 @@ const calToksPos = (toks, joints, datums) => {
 }
 
 
-const calOblique = (toks, radian, getDelta) => {
+const calOblique = (toks, radian, getDatums) => {
 
   const ratio = {
     x: Math.cos(radian),
     y: Math.sin(radian)
   }
 
-  // 计算 pos, 以 firstTok.pos 为基准点
-  const datums = [{ x: 0, y: 0 }]
-  for (let i = 1; i < toks.length; i++) {
-    const dPos = getDelta(toks[i - 1], toks[i], ratio)
-    datums.push(posAdd(datums[i - 1], dPos))
-  }
-
-  // const datums = toks.map((tok, i) => {
-
-  // })
-  // const datums = toks.reduce((datums, tok) => {
-
-  // }, [{ x: 0, y: 0 }])
-
-  // toks.forEach((tok, i) => {
-  //   if (i === 0) { tok.pos = { x: 0, y: 0 } }
-  //   else {
-
-
-  //     tok.pos = posAdd(prev.pos, dPos)
-  //   }
-  // })
-
+  const datums = getDatums(toks, ratio)
   const joints = toks.map((t) => t.getJoint())
 
   return calToksPos(toks, joints, datums)
 
-  // 位置调整为左上角
-  // toks.forEach((t) => { t.pos = posSub(t.pos, t.getJoint()) })
-
-  // // 通过计算 cornerPoint 计算 size
-  // const cp = calTotalCornerPoint(toks)
-  // const mp = calMarginPoint(toks)
-
-  // const size = {
-  //   width: cp.x2 - cp.x1,
-  //   height: cp.y2 - cp.y1,
-  // }
-
-  // const margin = getMargin(cp, mp)
-
-  // // 重新计算 tok.pos
-  // const oPos = { x: cp.x1, y: cp.y1 }
-  // toks.forEach((tok) => { tok.pos = posSub(tok.pos, oPos) })
-  // // console.log(oPos)
-  // // tok.pos = posSub(tok.pos, oPos)
-
-  // return [size, margin]
-  // tok.size = size
-  // tok.margin = margin
 }

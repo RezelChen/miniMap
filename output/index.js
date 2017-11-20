@@ -1426,7 +1426,7 @@ module.exports = function (it, TYPE) {
 
 "use strict";
 const UP = 'UP';
-/* harmony export (immutable) */ __webpack_exports__["s"] = UP;
+/* harmony export (immutable) */ __webpack_exports__["w"] = UP;
 
 const DOWN = 'DOWN';
 /* harmony export (immutable) */ __webpack_exports__["c"] = DOWN;
@@ -1438,6 +1438,10 @@ const LEFT = 'LEFT';
 /* harmony export (immutable) */ __webpack_exports__["e"] = LEFT;
 
 
+const RIGHT_INTER = 'RIGHT_INTER';
+/* harmony export (immutable) */ __webpack_exports__["o"] = RIGHT_INTER;
+
+
 const LEFT_UP = 'LEFT_UP';
 /* harmony export (immutable) */ __webpack_exports__["g"] = LEFT_UP;
 
@@ -1445,7 +1449,7 @@ const LEFT_DOWN = 'LEFT_DOWN';
 /* harmony export (immutable) */ __webpack_exports__["f"] = LEFT_DOWN;
 
 const RIGHT_UP = 'RIGHT_UP';
-/* harmony export (immutable) */ __webpack_exports__["o"] = RIGHT_UP;
+/* harmony export (immutable) */ __webpack_exports__["p"] = RIGHT_UP;
 
 const RIGHT_DOWN = 'RIGHT_DOWN';
 /* harmony export (immutable) */ __webpack_exports__["n"] = RIGHT_DOWN;
@@ -1456,7 +1460,7 @@ const RIGHT_DOWN = 'RIGHT_DOWN';
 
 
 const TOPIC = 'TOPIC';
-/* harmony export (immutable) */ __webpack_exports__["p"] = TOPIC;
+/* harmony export (immutable) */ __webpack_exports__["t"] = TOPIC;
 
 const BRANCH = 'BRANCH';
 /* harmony export (immutable) */ __webpack_exports__["a"] = BRANCH;
@@ -1484,10 +1488,20 @@ const LOGIC_L = 'LOGIC_L';
 /* harmony export (immutable) */ __webpack_exports__["h"] = LOGIC_L;
 
 const TREE_L = 'TREE_L';
-/* harmony export (immutable) */ __webpack_exports__["q"] = TREE_L;
+/* harmony export (immutable) */ __webpack_exports__["u"] = TREE_L;
 
 const TREE_R = 'TREE_R';
-/* harmony export (immutable) */ __webpack_exports__["r"] = TREE_R;
+/* harmony export (immutable) */ __webpack_exports__["v"] = TREE_R;
+
+const TIME_H = 'TIME_H';
+/* harmony export (immutable) */ __webpack_exports__["r"] = TIME_H;
+
+
+const TIME_UP = 'TIME_UP';
+/* harmony export (immutable) */ __webpack_exports__["s"] = TIME_UP;
+
+const TIME_DOWN = 'TIME_DOWN';
+/* harmony export (immutable) */ __webpack_exports__["q"] = TIME_DOWN;
 
 
 /***/ }),
@@ -1547,14 +1561,14 @@ const isArray = obj => obj.length !== undefined;
 /* unused harmony export isArray */
 
 const isUndef = v => v === undefined || v === null;
-/* harmony export (immutable) */ __webpack_exports__["c"] = isUndef;
+/* harmony export (immutable) */ __webpack_exports__["e"] = isUndef;
 
 const isDef = v => v !== undefined && v !== null;
-/* harmony export (immutable) */ __webpack_exports__["a"] = isDef;
+/* harmony export (immutable) */ __webpack_exports__["b"] = isDef;
 
 
 const isEven = n => n % 2 === 0;
-/* unused harmony export isEven */
+/* harmony export (immutable) */ __webpack_exports__["c"] = isEven;
 
 const copy = obj => Array.isArray(obj) ? obj.slice() : Object.assign({}, obj);
 /* unused harmony export copy */
@@ -1564,30 +1578,50 @@ const flatten = arr => arr.reduce((a, b) => a.concat(b), []);
 
 
 const mapFlat = (arr, fn) => flatten(arr.map(fn));
-/* harmony export (immutable) */ __webpack_exports__["e"] = mapFlat;
+/* harmony export (immutable) */ __webpack_exports__["g"] = mapFlat;
 
 
 const posAdd = (p1, p2) => {
   return { x: p1.x + p2.x, y: p1.y + p2.y };
 };
-/* harmony export (immutable) */ __webpack_exports__["f"] = posAdd;
+/* harmony export (immutable) */ __webpack_exports__["h"] = posAdd;
 
 const posSub = (p1, p2) => {
   return { x: p1.x - p2.x, y: p1.y - p2.y };
 };
-/* harmony export (immutable) */ __webpack_exports__["g"] = posSub;
+/* harmony export (immutable) */ __webpack_exports__["i"] = posSub;
 
 
 const isNull = arr => arr.length === 0;
-/* harmony export (immutable) */ __webpack_exports__["b"] = isNull;
+/* harmony export (immutable) */ __webpack_exports__["d"] = isNull;
 
 
 const logErr = (description, fn, ...others) => console.error(description);
-/* harmony export (immutable) */ __webpack_exports__["d"] = logErr;
+/* harmony export (immutable) */ __webpack_exports__["f"] = logErr;
 
 
 const rand = (n, m) => n + parseInt(Math.random() * m);
-/* harmony export (immutable) */ __webpack_exports__["h"] = rand;
+/* harmony export (immutable) */ __webpack_exports__["j"] = rand;
+
+
+const getMaxPoint = (...points) => {
+  if (points.length === 0) {
+    logErr('Arguments are empty', getMaxPoint);
+  } else {
+    const ds = points.map(p => p.x * p.x + p.y * p.y);
+    let maxIndex = 0;
+    let max = ds[0];
+    ds.forEach((d, i) => {
+      if (d > max) {
+        max = d;
+        maxIndex = i;
+      }
+    });
+
+    return points[maxIndex];
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = getMaxPoint;
 
 
 /***/ }),
@@ -3850,7 +3884,7 @@ class Tok {
   }
 
   getJoint() {
-    Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* logErr */])('Undefined method', this.getJoint, this);
+    Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Undefined method', this.getJoint, this);
   }
 
 }
@@ -3859,12 +3893,12 @@ class Topic extends Tok {
 
   constructor(opts) {
     super(opts);
-    this.type = __WEBPACK_IMPORTED_MODULE_3__constant__["p" /* TOPIC */];
+    this.type = __WEBPACK_IMPORTED_MODULE_3__constant__["t" /* TOPIC */];
     this.color = opts.color;
   }
 
   getJoint() {
-    const IN = Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */])(this.IN) ? this.IN : this.parent.IN;
+    const IN = Object(__WEBPACK_IMPORTED_MODULE_0__util__["b" /* isDef */])(this.IN) ? this.IN : this.parent.IN;
     return Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["e" /* getTopicJoint */])(this, IN);
   }
 
@@ -3935,7 +3969,7 @@ class Conn {
   }
 
   generate() {
-    const posArr = this.points.map(p => Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* posAdd */])(p.tok.pos, p.pos));
+    const posArr = this.points.map(p => Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(p.tok.pos, p.pos));
     return {
       p1: posArr[0],
       p2: posArr[1],
@@ -3952,7 +3986,7 @@ const isBranch = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["a"
 const isGroup = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["d" /* GROUP */];
 /* unused harmony export isGroup */
 
-const isTopic = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["p" /* TOPIC */];
+const isTopic = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["t" /* TOPIC */];
 /* harmony export (immutable) */ __webpack_exports__["e"] = isTopic;
 
 
@@ -3963,8 +3997,8 @@ const createEmptyTok = () => {
 
 
 const createRandTok = () => {
-  const width = Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* rand */])(20, 30);
-  const height = Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* rand */])(15, 15);
+  const width = Object(__WEBPACK_IMPORTED_MODULE_0__util__["j" /* rand */])(20, 30);
+  const height = Object(__WEBPACK_IMPORTED_MODULE_0__util__["j" /* rand */])(15, 15);
 
   // const width = 30
   // const height = 15
@@ -4001,7 +4035,7 @@ const createTokByLayer = (node, n) => {
 
 
 
-const getDeltaVertical = (tok1, tok2, ratio) => {
+const getDeltaV = (tok1, tok2, ratio) => {
   const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1];
   const dir = ratio.y > 0 ? 1 : -1;
 
@@ -4014,7 +4048,20 @@ const getDeltaVertical = (tok1, tok2, ratio) => {
   return { x: dx, y: dy };
 };
 
-const getDeltaHorizon = (tok1, tok2, ratio) => {
+const getDeltaV0 = (tok1, tok2, ratio) => {
+  const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1];
+  const dir = ratio.y > 0 ? 1 : -1;
+
+  const margin = Math.max(tokUp.margin[2], tokDown.margin[0]);
+  const dy0 = tokUp.getTopic().size.height - tokUp.getJoint().y;
+  const dy1 = tokDown.getJoint().y;
+  const dy = dir * (dy0 + margin + dy1);
+
+  const dx = dy / ratio.y * ratio.x;
+  return { x: dx, y: dy };
+};
+
+const getDeltaH = (tok1, tok2, ratio) => {
   const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1];
   const dir = ratio.x > 0 ? 1 : -1;
 
@@ -4027,23 +4074,83 @@ const getDeltaHorizon = (tok1, tok2, ratio) => {
   return { x: dx, y: dy };
 };
 
+const getDeltaH0 = (tok1, tok2, ratio) => {
+  const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1];
+  const dir = ratio.x > 0 ? 1 : -1;
+
+  const margin = Math.max(tokLeft.margin[1], tokRight.margin[3]);
+  const dx0 = tokLeft.getTopic().size.width - tokLeft.getJoint().x;
+  const dx1 = tokRight.getJoint().x;
+  const dx = dir * (dx0 + margin + dx1);
+
+  const dy = dx / ratio.x * ratio.y;
+  return { x: dx, y: dy };
+};
+
+const getDatumsCreator = getDelta => {
+  return (toks, ratio) => {
+    const datums = [{ x: 0, y: 0 }];
+    for (let i = 1; i < toks.length; i++) {
+      const dPos = getDelta(toks[i - 1], toks[i], ratio);
+      datums.push(Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(datums[i - 1], dPos));
+    }
+    return datums;
+  };
+};
+
+const getDatumsInterCreator = (getDelta, getDelta0) => {
+  return (toks, ratio) => {
+    const d0 = { x: 0, y: 0 };
+    if (toks.length === 0) {
+      return [];
+    }
+    if (toks.length === 1) {
+      return [d0];
+    } else {
+      const d1 = Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(d0, getDelta0(toks[0], toks[1], ratio));
+      const datums = [d0, d1];
+      for (let i = 2; i < toks.length; i++) {
+        const t0 = toks[i - 2];
+        const t1 = toks[i - 1];
+        const t2 = toks[i];
+
+        const d0 = datums[i - 2];
+        const d1 = datums[i - 1];
+
+        const d2 = Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* getMaxPoint */])(Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(d0, getDelta(t0, t2, ratio)), Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(d1, getDelta0(t1, t2, ratio)));
+        datums.push(d2);
+      }
+      return datums;
+    }
+  };
+};
+
+const getDatumsHorizon = getDatumsCreator(getDeltaH);
+const getDatumsVertical = getDatumsCreator(getDeltaV);
+const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH, getDeltaH0);
+const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV, getDeltaV0);
+
 const calGroup = tok => {
 
   const getRadianFn = dir => {
+    // temporary, not good enough
+    const [direction, inter] = dir.split('_');
+    const fnArr = Object(__WEBPACK_IMPORTED_MODULE_0__util__["b" /* isDef */])(inter) ? [getDatumsVerticalInter, getDatumsHorizonInter] : [getDatumsVertical, getDatumsHorizon];
+
     let radian;
-    switch (dir) {
+    switch (direction) {
       case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
         radian = 1 / 2 * Math.PI;
-        return [radian, getDeltaVertical];
-      case __WEBPACK_IMPORTED_MODULE_1__constant__["s" /* UP */]:
+        return [radian, fnArr[0]];
+      case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
         radian = 3 / 2 * Math.PI;
-        return [radian, getDeltaVertical];
+        return [radian, fnArr[0]];
       case __WEBPACK_IMPORTED_MODULE_1__constant__["m" /* RIGHT */]:
         radian = 0;
-        return [radian, getDeltaHorizon];
+        return [radian, fnArr[1]];
       case __WEBPACK_IMPORTED_MODULE_1__constant__["e" /* LEFT */]:
         radian = Math.PI;
-        return [radian, getDeltaHorizon];
+        return [radian, fnArr[1]];
     }
   };
 
@@ -4079,13 +4186,13 @@ const calBranch = tok => {
 const getRelPos = (tok, relTok) => {
 
   const iter = (t, pos) => {
-    if (Object(__WEBPACK_IMPORTED_MODULE_0__util__["c" /* isUndef */])(t)) {
-      return Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* logErr */])('Rel is not ancestor', getRelPos, relTok, tok);
+    if (Object(__WEBPACK_IMPORTED_MODULE_0__util__["e" /* isUndef */])(t)) {
+      return Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Rel is not ancestor', getRelPos, relTok, tok);
     }
     if (t === relTok) {
       return pos;
     } else {
-      return iter(t.parent, Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* posAdd */])(t.pos, pos));
+      return iter(t.parent, Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(t.pos, pos));
     }
   };
 
@@ -4096,11 +4203,11 @@ const getBranchJoint = (tok, dir) => {
   const topic = tok.getTopic();
   const pos = getRelPos(topic, tok);
   const joint = topic.getJoint();
-  const { x, y } = Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* posAdd */])(pos, joint);
+  const { x, y } = Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(pos, joint);
   const { width, height } = tok.size;
 
   switch (dir) {
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["s" /* UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
       return { x, y: 0 };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
       return { x, y: height };
@@ -4109,7 +4216,7 @@ const getBranchJoint = (tok, dir) => {
     case __WEBPACK_IMPORTED_MODULE_1__constant__["m" /* RIGHT */]:
       return { x: width, y };
     default:
-      Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* logErr */])('Unknown dir', getBranchJoint, dir);
+      Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Unknown dir', getBranchJoint, dir);
   }
 };
 /* harmony export (immutable) */ __webpack_exports__["c"] = getBranchJoint;
@@ -4123,7 +4230,7 @@ const getGroupJoint = (tok, dir, delta = 0) => {
       return { x: -delta, y: -delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["f" /* LEFT_DOWN */]:
       return { x: -delta, y: height + delta };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["o" /* RIGHT_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["p" /* RIGHT_UP */]:
       return { x: width + delta, y: -delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["n" /* RIGHT_DOWN */]:
       return { x: width + delta, y: height + delta };
@@ -4142,7 +4249,7 @@ const getGroupJoint = (tok, dir, delta = 0) => {
   const y = cp.y1 + tSize.height / 2;
 
   switch (dir) {
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["s" /* UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
       return { x, y: -delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
       return { x, y: height + delta };
@@ -4152,7 +4259,7 @@ const getGroupJoint = (tok, dir, delta = 0) => {
       return { x: width + delta, y };
 
     default:
-      Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* logErr */])('Unknown dir', getGroupJoint, dir);
+      Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Unknown dir', getGroupJoint, dir);
   }
 };
 /* harmony export (immutable) */ __webpack_exports__["d"] = getGroupJoint;
@@ -4162,7 +4269,7 @@ const getTopicJoint = (tok, dir, delta = 0) => {
   const { width, height } = tok.size;
 
   switch (dir) {
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["s" /* UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
       return { x: width / 2, y: -delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
       return { x: width / 2, y: height + delta };
@@ -4172,7 +4279,7 @@ const getTopicJoint = (tok, dir, delta = 0) => {
       return { x: width + delta, y: height / 2 };
 
     default:
-      Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* logErr */])('Unknown dir', getTopicJoint, dir);
+      Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Unknown dir', getTopicJoint, dir);
   }
 };
 /* harmony export (immutable) */ __webpack_exports__["e"] = getTopicJoint;
@@ -4238,7 +4345,7 @@ const getMargin = (cp, mp) => {
 const calToksPos = (toks, joints, datums) => {
 
   toks.forEach((tok, i) => {
-    tok.pos = Object(__WEBPACK_IMPORTED_MODULE_0__util__["g" /* posSub */])(datums[i], joints[i]);
+    tok.pos = Object(__WEBPACK_IMPORTED_MODULE_0__util__["i" /* posSub */])(datums[i], joints[i]);
   });
 
   // 通过计算 cornerPoint 计算 size
@@ -4248,7 +4355,7 @@ const calToksPos = (toks, joints, datums) => {
   // 重新计算 tok.pos
   const oPos = { x: cp.x1, y: cp.y1 };
   toks.forEach(tok => {
-    tok.pos = Object(__WEBPACK_IMPORTED_MODULE_0__util__["g" /* posSub */])(tok.pos, oPos);
+    tok.pos = Object(__WEBPACK_IMPORTED_MODULE_0__util__["i" /* posSub */])(tok.pos, oPos);
   });
 
   const size = getSize(cp);
@@ -4257,62 +4364,17 @@ const calToksPos = (toks, joints, datums) => {
   return [size, margin];
 };
 
-const calOblique = (toks, radian, getDelta) => {
+const calOblique = (toks, radian, getDatums) => {
 
   const ratio = {
     x: Math.cos(radian),
     y: Math.sin(radian)
+  };
 
-    // 计算 pos, 以 firstTok.pos 为基准点
-  };const datums = [{ x: 0, y: 0 }];
-  for (let i = 1; i < toks.length; i++) {
-    const dPos = getDelta(toks[i - 1], toks[i], ratio);
-    datums.push(Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* posAdd */])(datums[i - 1], dPos));
-  }
-
-  // const datums = toks.map((tok, i) => {
-
-  // })
-  // const datums = toks.reduce((datums, tok) => {
-
-  // }, [{ x: 0, y: 0 }])
-
-  // toks.forEach((tok, i) => {
-  //   if (i === 0) { tok.pos = { x: 0, y: 0 } }
-  //   else {
-
-
-  //     tok.pos = posAdd(prev.pos, dPos)
-  //   }
-  // })
-
+  const datums = getDatums(toks, ratio);
   const joints = toks.map(t => t.getJoint());
 
   return calToksPos(toks, joints, datums);
-
-  // 位置调整为左上角
-  // toks.forEach((t) => { t.pos = posSub(t.pos, t.getJoint()) })
-
-  // // 通过计算 cornerPoint 计算 size
-  // const cp = calTotalCornerPoint(toks)
-  // const mp = calMarginPoint(toks)
-
-  // const size = {
-  //   width: cp.x2 - cp.x1,
-  //   height: cp.y2 - cp.y1,
-  // }
-
-  // const margin = getMargin(cp, mp)
-
-  // // 重新计算 tok.pos
-  // const oPos = { x: cp.x1, y: cp.y1 }
-  // toks.forEach((tok) => { tok.pos = posSub(tok.pos, oPos) })
-  // // console.log(oPos)
-  // // tok.pos = posSub(tok.pos, oPos)
-
-  // return [size, margin]
-  // tok.size = size
-  // tok.margin = margin
 };
 
 /***/ }),
@@ -9646,7 +9708,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 const getRandColor = () => {
-  const randNum = () => Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["h" /* rand */])(100, 155);
+  const randNum = () => Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["j" /* rand */])(100, 150);
   return `rgb(${randNum()}, ${randNum()}, ${randNum()})`;
 };
 
@@ -9666,10 +9728,10 @@ const render = () => {
 const addTopicRandly = () => {
 
   const iter = (node, depth) => {
-    if (Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["b" /* isNull */])(node.children)) {
+    if (Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["d" /* isNull */])(node.children)) {
       return node.children.push(c());
     }
-    const index = Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["h" /* rand */])(0, node.children.length - 1);
+    const index = Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["j" /* rand */])(0, node.children.length - 1);
     if (depth === 0) {
       return node.children.splice(index, 0, c());
     } else {
@@ -9677,14 +9739,14 @@ const addTopicRandly = () => {
     }
   };
 
-  const depth = Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["h" /* rand */])(1, 3);
+  const depth = Object(__WEBPACK_IMPORTED_MODULE_2__src_util__["j" /* rand */])(1, 3);
   iter(root, depth);
   render();
 };
 
 let root;
 const init = () => {
-  root = c([c(), c([c([c(), c(), c()]), c()]), c(), c([c(), c()])]);
+  root = c([c([c()]), c([c(), c([c()]), c([c(), c(), c()]), c()]), c([c(), c()]), c()]);
   root.struct = __WEBPACK_IMPORTED_MODULE_1__src_constant__["j" /* MAP */];
   render();
 };
@@ -9740,7 +9802,7 @@ const driver = tok => {
 
 const calTok = tok => {
   switch (tok.type) {
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["p" /* TOPIC */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
       return tok;
     case __WEBPACK_IMPORTED_MODULE_2__constant__["d" /* GROUP */]:
       tok.elts.forEach(calTok);
@@ -9761,7 +9823,7 @@ const calTok = tok => {
 
 const imposeConnection = tok => {
   switch (tok.type) {
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["p" /* TOPIC */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
       break;
     case __WEBPACK_IMPORTED_MODULE_2__constant__["d" /* GROUP */]:
       tok.elts.forEach(imposeConnection);
@@ -9784,7 +9846,7 @@ const imposeConnection = tok => {
 
 const imposeInPos = (tok, outPos) => {
   switch (tok.type) {
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["p" /* TOPIC */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
       const inPos = { tok, pos: tok.getJoint() };
       tok.conn = new __WEBPACK_IMPORTED_MODULE_1__tok__["b" /* Conn */](outPos, inPos);
       break;
@@ -9813,12 +9875,12 @@ const imposeTok = (node, i = 0) => {
 const flattenBranch = tok => {
 
   const iter = (tok, pos) => {
-    tok.pos = Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* posAdd */])(tok.pos, pos);
+    tok.pos = Object(__WEBPACK_IMPORTED_MODULE_0__util__["h" /* posAdd */])(tok.pos, pos);
     tok.parent = null;
     if (Object(__WEBPACK_IMPORTED_MODULE_1__tok__["e" /* isTopic */])(tok)) {
       return [tok];
     } else {
-      return Object(__WEBPACK_IMPORTED_MODULE_0__util__["e" /* mapFlat */])(tok.elts, t => iter(t, tok.pos));
+      return Object(__WEBPACK_IMPORTED_MODULE_0__util__["g" /* mapFlat */])(tok.elts, t => iter(t, tok.pos));
     }
   };
 
@@ -9830,9 +9892,9 @@ const flattenBranch = tok => {
 
 // =========== exposeConn ===========
 const exposeConn = toks => {
-  const conns = toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */])(tok.conn)).map(t => t.conn.generate());
-  const filterTok = toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */])(tok.connOUTS));
-  const Oconns = Object(__WEBPACK_IMPORTED_MODULE_0__util__["e" /* mapFlat */])(filterTok, t => t.connOUTS.map(c => c.generate()));
+  const conns = toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["b" /* isDef */])(tok.conn)).map(t => t.conn.generate());
+  const filterTok = toks.filter(tok => Object(__WEBPACK_IMPORTED_MODULE_0__util__["b" /* isDef */])(tok.connOUTS));
+  const Oconns = Object(__WEBPACK_IMPORTED_MODULE_0__util__["g" /* mapFlat */])(filterTok, t => t.connOUTS.map(c => c.generate()));
 
   return [...conns, ...Oconns, ...toks];
 };
@@ -9864,14 +9926,14 @@ const render = toks => {
 
   const Snodes = toks.map(tok => {
     switch (tok.type) {
-      case __WEBPACK_IMPORTED_MODULE_2__constant__["p" /* TOPIC */]:
+      case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
         return createRect(tok);
       case __WEBPACK_IMPORTED_MODULE_2__constant__["b" /* CONN */]:
         return createPath(tok);
       default:
         return;
     }
-  }).filter(__WEBPACK_IMPORTED_MODULE_0__util__["a" /* isDef */]);
+  }).filter(__WEBPACK_IMPORTED_MODULE_0__util__["b" /* isDef */]);
 
   const g = new SVG.G().data('name', "container");
   Snodes.forEach(node => g.add(node));
@@ -9911,7 +9973,7 @@ const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* MA
   ctx = node.struct || ctx;
   const topic = node.tok;
 
-  if (Object(__WEBPACK_IMPORTED_MODULE_0__util__["b" /* isNull */])(node.children)) {
+  if (Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* isNull */])(node.children)) {
     return topic;
   } else {
     const OUTS = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["d" /* getOUTS */])(ctx);
@@ -9922,8 +9984,11 @@ const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* MA
       case __WEBPACK_IMPORTED_MODULE_3__constant__["h" /* LOGIC_L */]:
       case __WEBPACK_IMPORTED_MODULE_3__constant__["k" /* ORG */]:
       case __WEBPACK_IMPORTED_MODULE_3__constant__["l" /* ORG_UP */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["q" /* TREE_L */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TREE_R */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["u" /* TREE_L */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["v" /* TREE_R */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TIME_H */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_UP */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["q" /* TIME_DOWN */]:
         {
           const group = transList(node.children, ctx);
           return new __WEBPACK_IMPORTED_MODULE_1__tok__["a" /* Branch */]({ elts: [topic, group], OUTS });
@@ -9938,7 +10003,7 @@ const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* MA
         }
 
       default:
-        Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* logErr */])('Unknown ctx', transTok, ctx);
+        Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Unknown ctx', transTok, ctx);
     }
   }
 };
@@ -9946,12 +10011,47 @@ const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* MA
 
 
 const transList = (nodes, ctx) => {
-  const IN = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["c" /* getIN */])(ctx);
+
+  const getToks = (nodes, ctx) => {
+    switch (ctx) {
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TIME_H */]:
+        {
+          const ctxs = [__WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_UP */], __WEBPACK_IMPORTED_MODULE_3__constant__["q" /* TIME_DOWN */]];
+          const INs = ctxs.map(__WEBPACK_IMPORTED_MODULE_2__structUtil__["c" /* getIN */]);
+          return nodes.map((node, i) => {
+            const ctx = Object(__WEBPACK_IMPORTED_MODULE_0__util__["c" /* isEven */])(i) ? ctxs[0] : ctxs[1];
+            const IN = Object(__WEBPACK_IMPORTED_MODULE_0__util__["c" /* isEven */])(i) ? INs[0] : INs[1];
+            const tok = transNode(node, ctx);
+            tok.IN = IN;
+            return tok;
+          });
+        }
+
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_UP */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["q" /* TIME_DOWN */]:
+        {
+          const IN = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["c" /* getIN */])(ctx);
+          return nodes.map(node => {
+            const tok = transNode(node, __WEBPACK_IMPORTED_MODULE_3__constant__["i" /* LOGIC_R */]);
+            tok.IN = IN;
+            return tok;
+          });
+        }
+      default:
+        {
+          const IN = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["c" /* getIN */])(ctx);
+          return nodes.map(node => {
+            const tok = transNode(node, ctx);
+            tok.IN = IN;
+            return tok;
+          });
+        }
+    }
+  };
+
   const gIN = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["b" /* getGroupIN */])(ctx);
   const dir = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["a" /* getGroupDir */])(ctx);
-
-  const toks = nodes.map(node => transNode(node, ctx));
-  toks.forEach(tok => tok.IN = IN);
+  const toks = getToks(nodes, ctx);
 
   return new __WEBPACK_IMPORTED_MODULE_1__tok__["c" /* Group */]({ elts: toks, IN: gIN, dir });
 };
@@ -9969,19 +10069,22 @@ const transList = (nodes, ctx) => {
 const getOUTS = ctx => {
   switch (ctx) {
     case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
       return [__WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */]];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
       return [__WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */]];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TREE_L */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
       return [__WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */]];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
-      return [__WEBPACK_IMPORTED_MODULE_0__constant__["s" /* UP */]];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
+      return [__WEBPACK_IMPORTED_MODULE_0__constant__["w" /* UP */]];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["j" /* MAP */]:
       return [__WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */], __WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */]];
     default:
-      Object(__WEBPACK_IMPORTED_MODULE_1__util__["d" /* logErr */])('Unknown ctx', getOUTS, ctx);
+      Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getOUTS, ctx);
   }
 };
 /* harmony export (immutable) */ __webpack_exports__["d"] = getOUTS;
@@ -9990,19 +10093,23 @@ const getOUTS = ctx => {
 const getGroupIN = ctx => {
   switch (ctx) {
     case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* UP */];
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* UP */];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["g" /* LEFT_UP */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TREE_L */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["o" /* RIGHT_UP */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["f" /* LEFT_DOWN */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["p" /* RIGHT_UP */];
     default:
-      Object(__WEBPACK_IMPORTED_MODULE_1__util__["d" /* logErr */])('Unknown ctx', getGroupIN, ctx);
+      Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getGroupIN, ctx);
   }
 };
 /* harmony export (immutable) */ __webpack_exports__["b"] = getGroupIN;
@@ -10012,14 +10119,18 @@ const getGroupDir = ctx => {
   switch (ctx) {
     case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
     case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TREE_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TREE_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
     case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["o" /* RIGHT_INTER */];
     default:
-      Object(__WEBPACK_IMPORTED_MODULE_1__util__["d" /* logErr */])('Unknown ctx', getGroupDir, ctx);
+      Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getGroupDir, ctx);
   }
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = getGroupDir;
@@ -10028,17 +10139,20 @@ const getGroupDir = ctx => {
 const getIN = ctx => {
   switch (ctx) {
     case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TREE_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* UP */];
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* UP */];
     case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */];
     default:
-      Object(__WEBPACK_IMPORTED_MODULE_1__util__["d" /* logErr */])('Unknown ctx', getInDir, ctx);
+      Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getInDir, ctx);
   }
 };
 /* harmony export (immutable) */ __webpack_exports__["c"] = getIN;

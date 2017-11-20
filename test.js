@@ -1,10 +1,10 @@
 import { driver } from './src/driver'
-import { LOGIC_R, LOGIC_L, MAP } from './src/constant'
+import { MAP } from './src/constant'
 import { rand, isNull } from './src/util'
 
 
 const getRandColor = () => {
-  const randNum = () => rand(100, 155)
+  const randNum = () => rand(100, 150)
   return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
 }
 
@@ -40,17 +40,21 @@ const addTopicRandly = () => {
 let root
 const init = () => {
   root = c([
-    c(),
     c([
+      c(),
+    ]),
+    c([
+      c(),
+      c([c()]),
       c([
         c(), c(), c()
       ]),
       c(),
     ]),
-    c(),
     c([
       c(), c()
     ]),
+    c(),
   ])
   root.struct = MAP
   render()

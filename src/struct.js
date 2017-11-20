@@ -1,10 +1,10 @@
-import { logErr, isNull } from './util'
+import { logErr, isNull, isEven } from './util'
 import { Branch, Group } from './tok'
 import { getOUTS, getIN, getGroupIN, getGroupDir, splitTactic } from './structUtil'
 import {
   BRANCH, TOPIC, GROUP,
   DOWN, RIGHT, LEFT,
-  LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP, TREE_L, TREE_R
+  LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP, TREE_L, TREE_R, TIME_H, TIME_UP, TIME_DOWN
 } from './constant'
 
 
@@ -24,7 +24,10 @@ export const transNode = (node, ctx = MAP) => {
       case ORG:
       case ORG_UP:
       case TREE_L:
-      case TREE_R: {
+      case TREE_R:
+      case TIME_H:
+      case TIME_UP:
+      case TIME_DOWN: {
         const group = transList(node.children, ctx)
         return new Branch({ elts: [topic, group], OUTS })
       }
@@ -43,12 +46,44 @@ export const transNode = (node, ctx = MAP) => {
 }
 
 const transList = (nodes, ctx) => {
-  const IN = getIN(ctx)
+
+  const getToks = (nodes, ctx) => {
+    switch (ctx) {
+      case TIME_H: {
+        const ctxs = [TIME_UP, TIME_DOWN]
+        const INs = ctxs.map(getIN)
+        return nodes.map((node, i) => {
+          const ctx = isEven(i) ? ctxs[0] : ctxs[1]
+          const IN = isEven(i) ? INs[0] : INs[1]
+          const tok = transNode(node, ctx)
+          tok.IN = IN
+          return tok
+        })
+      }
+
+      case TIME_UP:
+      case TIME_DOWN: {
+        const IN = getIN(ctx)
+        return nodes.map((node) => {
+          const tok = transNode(node, LOGIC_R)
+          tok.IN = IN
+          return tok
+        })
+      }
+      default: {
+        const IN = getIN(ctx)
+        return nodes.map((node) => {
+          const tok = transNode(node, ctx)
+          tok.IN = IN
+          return tok
+        })
+      }
+    }
+  }
+
   const gIN = getGroupIN(ctx)
   const dir = getGroupDir(ctx)
-
-  const toks = nodes.map((node) => transNode(node, ctx))
-  toks.forEach((tok) => tok.IN = IN)
+  const toks = getToks(nodes, ctx)
 
   return new Group({ elts: toks, IN: gIN, dir })
 }
