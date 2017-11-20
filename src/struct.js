@@ -4,7 +4,8 @@ import { getOUTS, getIN, getGroupIN, getGroupDir, splitTactic } from './structUt
 import {
   BRANCH, TOPIC, GROUP,
   DOWN, RIGHT, LEFT,
-  LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP, TREE_L, TREE_R, TIME_H, TIME_UP, TIME_DOWN
+  MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
+  TREE_L, TREE_R, TIME_H, TIME_UP, TIME_DOWN, TIME_V
 } from './constant'
 
 
@@ -26,6 +27,7 @@ export const transNode = (node, ctx = MAP) => {
       case TREE_L:
       case TREE_R:
       case TIME_H:
+      case TIME_V:
       case TIME_UP:
       case TIME_DOWN: {
         const group = transList(node.children, ctx)
@@ -51,6 +53,18 @@ const transList = (nodes, ctx) => {
     switch (ctx) {
       case TIME_H: {
         const ctxs = [TIME_UP, TIME_DOWN]
+        const INs = ctxs.map(getIN)
+        return nodes.map((node, i) => {
+          const ctx = isEven(i) ? ctxs[0] : ctxs[1]
+          const IN = isEven(i) ? INs[0] : INs[1]
+          const tok = transNode(node, ctx)
+          tok.IN = IN
+          return tok
+        })
+      }
+
+      case TIME_V: {
+        const ctxs = [TREE_R, TREE_L]
         const INs = ctxs.map(getIN)
         return nodes.map((node, i) => {
           const ctx = isEven(i) ? ctxs[0] : ctxs[1]

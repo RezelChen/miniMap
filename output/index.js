@@ -1426,33 +1426,39 @@ module.exports = function (it, TYPE) {
 
 "use strict";
 const UP = 'UP';
-/* harmony export (immutable) */ __webpack_exports__["w"] = UP;
+/* harmony export (immutable) */ __webpack_exports__["y"] = UP;
 
 const DOWN = 'DOWN';
 /* harmony export (immutable) */ __webpack_exports__["c"] = DOWN;
 
 const RIGHT = 'RIGHT';
-/* harmony export (immutable) */ __webpack_exports__["m"] = RIGHT;
+/* harmony export (immutable) */ __webpack_exports__["n"] = RIGHT;
 
 const LEFT = 'LEFT';
-/* harmony export (immutable) */ __webpack_exports__["e"] = LEFT;
+/* harmony export (immutable) */ __webpack_exports__["f"] = LEFT;
 
 
 const RIGHT_INTER = 'RIGHT_INTER';
-/* harmony export (immutable) */ __webpack_exports__["o"] = RIGHT_INTER;
+/* harmony export (immutable) */ __webpack_exports__["p"] = RIGHT_INTER;
+
+const LEFT_INTER = 'LEFT_INTER';
+/* unused harmony export LEFT_INTER */
+
+const DOWN_INTER = 'DOWN_INTER';
+/* harmony export (immutable) */ __webpack_exports__["d"] = DOWN_INTER;
 
 
 const LEFT_UP = 'LEFT_UP';
-/* harmony export (immutable) */ __webpack_exports__["g"] = LEFT_UP;
+/* harmony export (immutable) */ __webpack_exports__["h"] = LEFT_UP;
 
 const LEFT_DOWN = 'LEFT_DOWN';
-/* harmony export (immutable) */ __webpack_exports__["f"] = LEFT_DOWN;
+/* harmony export (immutable) */ __webpack_exports__["g"] = LEFT_DOWN;
 
 const RIGHT_UP = 'RIGHT_UP';
-/* harmony export (immutable) */ __webpack_exports__["p"] = RIGHT_UP;
+/* harmony export (immutable) */ __webpack_exports__["q"] = RIGHT_UP;
 
 const RIGHT_DOWN = 'RIGHT_DOWN';
-/* harmony export (immutable) */ __webpack_exports__["n"] = RIGHT_DOWN;
+/* harmony export (immutable) */ __webpack_exports__["o"] = RIGHT_DOWN;
 
 
 // export const TOP = 'TOP'
@@ -1460,48 +1466,51 @@ const RIGHT_DOWN = 'RIGHT_DOWN';
 
 
 const TOPIC = 'TOPIC';
-/* harmony export (immutable) */ __webpack_exports__["t"] = TOPIC;
+/* harmony export (immutable) */ __webpack_exports__["v"] = TOPIC;
 
 const BRANCH = 'BRANCH';
 /* harmony export (immutable) */ __webpack_exports__["a"] = BRANCH;
 
 const GROUP = 'GROUP';
-/* harmony export (immutable) */ __webpack_exports__["d"] = GROUP;
+/* harmony export (immutable) */ __webpack_exports__["e"] = GROUP;
 
 const CONN = 'CONN';
 /* harmony export (immutable) */ __webpack_exports__["b"] = CONN;
 
 
 const MAP = 'MAP';
-/* harmony export (immutable) */ __webpack_exports__["j"] = MAP;
+/* harmony export (immutable) */ __webpack_exports__["k"] = MAP;
 
 const ORG = 'ORG';
-/* harmony export (immutable) */ __webpack_exports__["k"] = ORG;
+/* harmony export (immutable) */ __webpack_exports__["l"] = ORG;
 
 const ORG_UP = 'ORG_UP';
-/* harmony export (immutable) */ __webpack_exports__["l"] = ORG_UP;
+/* harmony export (immutable) */ __webpack_exports__["m"] = ORG_UP;
 
 const LOGIC_R = 'LOGIC_R';
-/* harmony export (immutable) */ __webpack_exports__["i"] = LOGIC_R;
+/* harmony export (immutable) */ __webpack_exports__["j"] = LOGIC_R;
 
 const LOGIC_L = 'LOGIC_L';
-/* harmony export (immutable) */ __webpack_exports__["h"] = LOGIC_L;
+/* harmony export (immutable) */ __webpack_exports__["i"] = LOGIC_L;
 
 const TREE_L = 'TREE_L';
-/* harmony export (immutable) */ __webpack_exports__["u"] = TREE_L;
+/* harmony export (immutable) */ __webpack_exports__["w"] = TREE_L;
 
 const TREE_R = 'TREE_R';
-/* harmony export (immutable) */ __webpack_exports__["v"] = TREE_R;
+/* harmony export (immutable) */ __webpack_exports__["x"] = TREE_R;
 
 const TIME_H = 'TIME_H';
-/* harmony export (immutable) */ __webpack_exports__["r"] = TIME_H;
+/* harmony export (immutable) */ __webpack_exports__["s"] = TIME_H;
+
+const TIME_V = 'TIME_V';
+/* harmony export (immutable) */ __webpack_exports__["u"] = TIME_V;
 
 
 const TIME_UP = 'TIME_UP';
-/* harmony export (immutable) */ __webpack_exports__["s"] = TIME_UP;
+/* harmony export (immutable) */ __webpack_exports__["t"] = TIME_UP;
 
 const TIME_DOWN = 'TIME_DOWN';
-/* harmony export (immutable) */ __webpack_exports__["q"] = TIME_DOWN;
+/* harmony export (immutable) */ __webpack_exports__["r"] = TIME_DOWN;
 
 
 /***/ }),
@@ -3893,7 +3902,7 @@ class Topic extends Tok {
 
   constructor(opts) {
     super(opts);
-    this.type = __WEBPACK_IMPORTED_MODULE_3__constant__["t" /* TOPIC */];
+    this.type = __WEBPACK_IMPORTED_MODULE_3__constant__["v" /* TOPIC */];
     this.color = opts.color;
   }
 
@@ -3913,7 +3922,7 @@ class Topic extends Tok {
 class Group extends Tok {
   constructor(opts) {
     super(opts);
-    this.type = __WEBPACK_IMPORTED_MODULE_3__constant__["d" /* GROUP */];
+    this.type = __WEBPACK_IMPORTED_MODULE_3__constant__["e" /* GROUP */];
     this.dir = opts.dir;
   }
 
@@ -3983,10 +3992,10 @@ class Conn {
 const isBranch = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["a" /* BRANCH */];
 /* unused harmony export isBranch */
 
-const isGroup = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["d" /* GROUP */];
+const isGroup = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["e" /* GROUP */];
 /* unused harmony export isGroup */
 
-const isTopic = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["t" /* TOPIC */];
+const isTopic = tok => tok.type === __WEBPACK_IMPORTED_MODULE_3__constant__["v" /* TOPIC */];
 /* harmony export (immutable) */ __webpack_exports__["e"] = isTopic;
 
 
@@ -4142,13 +4151,13 @@ const calGroup = tok => {
       case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
         radian = 1 / 2 * Math.PI;
         return [radian, fnArr[0]];
-      case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
+      case __WEBPACK_IMPORTED_MODULE_1__constant__["y" /* UP */]:
         radian = 3 / 2 * Math.PI;
         return [radian, fnArr[0]];
-      case __WEBPACK_IMPORTED_MODULE_1__constant__["m" /* RIGHT */]:
+      case __WEBPACK_IMPORTED_MODULE_1__constant__["n" /* RIGHT */]:
         radian = 0;
         return [radian, fnArr[1]];
-      case __WEBPACK_IMPORTED_MODULE_1__constant__["e" /* LEFT */]:
+      case __WEBPACK_IMPORTED_MODULE_1__constant__["f" /* LEFT */]:
         radian = Math.PI;
         return [radian, fnArr[1]];
     }
@@ -4207,13 +4216,13 @@ const getBranchJoint = (tok, dir) => {
   const { width, height } = tok.size;
 
   switch (dir) {
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["y" /* UP */]:
       return { x, y: 0 };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
       return { x, y: height };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["e" /* LEFT */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["f" /* LEFT */]:
       return { x: 0, y };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["m" /* RIGHT */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["n" /* RIGHT */]:
       return { x: width, y };
     default:
       Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Unknown dir', getBranchJoint, dir);
@@ -4226,13 +4235,13 @@ const getGroupJoint = (tok, dir, delta = 0) => {
   const { width, height } = tok.size;
 
   switch (dir) {
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["g" /* LEFT_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["h" /* LEFT_UP */]:
       return { x: -delta, y: -delta };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["f" /* LEFT_DOWN */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["g" /* LEFT_DOWN */]:
       return { x: -delta, y: height + delta };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["p" /* RIGHT_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["q" /* RIGHT_UP */]:
       return { x: width + delta, y: -delta };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["n" /* RIGHT_DOWN */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["o" /* RIGHT_DOWN */]:
       return { x: width + delta, y: height + delta };
   }
 
@@ -4249,13 +4258,13 @@ const getGroupJoint = (tok, dir, delta = 0) => {
   const y = cp.y1 + tSize.height / 2;
 
   switch (dir) {
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["y" /* UP */]:
       return { x, y: -delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
       return { x, y: height + delta };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["e" /* LEFT */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["f" /* LEFT */]:
       return { x: -delta, y };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["m" /* RIGHT */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["n" /* RIGHT */]:
       return { x: width + delta, y };
 
     default:
@@ -4269,13 +4278,13 @@ const getTopicJoint = (tok, dir, delta = 0) => {
   const { width, height } = tok.size;
 
   switch (dir) {
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["w" /* UP */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["y" /* UP */]:
       return { x: width / 2, y: -delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
       return { x: width / 2, y: height + delta };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["e" /* LEFT */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["f" /* LEFT */]:
       return { x: -delta, y: height / 2 };
-    case __WEBPACK_IMPORTED_MODULE_1__constant__["m" /* RIGHT */]:
+    case __WEBPACK_IMPORTED_MODULE_1__constant__["n" /* RIGHT */]:
       return { x: width + delta, y: height / 2 };
 
     default:
@@ -9747,7 +9756,7 @@ const addTopicRandly = () => {
 let root;
 const init = () => {
   root = c([c([c()]), c([c(), c([c()]), c([c(), c(), c()]), c()]), c([c(), c()]), c()]);
-  root.struct = __WEBPACK_IMPORTED_MODULE_1__src_constant__["j" /* MAP */];
+  root.struct = __WEBPACK_IMPORTED_MODULE_1__src_constant__["k" /* MAP */];
   render();
 };
 
@@ -9802,9 +9811,9 @@ const driver = tok => {
 
 const calTok = tok => {
   switch (tok.type) {
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["v" /* TOPIC */]:
       return tok;
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["d" /* GROUP */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["e" /* GROUP */]:
       tok.elts.forEach(calTok);
       Object(__WEBPACK_IMPORTED_MODULE_3__layoutUtil__["b" /* calGroup */])(tok);
       return tok;
@@ -9823,9 +9832,9 @@ const calTok = tok => {
 
 const imposeConnection = tok => {
   switch (tok.type) {
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["v" /* TOPIC */]:
       break;
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["d" /* GROUP */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["e" /* GROUP */]:
       tok.elts.forEach(imposeConnection);
       break;
     case __WEBPACK_IMPORTED_MODULE_2__constant__["a" /* BRANCH */]:
@@ -9846,11 +9855,11 @@ const imposeConnection = tok => {
 
 const imposeInPos = (tok, outPos) => {
   switch (tok.type) {
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["v" /* TOPIC */]:
       const inPos = { tok, pos: tok.getJoint() };
       tok.conn = new __WEBPACK_IMPORTED_MODULE_1__tok__["b" /* Conn */](outPos, inPos);
       break;
-    case __WEBPACK_IMPORTED_MODULE_2__constant__["d" /* GROUP */]:
+    case __WEBPACK_IMPORTED_MODULE_2__constant__["e" /* GROUP */]:
       tok.elts.forEach(t => imposeInPos(t, outPos));
       break;
     case __WEBPACK_IMPORTED_MODULE_2__constant__["a" /* BRANCH */]:
@@ -9926,7 +9935,7 @@ const render = toks => {
 
   const Snodes = toks.map(tok => {
     switch (tok.type) {
-      case __WEBPACK_IMPORTED_MODULE_2__constant__["t" /* TOPIC */]:
+      case __WEBPACK_IMPORTED_MODULE_2__constant__["v" /* TOPIC */]:
         return createRect(tok);
       case __WEBPACK_IMPORTED_MODULE_2__constant__["b" /* CONN */]:
         return createPath(tok);
@@ -9968,7 +9977,7 @@ const CONN_GAP = 10;
 
 
 
-const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* MAP */]) => {
+const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["k" /* MAP */]) => {
 
   ctx = node.struct || ctx;
   const topic = node.tok;
@@ -9980,25 +9989,26 @@ const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* MA
 
     switch (ctx) {
 
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["i" /* LOGIC_R */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["h" /* LOGIC_L */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["k" /* ORG */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["l" /* ORG_UP */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["u" /* TREE_L */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["v" /* TREE_R */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TIME_H */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_UP */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["q" /* TIME_DOWN */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* LOGIC_R */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["i" /* LOGIC_L */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["l" /* ORG */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["m" /* ORG_UP */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["w" /* TREE_L */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["x" /* TREE_R */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_H */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["u" /* TIME_V */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["t" /* TIME_UP */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TIME_DOWN */]:
         {
           const group = transList(node.children, ctx);
           return new __WEBPACK_IMPORTED_MODULE_1__tok__["a" /* Branch */]({ elts: [topic, group], OUTS });
         }
 
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* MAP */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["k" /* MAP */]:
         {
           const [right, left] = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["e" /* splitTactic */])(node.children);
-          const rGroup = transList(right, __WEBPACK_IMPORTED_MODULE_3__constant__["i" /* LOGIC_R */]);
-          const lGroup = transList(left, __WEBPACK_IMPORTED_MODULE_3__constant__["h" /* LOGIC_L */]);
+          const rGroup = transList(right, __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* LOGIC_R */]);
+          const lGroup = transList(left, __WEBPACK_IMPORTED_MODULE_3__constant__["i" /* LOGIC_L */]);
           return new __WEBPACK_IMPORTED_MODULE_1__tok__["a" /* Branch */]({ elts: [topic, rGroup, lGroup], OUTS });
         }
 
@@ -10014,9 +10024,9 @@ const transList = (nodes, ctx) => {
 
   const getToks = (nodes, ctx) => {
     switch (ctx) {
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TIME_H */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_H */]:
         {
-          const ctxs = [__WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_UP */], __WEBPACK_IMPORTED_MODULE_3__constant__["q" /* TIME_DOWN */]];
+          const ctxs = [__WEBPACK_IMPORTED_MODULE_3__constant__["t" /* TIME_UP */], __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TIME_DOWN */]];
           const INs = ctxs.map(__WEBPACK_IMPORTED_MODULE_2__structUtil__["c" /* getIN */]);
           return nodes.map((node, i) => {
             const ctx = Object(__WEBPACK_IMPORTED_MODULE_0__util__["c" /* isEven */])(i) ? ctxs[0] : ctxs[1];
@@ -10027,12 +10037,25 @@ const transList = (nodes, ctx) => {
           });
         }
 
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["s" /* TIME_UP */]:
-      case __WEBPACK_IMPORTED_MODULE_3__constant__["q" /* TIME_DOWN */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["u" /* TIME_V */]:
+        {
+          const ctxs = [__WEBPACK_IMPORTED_MODULE_3__constant__["x" /* TREE_R */], __WEBPACK_IMPORTED_MODULE_3__constant__["w" /* TREE_L */]];
+          const INs = ctxs.map(__WEBPACK_IMPORTED_MODULE_2__structUtil__["c" /* getIN */]);
+          return nodes.map((node, i) => {
+            const ctx = Object(__WEBPACK_IMPORTED_MODULE_0__util__["c" /* isEven */])(i) ? ctxs[0] : ctxs[1];
+            const IN = Object(__WEBPACK_IMPORTED_MODULE_0__util__["c" /* isEven */])(i) ? INs[0] : INs[1];
+            const tok = transNode(node, ctx);
+            tok.IN = IN;
+            return tok;
+          });
+        }
+
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["t" /* TIME_UP */]:
+      case __WEBPACK_IMPORTED_MODULE_3__constant__["r" /* TIME_DOWN */]:
         {
           const IN = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["c" /* getIN */])(ctx);
           return nodes.map(node => {
-            const tok = transNode(node, __WEBPACK_IMPORTED_MODULE_3__constant__["i" /* LOGIC_R */]);
+            const tok = transNode(node, __WEBPACK_IMPORTED_MODULE_3__constant__["j" /* LOGIC_R */]);
             tok.IN = IN;
             return tok;
           });
@@ -10068,21 +10091,22 @@ const transList = (nodes, ctx) => {
 
 const getOUTS = ctx => {
   switch (ctx) {
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
-      return [__WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */]];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
-      return [__WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */]];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["j" /* LOGIC_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_H */]:
+      return [__WEBPACK_IMPORTED_MODULE_0__constant__["n" /* RIGHT */]];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_L */]:
+      return [__WEBPACK_IMPORTED_MODULE_0__constant__["f" /* LEFT */]];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* TREE_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["x" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_DOWN */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TIME_V */]:
       return [__WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */]];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
-      return [__WEBPACK_IMPORTED_MODULE_0__constant__["w" /* UP */]];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["j" /* MAP */]:
-      return [__WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */], __WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */]];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* ORG_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["t" /* TIME_UP */]:
+      return [__WEBPACK_IMPORTED_MODULE_0__constant__["y" /* UP */]];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* MAP */]:
+      return [__WEBPACK_IMPORTED_MODULE_0__constant__["n" /* RIGHT */], __WEBPACK_IMPORTED_MODULE_0__constant__["f" /* LEFT */]];
     default:
       Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getOUTS, ctx);
   }
@@ -10092,22 +10116,23 @@ const getOUTS = ctx => {
 
 const getGroupIN = ctx => {
   switch (ctx) {
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* UP */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["j" /* LOGIC_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_H */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["f" /* LEFT */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_L */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["n" /* RIGHT */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TIME_V */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["y" /* UP */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* ORG_UP */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["g" /* LEFT_UP */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["f" /* LEFT_DOWN */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["p" /* RIGHT_UP */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["x" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_DOWN */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LEFT_UP */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["t" /* TIME_UP */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["g" /* LEFT_DOWN */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* TREE_L */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* RIGHT_UP */];
     default:
       Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getGroupIN, ctx);
   }
@@ -10117,18 +10142,20 @@ const getGroupIN = ctx => {
 
 const getGroupDir = ctx => {
   switch (ctx) {
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["j" /* LOGIC_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["x" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* TREE_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["t" /* TIME_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_DOWN */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["o" /* RIGHT_INTER */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* ORG_UP */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["n" /* RIGHT */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_H */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["p" /* RIGHT_INTER */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TIME_V */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["d" /* DOWN_INTER */];
     default:
       Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getGroupDir, ctx);
   }
@@ -10138,18 +10165,17 @@ const getGroupDir = ctx => {
 
 const getIN = ctx => {
   switch (ctx) {
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["v" /* TREE_R */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["s" /* TIME_UP */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["q" /* TIME_DOWN */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_H */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["e" /* LEFT */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["h" /* LOGIC_L */]:
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["u" /* TREE_L */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* RIGHT */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["k" /* ORG */]:
-      return __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* UP */];
-    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["j" /* LOGIC_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["x" /* TREE_R */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["t" /* TIME_UP */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["r" /* TIME_DOWN */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["f" /* LEFT */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["i" /* LOGIC_L */]:
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["w" /* TREE_L */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["n" /* RIGHT */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["l" /* ORG */]:
+      return __WEBPACK_IMPORTED_MODULE_0__constant__["y" /* UP */];
+    case __WEBPACK_IMPORTED_MODULE_0__constant__["m" /* ORG_UP */]:
       return __WEBPACK_IMPORTED_MODULE_0__constant__["c" /* DOWN */];
     default:
       Object(__WEBPACK_IMPORTED_MODULE_1__util__["f" /* logErr */])('Unknown ctx', getInDir, ctx);

@@ -1,7 +1,7 @@
 import {
   LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP,
-  RIGHT, LEFT, DOWN, UP, LEFT_DOWN, RIGHT_INTER,
-  TREE_L, TREE_R, LEFT_UP, RIGHT_UP, TIME_DOWN, TIME_UP, TIME_H
+  RIGHT, LEFT, DOWN, UP, LEFT_DOWN, RIGHT_INTER, DOWN_INTER,
+  TREE_L, TREE_R, LEFT_UP, RIGHT_UP, TIME_DOWN, TIME_UP, TIME_H, TIME_V
 } from './constant'
 import { logErr } from './util'
 
@@ -16,6 +16,7 @@ export const getOUTS = (ctx) => {
     case TREE_L:
     case TREE_R:
     case TIME_DOWN:
+    case TIME_V:
       return [DOWN]
     case ORG_UP:
     case TIME_UP:
@@ -35,6 +36,7 @@ export const getGroupIN = (ctx) => {
     case LOGIC_L:
       return RIGHT
     case ORG:
+    case TIME_V:
       return UP
     case ORG_UP:
       return DOWN
@@ -64,6 +66,8 @@ export const getGroupDir = (ctx) => {
       return RIGHT
     case TIME_H:
       return RIGHT_INTER
+    case TIME_V:
+      return DOWN_INTER
     default:
       logErr('Unknown ctx', getGroupDir, ctx)
   }
@@ -75,7 +79,6 @@ export const getIN = (ctx) => {
     case TREE_R:
     case TIME_UP:
     case TIME_DOWN:
-    case TIME_H:
       return LEFT
     case LOGIC_L:
     case TREE_L:
