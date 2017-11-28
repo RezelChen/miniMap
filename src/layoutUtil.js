@@ -164,7 +164,7 @@ const getRelPos = (tok, relTok) => {
   return iter(tok, { x: 0, y: 0 })
 }
 
-export const getBranchJoint = (tok, dir) => {
+export const getBranchJoint = (tok, dir, delta = 0) => {
   const topic = tok.getTopic()
   const pos = getRelPos(topic, tok)
   const joint = topic.getJoint()
@@ -173,13 +173,13 @@ export const getBranchJoint = (tok, dir) => {
 
   switch (dir) {
     case UP:
-      return { x, y: 0 }
+      return { x, y: -delta }
     case DOWN:
-      return { x, y: height }
+      return { x, y: height + delta }
     case LEFT:
-      return { x: 0, y }
+      return { x: -delta, y }
     case RIGHT:
-      return { x: width, y }
+      return { x: width + delta, y }
     default:
       logErr('Unknown dir', getBranchJoint, dir)
   }

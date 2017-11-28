@@ -330,7 +330,7 @@ module.exports = function (NAME, exec) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(47);
+var IObject = __webpack_require__(48);
 var defined = __webpack_require__(23);
 module.exports = function (it) {
   return IObject(defined(it));
@@ -341,7 +341,7 @@ module.exports = function (it) {
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pIE = __webpack_require__(48);
+var pIE = __webpack_require__(49);
 var createDesc = __webpack_require__(31);
 var toIObject = __webpack_require__(15);
 var toPrimitive = __webpack_require__(22);
@@ -508,7 +508,7 @@ module.exports = function (KEY, exec) {
 // 5 -> Array#find
 // 6 -> Array#findIndex
 var ctx = __webpack_require__(18);
-var IObject = __webpack_require__(47);
+var IObject = __webpack_require__(48);
 var toObject = __webpack_require__(9);
 var toLength = __webpack_require__(8);
 var asc = __webpack_require__(84);
@@ -570,7 +570,7 @@ if (__webpack_require__(6)) {
   var toAbsoluteIndex = __webpack_require__(35);
   var toPrimitive = __webpack_require__(22);
   var has = __webpack_require__(11);
-  var classof = __webpack_require__(49);
+  var classof = __webpack_require__(50);
   var isObject = __webpack_require__(4);
   var toObject = __webpack_require__(9);
   var isArrayIter = __webpack_require__(81);
@@ -1425,6 +1425,78 @@ module.exports = function (it, TYPE) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const isArray = obj => obj.length !== undefined;
+/* unused harmony export isArray */
+
+const isUndef = v => v === undefined || v === null;
+/* harmony export (immutable) */ __webpack_exports__["e"] = isUndef;
+
+const isDef = v => v !== undefined && v !== null;
+/* harmony export (immutable) */ __webpack_exports__["b"] = isDef;
+
+
+const isEven = n => n % 2 === 0;
+/* harmony export (immutable) */ __webpack_exports__["c"] = isEven;
+
+const copy = obj => Array.isArray(obj) ? obj.slice() : Object.assign({}, obj);
+/* unused harmony export copy */
+
+const flatten = arr => arr.reduce((a, b) => a.concat(b), []);
+/* unused harmony export flatten */
+
+
+const mapFlat = (arr, fn) => flatten(arr.map(fn));
+/* harmony export (immutable) */ __webpack_exports__["g"] = mapFlat;
+
+
+const posAdd = (p1, p2) => {
+  return { x: p1.x + p2.x, y: p1.y + p2.y };
+};
+/* harmony export (immutable) */ __webpack_exports__["h"] = posAdd;
+
+const posSub = (p1, p2) => {
+  return { x: p1.x - p2.x, y: p1.y - p2.y };
+};
+/* harmony export (immutable) */ __webpack_exports__["i"] = posSub;
+
+
+const isNull = arr => arr.length === 0;
+/* harmony export (immutable) */ __webpack_exports__["d"] = isNull;
+
+
+const logErr = (description, fn, ...others) => console.error(description);
+/* harmony export (immutable) */ __webpack_exports__["f"] = logErr;
+
+
+const rand = (n, m) => n + parseInt(Math.random() * m);
+/* harmony export (immutable) */ __webpack_exports__["j"] = rand;
+
+
+const getMaxPoint = (...points) => {
+  if (points.length === 0) {
+    logErr('Arguments are empty', getMaxPoint);
+  } else {
+    const ds = points.map(p => p.x * p.x + p.y * p.y);
+    let maxIndex = 0;
+    let max = ds[0];
+    ds.forEach((d, i) => {
+      if (d > max) {
+        max = d;
+        maxIndex = i;
+      }
+    });
+
+    return points[maxIndex];
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = getMaxPoint;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 const UP = 'UP';
 /* harmony export (immutable) */ __webpack_exports__["y"] = UP;
 
@@ -1514,7 +1586,7 @@ const TIME_DOWN = 'TIME_DOWN';
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
@@ -1526,14 +1598,14 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 exports.f = {}.propertyIsEnumerable;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
@@ -1559,78 +1631,6 @@ module.exports = function (it) {
     // ES3 arguments fallback
     : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
 };
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const isArray = obj => obj.length !== undefined;
-/* unused harmony export isArray */
-
-const isUndef = v => v === undefined || v === null;
-/* harmony export (immutable) */ __webpack_exports__["e"] = isUndef;
-
-const isDef = v => v !== undefined && v !== null;
-/* harmony export (immutable) */ __webpack_exports__["b"] = isDef;
-
-
-const isEven = n => n % 2 === 0;
-/* harmony export (immutable) */ __webpack_exports__["c"] = isEven;
-
-const copy = obj => Array.isArray(obj) ? obj.slice() : Object.assign({}, obj);
-/* unused harmony export copy */
-
-const flatten = arr => arr.reduce((a, b) => a.concat(b), []);
-/* unused harmony export flatten */
-
-
-const mapFlat = (arr, fn) => flatten(arr.map(fn));
-/* harmony export (immutable) */ __webpack_exports__["g"] = mapFlat;
-
-
-const posAdd = (p1, p2) => {
-  return { x: p1.x + p2.x, y: p1.y + p2.y };
-};
-/* harmony export (immutable) */ __webpack_exports__["h"] = posAdd;
-
-const posSub = (p1, p2) => {
-  return { x: p1.x - p2.x, y: p1.y - p2.y };
-};
-/* harmony export (immutable) */ __webpack_exports__["i"] = posSub;
-
-
-const isNull = arr => arr.length === 0;
-/* harmony export (immutable) */ __webpack_exports__["d"] = isNull;
-
-
-const logErr = (description, fn, ...others) => console.error(description);
-/* harmony export (immutable) */ __webpack_exports__["f"] = logErr;
-
-
-const rand = (n, m) => n + parseInt(Math.random() * m);
-/* harmony export (immutable) */ __webpack_exports__["j"] = rand;
-
-
-const getMaxPoint = (...points) => {
-  if (points.length === 0) {
-    logErr('Arguments are empty', getMaxPoint);
-  } else {
-    const ds = points.map(p => p.x * p.x + p.y * p.y);
-    let maxIndex = 0;
-    let max = ds[0];
-    ds.forEach((d, i) => {
-      if (d > max) {
-        max = d;
-        maxIndex = i;
-      }
-    });
-
-    return points[maxIndex];
-  }
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = getMaxPoint;
 
 
 /***/ }),
@@ -2342,7 +2342,7 @@ module.exports = function (object, index, value) {
 /* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof = __webpack_require__(49);
+var classof = __webpack_require__(50);
 var ITERATOR = __webpack_require__(5)('iterator');
 var Iterators = __webpack_require__(44);
 module.exports = __webpack_require__(21).getIteratorMethod = function (it) {
@@ -3018,9 +3018,9 @@ module.exports.f = function getOwnPropertyNames(it) {
 // 19.1.2.1 Object.assign(target, source, ...)
 var getKeys = __webpack_require__(34);
 var gOPS = __webpack_require__(53);
-var pIE = __webpack_require__(48);
+var pIE = __webpack_require__(49);
 var toObject = __webpack_require__(9);
-var IObject = __webpack_require__(47);
+var IObject = __webpack_require__(48);
 var $assign = Object.assign;
 
 // should work with symbols and should have deterministic property order (V8 bug)
@@ -3219,7 +3219,7 @@ module.exports = function (iterator, fn, value, entries) {
 
 var aFunction = __webpack_require__(10);
 var toObject = __webpack_require__(9);
-var IObject = __webpack_require__(47);
+var IObject = __webpack_require__(48);
 var toLength = __webpack_require__(8);
 
 module.exports = function (that, callbackfn, aLen, memo, isRight) {
@@ -3793,7 +3793,7 @@ module.exports = function (that, maxLength, fillString, left) {
 
 var getKeys = __webpack_require__(34);
 var toIObject = __webpack_require__(15);
-var isEnum = __webpack_require__(48).f;
+var isEnum = __webpack_require__(49).f;
 module.exports = function (isEntries) {
   return function (it) {
     var O = toIObject(it);
@@ -3814,7 +3814,7 @@ module.exports = function (isEntries) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
-var classof = __webpack_require__(49);
+var classof = __webpack_require__(50);
 var from = __webpack_require__(124);
 module.exports = function (NAME) {
   return function toJSON() {
@@ -3866,10 +3866,10 @@ module.exports = Math.scale || function scale(x, inLow, inHigh, outLow, outHigh)
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__layoutUtil__ = __webpack_require__(127);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config__ = __webpack_require__(334);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constant__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constant__ = __webpack_require__(47);
 
 
 
@@ -3927,7 +3927,7 @@ class Group extends Tok {
   }
 
   getJoint() {
-    return Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["d" /* getGroupJoint */])(this, this.IN, __WEBPACK_IMPORTED_MODULE_2__config__["b" /* GROUP_PADDING */]);
+    return Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["d" /* getGroupJoint */])(this, this.IN, __WEBPACK_IMPORTED_MODULE_2__config__["c" /* GROUP_PADDING */]);
   }
 
   getTopics() {
@@ -3946,7 +3946,7 @@ class Branch extends Tok {
   }
 
   getJoint() {
-    return Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["c" /* getBranchJoint */])(this, this.IN);
+    return Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["c" /* getBranchJoint */])(this, this.IN, __WEBPACK_IMPORTED_MODULE_2__config__["a" /* BRANCH_PADDING */]);
   }
 
   getTopic() {
@@ -3955,14 +3955,14 @@ class Branch extends Tok {
 
   getOutPoints() {
     const topic = this.getTopic();
-    return this.OUTS.map(out => Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["e" /* getTopicJoint */])(topic, out, __WEBPACK_IMPORTED_MODULE_2__config__["a" /* CONN_GAP */]));
+    return this.OUTS.map(out => Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["e" /* getTopicJoint */])(topic, out, __WEBPACK_IMPORTED_MODULE_2__config__["b" /* CONN_GAP */]));
   }
 
   createOutConns() {
     const topic = this.getTopic();
     return this.OUTS.map(out => {
       const p1 = { tok: topic, pos: Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["e" /* getTopicJoint */])(topic, out) };
-      const p2 = { tok: topic, pos: Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["e" /* getTopicJoint */])(topic, out, __WEBPACK_IMPORTED_MODULE_2__config__["a" /* CONN_GAP */]) };
+      const p2 = { tok: topic, pos: Object(__WEBPACK_IMPORTED_MODULE_1__layoutUtil__["e" /* getTopicJoint */])(topic, out, __WEBPACK_IMPORTED_MODULE_2__config__["b" /* CONN_GAP */]) };
       return new Conn(p1, p2);
     });
   }
@@ -4039,8 +4039,8 @@ const createTokByLayer = (node, n) => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constant__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constant__ = __webpack_require__(47);
 
 
 
@@ -4208,7 +4208,7 @@ const getRelPos = (tok, relTok) => {
   return iter(tok, { x: 0, y: 0 });
 };
 
-const getBranchJoint = (tok, dir) => {
+const getBranchJoint = (tok, dir, delta = 0) => {
   const topic = tok.getTopic();
   const pos = getRelPos(topic, tok);
   const joint = topic.getJoint();
@@ -4217,13 +4217,13 @@ const getBranchJoint = (tok, dir) => {
 
   switch (dir) {
     case __WEBPACK_IMPORTED_MODULE_1__constant__["y" /* UP */]:
-      return { x, y: 0 };
+      return { x, y: -delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["c" /* DOWN */]:
-      return { x, y: height };
+      return { x, y: height + delta };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["f" /* LEFT */]:
-      return { x: 0, y };
+      return { x: -delta, y };
     case __WEBPACK_IMPORTED_MODULE_1__constant__["n" /* RIGHT */]:
-      return { x: width, y };
+      return { x: width + delta, y };
     default:
       Object(__WEBPACK_IMPORTED_MODULE_0__util__["f" /* logErr */])('Unknown dir', getBranchJoint, dir);
   }
@@ -4786,7 +4786,7 @@ if (!USE_NATIVE) {
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
   __webpack_require__(37).f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(48).f = $propertyIsEnumerable;
+  __webpack_require__(49).f = $propertyIsEnumerable;
   __webpack_require__(53).f = $getOwnPropertySymbols;
 
   if (DESCRIPTORS && !__webpack_require__(33)) {
@@ -4880,7 +4880,7 @@ setToStringTag(global.JSON, 'JSON', true);
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(34);
 var gOPS = __webpack_require__(53);
-var pIE = __webpack_require__(48);
+var pIE = __webpack_require__(49);
 module.exports = function (it) {
   var result = getKeys(it);
   var getSymbols = gOPS.f;
@@ -5109,7 +5109,7 @@ $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(70).set });
 "use strict";
 
 // 19.1.3.6 Object.prototype.toString()
-var classof = __webpack_require__(49);
+var classof = __webpack_require__(50);
 var test = {};
 test[__webpack_require__(5)('toStringTag')] = 'z';
 if (test + '' != '[object z]') {
@@ -6383,7 +6383,7 @@ var toIObject = __webpack_require__(15);
 var arrayJoin = [].join;
 
 // fallback for not array-like strings
-$export($export.P + $export.F * (__webpack_require__(47) != Object || !__webpack_require__(20)(arrayJoin)), 'Array', {
+$export($export.P + $export.F * (__webpack_require__(48) != Object || !__webpack_require__(20)(arrayJoin)), 'Array', {
   join: function join(separator) {
     return arrayJoin.call(toIObject(this), separator === undefined ? ',' : separator);
   }
@@ -6938,7 +6938,7 @@ __webpack_require__(58)('split', 2, function (defined, SPLIT, $split) {
 var LIBRARY = __webpack_require__(33);
 var global = __webpack_require__(2);
 var ctx = __webpack_require__(18);
-var classof = __webpack_require__(49);
+var classof = __webpack_require__(50);
 var $export = __webpack_require__(0);
 var isObject = __webpack_require__(4);
 var aFunction = __webpack_require__(10);
@@ -9710,8 +9710,8 @@ module.exports = function (regExp, replace) {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_driver__ = __webpack_require__(332);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_constant__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_util__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_constant__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_util__ = __webpack_require__(46);
 
 
 
@@ -9798,9 +9798,9 @@ const driver = tok => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tok__ = __webpack_require__(126);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constant__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constant__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__layoutUtil__ = __webpack_require__(127);
 
 
@@ -9957,10 +9957,13 @@ const render = toks => {
 
 "use strict";
 const GROUP_PADDING = 30;
-/* harmony export (immutable) */ __webpack_exports__["b"] = GROUP_PADDING;
+/* harmony export (immutable) */ __webpack_exports__["c"] = GROUP_PADDING;
+
+const BRANCH_PADDING = 10;
+/* harmony export (immutable) */ __webpack_exports__["a"] = BRANCH_PADDING;
 
 const CONN_GAP = 10;
-/* harmony export (immutable) */ __webpack_exports__["a"] = CONN_GAP;
+/* harmony export (immutable) */ __webpack_exports__["b"] = CONN_GAP;
 
 
 /***/ }),
@@ -9968,10 +9971,10 @@ const CONN_GAP = 10;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tok__ = __webpack_require__(126);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__structUtil__ = __webpack_require__(336);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constant__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__constant__ = __webpack_require__(47);
 
 
 
@@ -9983,7 +9986,7 @@ const transNode = (node, ctx = __WEBPACK_IMPORTED_MODULE_3__constant__["k" /* MA
   const topic = node.tok;
 
   if (Object(__WEBPACK_IMPORTED_MODULE_0__util__["d" /* isNull */])(node.children)) {
-    return topic;
+    return new __WEBPACK_IMPORTED_MODULE_1__tok__["a" /* Branch */]({ elts: [topic], OUTS: [] });
   } else {
     const OUTS = Object(__WEBPACK_IMPORTED_MODULE_2__structUtil__["d" /* getOUTS */])(ctx);
 
@@ -10084,8 +10087,8 @@ const transList = (nodes, ctx) => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constant__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constant__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util__ = __webpack_require__(46);
 
 
 

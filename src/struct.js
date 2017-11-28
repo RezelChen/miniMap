@@ -14,7 +14,7 @@ export const transNode = (node, ctx = MAP) => {
   ctx = node.struct || ctx
   const topic = node.tok
 
-  if (isNull(node.children)) { return topic }
+  if (isNull(node.children)) { return new Branch({ elts: [topic], OUTS: [] }) }
   else {
     const OUTS = getOUTS(ctx)
 

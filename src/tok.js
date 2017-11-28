@@ -1,6 +1,6 @@
 import { rand, logErr, posAdd, isDef } from './util'
 import { getTopicJoint, getGroupJoint, getBranchJoint } from './layoutUtil'
-import { GROUP_PADDING, CONN_GAP } from './config'
+import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING } from './config'
 import {
   TOPIC, BRANCH, GROUP, CONN,
   LEFT, RIGHT, TOP, BOTTOM
@@ -64,7 +64,7 @@ export class Branch extends Tok {
     this.OUTS = opts.OUTS
   }
 
-  getJoint () { return getBranchJoint(this, this.IN) }
+  getJoint () { return getBranchJoint(this, this.IN, BRANCH_PADDING) }
 
   getTopic () { return this.elts[0] }
 
