@@ -5,7 +5,8 @@ import {
   BRANCH, TOPIC, GROUP,
   DOWN, RIGHT, LEFT,
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
-  TREE_L, TREE_R, TIME_H, TIME_UP, TIME_DOWN, TIME_V
+  TREE_L, TREE_R, TIME_H, TIME_UP, TIME_DOWN, TIME_V,
+  FISH_RIGHT_UP, FISH_LEFT_UP, FISH_LEFT_DOWN, FISH_RIGHT_DOWN
 } from './constant'
 
 
@@ -29,7 +30,11 @@ export const transNode = (node, ctx = MAP) => {
       case TIME_H:
       case TIME_V:
       case TIME_UP:
-      case TIME_DOWN: {
+      case TIME_DOWN:
+      case FISH_RIGHT_UP:
+      case FISH_RIGHT_DOWN:
+      case FISH_LEFT_UP:
+      case FISH_LEFT_DOWN: {
         const group = transList(node.children, ctx)
         return new Branch({ elts: [topic, group], OUTS })
       }

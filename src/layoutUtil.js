@@ -106,7 +106,7 @@ export const calGroup = (tok) => {
 
   const getRadianFn = (dir) => {
     // temporary, not good enough
-    const [direction, inter] = dir.split('_')
+    const [direction, inter] = dir.split('-')
     const fnArr = isDef(inter) ?
       [getDatumsVerticalInter, getDatumsHorizonInter] :
       [getDatumsVertical, getDatumsHorizon]
@@ -125,6 +125,18 @@ export const calGroup = (tok) => {
       case LEFT:
         radian = Math.PI
         return [radian, fnArr[1]]
+      case RIGHT_DOWN:
+        radian = 1 / 3 * Math.PI
+        return [radian, fnArr[0]]
+      case LEFT_DOWN:
+        radian = 2 / 3 * Math.PI
+        return [radian, fnArr[0]]
+      case LEFT_UP:
+        radian = 4 / 3 * Math.PI
+        return [radian, fnArr[0]]
+      case RIGHT_UP:
+        radian = 5 / 3 * Math.PI
+        return [radian, fnArr[0]]
     }
   }
 
