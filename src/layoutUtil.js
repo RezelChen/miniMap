@@ -1,8 +1,11 @@
-import { posSub, posAdd, logErr, isUndef, isDef, getMaxPoint } from './util'
+import { 
+  posSub, posAdd, logErr, isUndef, isDef, 
+  getMaxPoint, getRadian,
+} from './util'
 import {
   UP, RIGHT, DOWN, LEFT,
+  LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP,
   GROUP, BRANCH,
-  LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP
 } from './constant'
 
 // TODO this is almost the same as getDatums, should be combined together.
@@ -143,27 +146,6 @@ const getDatumsHorizon = getDatumsCreator(getDeltaH)
 const getDatumsVertical = getDatumsCreator(getDeltaV)
 const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH, getDeltaH0)
 const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV, getDeltaV0)
-
-const getRadian = (dir) => {
-  switch (dir) {
-    case DOWN:
-      return 1 / 2 * Math.PI
-    case UP:
-      return 3 / 2 * Math.PI
-    case RIGHT:
-      return 0
-    case LEFT:
-      return Math.PI
-    case RIGHT_DOWN:
-      return 1 / 3 * Math.PI
-    case LEFT_DOWN:
-      return 2 / 3 * Math.PI
-    case LEFT_UP:
-      return 4 / 3 * Math.PI
-    case RIGHT_UP:
-      return 5 / 3 * Math.PI
-  }
-}
 
 const getDatumsFn = (dir, isInter = false) => {
   const [datumsVert, datumsHori] = isInter ? 

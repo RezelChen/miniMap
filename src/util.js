@@ -1,3 +1,8 @@
+import {
+  UP, RIGHT, DOWN, LEFT,
+  LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP,
+} from './constant'
+
 export const isArray = (obj) => obj.length !== undefined
 export const isUndef = (v) => v === undefined || v === null
 export const isDef = (v) => v !== undefined && v !== null
@@ -31,5 +36,26 @@ export const getMaxPoint = (...points) => {
     })
 
     return points[maxIndex]
+  }
+}
+
+export const getRadian = (dir) => {
+  switch (dir) {
+    case DOWN:
+      return 1 / 2 * Math.PI
+    case UP:
+      return 3 / 2 * Math.PI
+    case RIGHT:
+      return 0
+    case LEFT:
+      return Math.PI
+    case RIGHT_DOWN:
+      return 1 / 3 * Math.PI
+    case LEFT_DOWN:
+      return 2 / 3 * Math.PI
+    case LEFT_UP:
+      return 4 / 3 * Math.PI
+    case RIGHT_UP:
+      return 5 / 3 * Math.PI
   }
 }
