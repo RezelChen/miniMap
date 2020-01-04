@@ -1,6 +1,6 @@
 import { 
   posSub, posAdd, logErr, isUndef, isDef, 
-  getMaxPoint, getRadian,
+  getMaxPoint, getRatio,
 } from './util'
 import {
   UP, RIGHT, DOWN, LEFT,
@@ -42,12 +42,7 @@ const getPaddingFn = (dir) => {
 
 export const getPadding = (dir, delta, cj = { x: 0, y: 0 }) => {
   const fn = getPaddingFn(dir)
-  const radian = getRadian(dir)
-  const ratio = {
-    x: Math.cos(radian),
-    y: Math.sin(radian)
-  }
-
+  const ratio = getRatio(dir)
   return fn(ratio, delta, cj)
 }
 
@@ -169,10 +164,10 @@ const getDatumsFn = (dir, isInter = false) => {
 export const calGroup = (tok) => {
 
   const [direction, inter] = tok.dir.split('-')
-  const radian = getRadian(direction)
+  const ratio = getRatio(direction)
   const fn = getDatumsFn(direction, isDef(inter))
 
-  const [size, margin] = calOblique(tok.elts, radian, fn)
+  const [size, margin] = calOblique(tok.elts, ratio, fn)
   tok.size = size
   tok.margin = margin
   return tok
@@ -242,14 +237,14 @@ export const getGroupJoint = (tok, dir, delta = { x: 0, y: 0 }) => {
       return { x: width + dx, y: height + dy }
   }
 
-  const fackToks = tok.getTopics().map((topic) => {
+  const fakeToks = tok.getTopics().map((topic) => {
     return {
       pos: getRelPos(topic, tok),
       size: topic.size,
     }
   })
 
-  const cp = calTotalCornerPoint(fackToks)
+  const cp = calTotalCornerPoint(fakeToks)
   const tSize = getSize(cp)
   const x = cp.x1 + tSize.width / 2
   const y = cp.y1 + tSize.height / 2
@@ -366,13 +361,7 @@ const calToksPos = (toks, joints, datums) => {
 }
 
 
-const calOblique = (toks, radian, getDatums) => {
-
-  const ratio = {
-    x: Math.cos(radian),
-    y: Math.sin(radian)
-  }
-
+const calOblique = (toks, ratio, getDatums) => {
   const datums = getDatums(toks, ratio)
   const joints = toks.map((t) => t.getJoint())
 

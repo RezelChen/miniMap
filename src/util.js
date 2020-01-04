@@ -39,23 +39,35 @@ export const getMaxPoint = (...points) => {
   }
 }
 
-export const getRadian = (dir) => {
-  switch (dir) {
-    case DOWN:
-      return 1 / 2 * Math.PI
-    case UP:
-      return 3 / 2 * Math.PI
-    case RIGHT:
-      return 0
-    case LEFT:
-      return Math.PI
-    case RIGHT_DOWN:
-      return 1 / 3 * Math.PI
-    case LEFT_DOWN:
-      return 2 / 3 * Math.PI
-    case LEFT_UP:
-      return 4 / 3 * Math.PI
-    case RIGHT_UP:
-      return 5 / 3 * Math.PI
+const RADIAN_MAP = {
+  [DOWN]: 1 / 2 * Math.PI,
+  [UP]: 3 / 2 * Math.PI,
+  [RIGHT]: 0,
+  [LEFT]: Math.PI,
+  [RIGHT_DOWN]: 1 / 3 * Math.PI,
+  [LEFT_DOWN]: 2 / 3 * Math.PI,
+  [LEFT_UP]: 4 / 3 * Math.PI,
+  [RIGHT_UP]: 5 / 3 * Math.PI,
+}
+
+export const getRatio = (dir) => {
+  const radian = RADIAN_MAP[dir]
+  return {
+    x: Math.cos(radian),
+    y: Math.sin(radian),
   }
+}
+
+export const getDeltaV = (ratio, delta) => {
+  const one = ratio.y > 0 ? 1 : -1
+  const dy = one * delta
+  const dx = dy / ratio.y * ratio.x
+  return { x: dx, y: dy }
+}
+
+export const getDeltaH = (ratio, delta) => {
+  const one = ratio.x > 0 ? 1 : -1
+  const dx = one * delta
+  const dy = dx / ratio.x * ratio.y
+  return { x: dx, y: dy }
 }
