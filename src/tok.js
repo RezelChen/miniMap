@@ -1,5 +1,5 @@
 import { rand, logErr, posAdd, isDef } from './util'
-import { getTopicJoint, getGroupJoint, getBranchJoint } from './layoutUtil'
+import { getTopicJoint, getGroupJoint, getBranchJoint, getPadding } from './layoutUtil'
 import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING } from './config'
 import {
   TOPIC, BRANCH, GROUP, CONN,
@@ -51,7 +51,12 @@ export class Group extends Tok {
     this.dir = opts.dir
   }
 
-  getJoint () { return getGroupJoint(this, this.IN, GROUP_PADDING) }
+  getJoint() {
+    const topics = this.getTopics()
+    const cj = topics[0] ? topics[0].getJoint() : null
+    const padding = getPadding(this.IN, GROUP_PADDING, cj)
+    return getGroupJoint(this, this.IN, padding)
+  }
 
   getTopics () { return this.elts.map((t) => t.getTopic()) }
 

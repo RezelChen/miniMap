@@ -5,6 +5,49 @@ import {
   LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP
 } from './constant'
 
+// TODO this is almost the same as getDatums, should be combined together.
+const getPaddingV = (ratio, dy, cj) => {
+  const dir = ratio.y > 0 ? 1 : -1
+  dy = dir * dy
+  const dir0 = ratio.x < 0 ? 1 : -1
+  const dx = dir0 * cj.x + (dy / ratio.y * ratio.x)
+  return { x: dx, y: dy }
+}
+
+const getPaddingH = (ratio, dx, cj) => {
+  const dir = ratio.x > 0 ? 1 : -1
+  dx = dir * dx
+  const dir0 = ratio.y < 0 ? 1 : -1
+  const dy = dir0 * cj.y + (dx / ratio.x * ratio.y)
+  return { x: dx, y: dy }
+}
+
+const getPaddingFn = (dir) => {
+  switch (dir) {
+    case DOWN:
+    case UP:
+      return getPaddingV
+    case RIGHT:
+    case LEFT:
+    case RIGHT_DOWN:
+    case RIGHT_UP:
+    case LEFT_UP:
+    case LEFT_DOWN:
+      return getPaddingH
+  }
+}
+
+export const getPadding = (dir, delta, cj = { x: 0, y: 0 }) => {
+  const fn = getPaddingFn(dir)
+  const radian = getRadian(dir)
+  const ratio = {
+    x: Math.cos(radian),
+    y: Math.sin(radian)
+  }
+
+  return fn(ratio, delta, cj)
+}
+
 const getDeltaV = (tok1, tok2, ratio) => {
   const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]
   const dir = ratio.y > 0 ? 1 : -1
@@ -101,46 +144,51 @@ const getDatumsVertical = getDatumsCreator(getDeltaV)
 const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH, getDeltaH0)
 const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV, getDeltaV0)
 
+const getRadian = (dir) => {
+  switch (dir) {
+    case DOWN:
+      return 1 / 2 * Math.PI
+    case UP:
+      return 3 / 2 * Math.PI
+    case RIGHT:
+      return 0
+    case LEFT:
+      return Math.PI
+    case RIGHT_DOWN:
+      return 1 / 3 * Math.PI
+    case LEFT_DOWN:
+      return 2 / 3 * Math.PI
+    case LEFT_UP:
+      return 4 / 3 * Math.PI
+    case RIGHT_UP:
+      return 5 / 3 * Math.PI
+  }
+}
+
+const getDatumsFn = (dir, isInter = false) => {
+  const [datumsVert, datumsHori] = isInter ? 
+    [getDatumsVerticalInter, getDatumsHorizonInter] :
+    [getDatumsVertical, getDatumsHorizon]
+  
+  switch (dir) {
+    case DOWN:
+    case UP:
+    case RIGHT_DOWN:
+    case LEFT_DOWN:
+    case LEFT_UP:
+    case RIGHT_UP:
+      return datumsVert
+    case RIGHT:
+    case LEFT:
+      return datumsHori
+  }
+}
 
 export const calGroup = (tok) => {
 
-  const getRadianFn = (dir) => {
-    // temporary, not good enough
-    const [direction, inter] = dir.split('-')
-    const fnArr = isDef(inter) ?
-      [getDatumsVerticalInter, getDatumsHorizonInter] :
-      [getDatumsVertical, getDatumsHorizon]
-
-    let radian
-    switch (direction) {
-      case DOWN:
-        radian = 1 / 2 * Math.PI
-        return [radian, fnArr[0]]
-      case UP:
-        radian = 3 / 2 * Math.PI
-        return [radian, fnArr[0]]
-      case RIGHT:
-        radian = 0
-        return [radian, fnArr[1]]
-      case LEFT:
-        radian = Math.PI
-        return [radian, fnArr[1]]
-      case RIGHT_DOWN:
-        radian = 1 / 3 * Math.PI
-        return [radian, fnArr[0]]
-      case LEFT_DOWN:
-        radian = 2 / 3 * Math.PI
-        return [radian, fnArr[0]]
-      case LEFT_UP:
-        radian = 4 / 3 * Math.PI
-        return [radian, fnArr[0]]
-      case RIGHT_UP:
-        radian = 5 / 3 * Math.PI
-        return [radian, fnArr[0]]
-    }
-  }
-
-  const [radian, fn] = getRadianFn(tok.dir)
+  const [direction, inter] = tok.dir.split('-')
+  const radian = getRadian(direction)
+  const fn = getDatumsFn(direction, isDef(inter))
 
   const [size, margin] = calOblique(tok.elts, radian, fn)
   tok.size = size
@@ -197,18 +245,19 @@ export const getBranchJoint = (tok, dir, delta = 0) => {
   }
 }
 
-export const getGroupJoint = (tok, dir, delta = 0) => {
+export const getGroupJoint = (tok, dir, delta = { x: 0, y: 0 }) => {
   const { width, height } = tok.size
-
+  const dx = delta.x
+  const dy = delta.y
   switch (dir) {
     case LEFT_UP:
-      return { x: -delta, y: -delta }
+      return { x: dx, y: dy }
     case LEFT_DOWN:
-      return { x: -delta, y: height + delta }
+      return { x: dx, y: height + dy }
     case RIGHT_UP:
-      return { x: width + delta, y: -delta }
+      return { x: width + dx, y: dy }
     case RIGHT_DOWN:
-      return { x: width + delta, y: height + delta }
+      return { x: width + dx, y: height + dy }
   }
 
   const fackToks = tok.getTopics().map((topic) => {
@@ -226,13 +275,13 @@ export const getGroupJoint = (tok, dir, delta = 0) => {
 
   switch (dir) {
     case UP:
-      return { x, y: -delta }
+      return { x, y: dy }
     case DOWN:
-      return { x, y: height + delta }
+      return { x, y: height + dy }
     case LEFT:
-      return { x: -delta, y }
+      return { x: dx, y }
     case RIGHT:
-      return { x: width + delta, y }
+      return { x: width + dx, y }
 
     default:
       logErr('Unknown dir', getGroupJoint, dir)
