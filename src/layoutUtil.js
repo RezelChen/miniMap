@@ -1,50 +1,12 @@
 import { 
   posSub, posAdd, logErr, isUndef, isDef, 
-  getMaxPoint, getRatio,
+  getMaxPoint, getRatio, _getDeltaV, _getDeltaH,
 } from './util'
 import {
   UP, RIGHT, DOWN, LEFT,
   LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP,
   GROUP, BRANCH,
 } from './constant'
-
-// TODO this is almost the same as getDatums, should be combined together.
-const getPaddingV = (ratio, dy, cj) => {
-  const dir = ratio.y > 0 ? 1 : -1
-  dy = dir * dy
-  const dir0 = ratio.x < 0 ? 1 : -1
-  const dx = dir0 * cj.x + (dy / ratio.y * ratio.x)
-  return { x: dx, y: dy }
-}
-
-const getPaddingH = (ratio, dx, cj) => {
-  const dir = ratio.x > 0 ? 1 : -1
-  dx = dir * dx
-  const dir0 = ratio.y < 0 ? 1 : -1
-  const dy = dir0 * cj.y + (dx / ratio.x * ratio.y)
-  return { x: dx, y: dy }
-}
-
-const getPaddingFn = (dir) => {
-  switch (dir) {
-    case DOWN:
-    case UP:
-      return getPaddingV
-    case RIGHT:
-    case LEFT:
-    case RIGHT_DOWN:
-    case RIGHT_UP:
-    case LEFT_UP:
-    case LEFT_DOWN:
-      return getPaddingH
-  }
-}
-
-export const getPadding = (dir, delta, cj = { x: 0, y: 0 }) => {
-  const fn = getPaddingFn(dir)
-  const ratio = getRatio(dir)
-  return fn(ratio, delta, cj)
-}
 
 const getDeltaV = (tok1, tok2, ratio) => {
   const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]
@@ -222,47 +184,41 @@ export const getBranchJoint = (tok, dir, delta = 0) => {
   }
 }
 
-export const getGroupJoint = (tok, dir, delta = { x: 0, y: 0 }) => {
-  const { width, height } = tok.size
-  const dx = delta.x
-  const dy = delta.y
+const _getGroupJoint = (tok, dir) => {
   switch (dir) {
     case LEFT_UP:
-      return { x: dx, y: dy }
     case LEFT_DOWN:
-      return { x: dx, y: height + dy }
     case RIGHT_UP:
-      return { x: width + dx, y: dy }
-    case RIGHT_DOWN:
-      return { x: width + dx, y: height + dy }
+    case RIGHT_DOWN: {
+      // TODO check child !== undefined
+      // Maybe this should prevent when transNode, so check is unnecessarily
+      const child = tok.elts[0]
+      return posAdd(child.pos, child.getJoint())
+    }
   }
 
-  const fakeToks = tok.getTopics().map((topic) => {
+  const getFakeTok = (topic) => {
     return {
       pos: getRelPos(topic, tok),
       size: topic.size,
     }
-  })
-
+  }
+  const fakeToks = tok.getTopics().map(getFakeTok)
   const cp = calTotalCornerPoint(fakeToks)
   const tSize = getSize(cp)
-  const x = cp.x1 + tSize.width / 2
-  const y = cp.y1 + tSize.height / 2
+  const fakeTok = { size: tSize }
+  const originPos = { x: cp.x1, y: cp.y1 }
+  return posAdd(originPos, getTopicJoint(fakeTok, dir))
+}
 
+export const getGroupJoint = (tok, dir, delta = 0) => {
+  const joint = _getGroupJoint(tok, dir)
 
-  switch (dir) {
-    case UP:
-      return { x, y: dy }
-    case DOWN:
-      return { x, y: height + dy }
-    case LEFT:
-      return { x: dx, y }
-    case RIGHT:
-      return { x: width + dx, y }
+  const ratio = getRatio(dir)
+  if ([UP, DOWN].includes(dir)) { delta = _getDeltaV(ratio, delta) }
+  else { delta = _getDeltaH(ratio, delta) }
 
-    default:
-      logErr('Unknown dir', getGroupJoint, dir)
-  }
+  return posAdd(joint, delta)
 }
 
 export const getTopicJoint = (tok, dir, delta = 0) => {

@@ -58,14 +58,14 @@ export const getRatio = (dir) => {
   }
 }
 
-export const getDeltaV = (ratio, delta) => {
+export const _getDeltaV = (ratio, delta) => {
   const one = ratio.y > 0 ? 1 : -1
   const dy = one * delta
   const dx = dy / ratio.y * ratio.x
   return { x: dx, y: dy }
 }
 
-export const getDeltaH = (ratio, delta) => {
+export const _getDeltaH = (ratio, delta) => {
   const one = ratio.x > 0 ? 1 : -1
   const dx = one * delta
   const dy = dx / ratio.x * ratio.y
