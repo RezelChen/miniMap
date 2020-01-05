@@ -22,39 +22,12 @@ const getDeltaV = (tok1, tok2, ratio) => {
   return { x: dx, y: dy }
 }
 
-const getDeltaV0 = (tok1, tok2, ratio) => {
-  const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]
-  const dir = ratio.y > 0 ? 1 : -1
-
-  const margin = Math.max(tokUp.margin[2], tokDown.margin[0])
-  const dy0 = tokUp.getTopic().size.height - tokUp.getJoint().y
-  const dy1 = tokDown.getJoint().y
-  const dy = dir * (dy0 + margin + dy1)
-
-  const dx = dy / ratio.y * ratio.x
-  return { x: dx, y: dy }
-}
-
 const getDeltaH = (tok1, tok2, ratio) => {
   const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1]
   const dir = ratio.x > 0 ? 1 : -1
 
   const margin = Math.max(tokLeft.margin[1], tokRight.margin[3])
   const dx0 = tokLeft.size.width - tokLeft.getJoint().x
-  const dx1 = tokRight.getJoint().x
-  const dx = dir * (dx0 + margin + dx1)
-
-  const dy = dx / ratio.x * ratio.y
-  return { x: dx, y: dy }
-}
-
-
-const getDeltaH0 = (tok1, tok2, ratio) => {
-  const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1]
-  const dir = ratio.x > 0 ? 1 : -1
-
-  const margin = Math.max(tokLeft.margin[1], tokRight.margin[3])
-  const dx0 = tokLeft.getTopic().size.width - tokLeft.getJoint().x
   const dx1 = tokRight.getJoint().x
   const dx = dir * (dx0 + margin + dx1)
 
@@ -73,7 +46,9 @@ const getDatumsCreator = (getDelta) => {
   }
 }
 
-const getDatumsInterCreator = (getDelta, getDelta0) => {
+const getDatumsInterCreator = (getDelta) => {
+  const getDelta0 = (tok1, tok2, ratio) => getDelta(tok1.getTopic(), tok2.getTopic(), ratio)
+
   return (toks, ratio) => {
     const d0 = { x: 0, y: 0 }
     if (toks.length === 0) { return [] }
@@ -102,8 +77,8 @@ const getDatumsInterCreator = (getDelta, getDelta0) => {
 
 const getDatumsHorizon = getDatumsCreator(getDeltaH)
 const getDatumsVertical = getDatumsCreator(getDeltaV)
-const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH, getDeltaH0)
-const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV, getDeltaV0)
+const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH)
+const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV)
 
 const getDatumsFn = (dir, isInter = false) => {
   const [datumsVert, datumsHori] = isInter ? 
