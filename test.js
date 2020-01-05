@@ -1,5 +1,5 @@
 import { driver } from './src/driver'
-import { LOGIC_R } from './src/constant'
+import { MAP } from './src/constant'
 import { rand, isNull } from './src/util'
 
 
@@ -56,7 +56,7 @@ const init = () => {
     ]),
     c(),
   ])
-  root.struct = LOGIC_R
+  root.struct = MAP
   render()
 }
 
