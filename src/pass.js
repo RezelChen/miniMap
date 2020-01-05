@@ -29,10 +29,11 @@ export const imposeConnection = (tok) => {
   switch (tok.type) {
     case TOPIC:
       break
-    case GROUP:
+    case GROUP: {
       tok.elts.forEach(imposeConnection)
       break
-    case BRANCH:
+    }
+    case BRANCH: {
       const [topic, ...others] = tok.elts
       const outPosArr = tok.getOutPoints().map((point) => {
         return { tok: topic, pos: point }
@@ -41,23 +42,32 @@ export const imposeConnection = (tok) => {
       others.forEach((t, i) => imposeInPos(t, outPosArr[i]))
       topic.connOUTS = tok.createOutConns()
       break
+    }
   }
 
   return tok
 }
 
+// TODO Global the connection
 const imposeInPos = (tok, outPos) => {
   switch (tok.type) {
-    case TOPIC:
+    case TOPIC: {
       const inPos = { tok, pos: tok.getJoint() }
-      tok.conn = new Conn(outPos, inPos)
+      tok.connINS.push(new Conn(outPos, inPos))
       break
-    case GROUP:
+    }
+    case GROUP: {
       tok.elts.forEach((t) => imposeInPos(t, outPos))
       break
-    case BRANCH:
+    }
+    case BRANCH: {
+      const inPos = { tok, pos: tok.getJoint() }
       const [topic, ...others] = tok.elts
-      imposeInPos(topic, outPos)
+      topic.connINS = []
+      topic.connINS.push(new Conn(outPos, inPos))
+      // use the inPos of branch as the outPos of topic
+      imposeInPos(topic, inPos)
+    }
   }
 }
 
@@ -87,11 +97,14 @@ export const flattenBranch = (tok) => {
 
 // =========== exposeConn ===========
 export const exposeConn = (toks) => {
-  const conns = toks.filter((tok) => isDef(tok.conn)).map((t) => t.conn.generate())
-  const filterTok = toks.filter((tok) => isDef(tok.connOUTS))
-  const Oconns = mapFlat(filterTok, (t) => t.connOUTS.map((c) => c.generate()))
+  const genConn = (c) => c.generate()
+  const inToks = toks.filter((tok) => isDef(tok.connINS))
+  const outToks = toks.filter((tok) => isDef(tok.connOUTS))
 
-  return [...conns, ...Oconns, ...toks]
+  const inConns = mapFlat(inToks, (t) => t.connINS.map(genConn))
+  const outConns = mapFlat(outToks, (t) => t.connOUTS.map(genConn))
+
+  return [...inConns, ...outConns, ...toks]
 }
 
 // =========== render ===========
