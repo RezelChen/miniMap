@@ -71,3 +71,23 @@ export const _getDeltaH = (ratio, delta) => {
   const dy = dx / ratio.x * ratio.y
   return { x: dx, y: dy }
 }
+
+export const getCornerPoint = (tok) => {
+  const x1 = tok.pos.x
+  const y1 = tok.pos.y
+  const x2 = x1 + tok.size.width
+  const y2 = y1 + tok.size.height
+  return { x1, x2, y1, y2 }
+}
+
+export const getPointsConrner = (pots) => {
+  const cornerPoint = { x1: Infinity, x2: -Infinity, y1: Infinity, y2: -Infinity }
+  pots.forEach((p) => {
+    cornerPoint.x1 = Math.min(cornerPoint.x1, p.x)
+    cornerPoint.y1 = Math.min(cornerPoint.y1, p.y)
+    cornerPoint.x2 = Math.max(cornerPoint.x2, p.x)
+    cornerPoint.y2 = Math.max(cornerPoint.y2, p.y)
+  })
+
+  return cornerPoint
+}

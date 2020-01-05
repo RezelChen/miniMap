@@ -1,6 +1,7 @@
 import { 
   posSub, posAdd, logErr, isUndef, isDef, 
   getMaxPoint, getRatio, _getDeltaV, _getDeltaH,
+  getCornerPoint, getPointsConrner,
 } from './util'
 import {
   UP, RIGHT, DOWN, LEFT,
@@ -164,49 +165,44 @@ const getRelPos = (tok, relTok) => {
 }
 
 export const getBranchJoint = (tok, dir, delta = 0) => {
+  // use the topic's joint as branch joint
   const topic = tok.getTopic()
   const pos = getRelPos(topic, tok)
-  const joint = topic.getJoint()
-  const { x, y } = posAdd(pos, joint)
-  const { width, height } = tok.size
+  const topicJoint = topic.getJoint()
+  const joint = posAdd(pos, topicJoint)
 
-  switch (dir) {
-    case UP:
-      return { x, y: -delta }
-    case DOWN:
-      return { x, y: height + delta }
-    case LEFT:
-      return { x: -delta, y }
-    case RIGHT:
-      return { x: width + delta, y }
-    default:
-      logErr('Unknown dir', getBranchJoint, dir)
-  }
+  // the same as getGroupJoint
+  const ratio = getRatio(dir)
+  if ([UP, DOWN].includes(dir)) { delta = _getDeltaV(ratio, delta) }
+  else { delta = _getDeltaH(ratio, delta) }
+  return posAdd(joint, delta)
 }
 
+// TODO check child !== undefined
+// Maybe this should prevent when transNode, so check is unnecessarily
 const _getGroupJoint = (tok, dir) => {
+
+  const getRelJoint = (t) => {
+    const pos = getRelPos(t, tok)
+    return posAdd(pos, t.getJoint())
+  }
+  
+  // use the first child's joint as group joint
   switch (dir) {
     case LEFT_UP:
     case LEFT_DOWN:
     case RIGHT_UP:
     case RIGHT_DOWN: {
-      // TODO check child !== undefined
-      // Maybe this should prevent when transNode, so check is unnecessarily
       const child = tok.elts[0]
-      return posAdd(child.pos, child.getJoint())
+      return getRelJoint(child)
     }
   }
 
-  const getFakeTok = (topic) => {
-    return {
-      pos: getRelPos(topic, tok),
-      size: topic.size,
-    }
-  }
-  const fakeToks = tok.getTopics().map(getFakeTok)
-  const cp = calTotalCornerPoint(fakeToks)
-  const tSize = getSize(cp)
-  const fakeTok = { size: tSize }
+  // Calculate the size of children joints as fakeTok
+  // use this fakeTok's joint as group joint
+  const joints = tok.elts.map(getRelJoint)
+  const cp = getPointsConrner(joints)
+  const fakeTok = { size: getSize(cp) }
   const originPos = { x: cp.x1, y: cp.y1 }
   return posAdd(originPos, getTopicJoint(fakeTok, dir))
 }
@@ -217,7 +213,6 @@ export const getGroupJoint = (tok, dir, delta = 0) => {
   const ratio = getRatio(dir)
   if ([UP, DOWN].includes(dir)) { delta = _getDeltaV(ratio, delta) }
   else { delta = _getDeltaH(ratio, delta) }
-
   return posAdd(joint, delta)
 }
 
@@ -270,16 +265,6 @@ export const calTotalCornerPoint = (toks) => {
   return cornerPoint
 }
 
-
-const getCornerPoint = (tok) => {
-  const x1 = tok.pos.x
-  const y1 = tok.pos.y
-  const x2 = x1 + tok.size.width
-  const y2 = y1 + tok.size.height
-  return { x1, x2, y1, y2 }
-}
-
-
 const getSize = (cp) => {
   return {
     width: cp.x2 - cp.x1,
@@ -312,7 +297,6 @@ const calToksPos = (toks, joints, datums) => {
 
   const size = getSize(cp)
   const margin = getMargin(cp, mp)
-
   return [size, margin]
 }
 
@@ -322,5 +306,4 @@ const calOblique = (toks, ratio, getDatums) => {
   const joints = toks.map((t) => t.getJoint())
 
   return calToksPos(toks, joints, datums)
-
 }
