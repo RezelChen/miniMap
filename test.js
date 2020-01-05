@@ -1,74 +1,71 @@
-import { driver } from './src/driver'
+import render from './src'
 import { MAP } from './src/constant'
-import { rand, isNull } from './src/util'
+import { rand, isNull, getRandColor } from './src/util'
 
-
-const getRandColor = () => {
-  const randNum = () => rand(100, 150)
-  return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
+const root = {
+  topic: 'hello',
+  struct: MAP,
+  children: [
+    {
+      topic: 'a',
+      children: [
+        // { topic: 'a1' }, 
+        { topic: 'a2', children: [{ topic: 'a2.1' }, { topic: 'a2.1' }] }
+      ]
+    },
+    {
+      topic: 'b',
+      children: [
+        { topic: 'b1' }, 
+        { topic: 'b2' }, 
+        { topic: 'b3' }
+      ]
+    },
+    {
+      topic: 'c',
+      children: [{ topic: 'c1' }]
+    },
+  ]
 }
 
-// createNode
-const c = (c = []) => {
-  return { children: c, color: getRandColor() }
+const setColor = (data) => {
+  data.color = getRandColor()
+  if (data.children) { data.children.forEach(setColor) }
 }
 
-const render = () => {
-  const g = driver(root)
-  const el = document.getElementById('test')
-  el.innerHTML = ''
-  const svg = SVG(el).spof().style({ display: 'block' })
-  svg.add(g)
-}
-
-const addTopicRandly = () => {
+const addTopicRandly = (root) => {
 
   const iter = (node, depth) => {
-    if (isNull(node.children)) { return node.children.push(c()) }
-    const index = rand(0, node.children.length - 1)
-    if (depth === 0) { return node.children.splice(index, 0, c()) }
-    else {
-      return iter(node.children[index], depth - 1)
-    }
+    const child = { topic: 'ha', color: getRandColor() }
+
+    if (node.children === undefined) { node.children = [] }
+    if (isNull(node.children)) { return node.children.push(child) }
+
+    const index = rand(0, node.children.length)
+    if (depth === 0) { return node.children.splice(index, 0, child) }
+    else { return iter(node.children[index], depth - 1) }
   }
 
-  const depth = rand(1, 3)
+  const depth = rand(0, 4)
   iter(root, depth)
-  render()
 }
 
-let root
-const init = () => {
-  root = c([
-    c([
-      c(),
-    ]),
-    c([
-      c(),
-      c([c()]),
-      c([
-        c(), c(), c()
-      ]),
-      c(),
-    ]),
-    c([
-      c(), c()
-    ]),
-    c(),
-  ])
-  root.struct = MAP
-  render()
-}
-
-init()
+const testEl = document.getElementById('test')
 const sel = document.getElementById('sel')
+const btn = document.getElementById('addBtn')
+const renderTest = () => render(testEl, root)
+
 sel.addEventListener('change', (e) => {
   const { value } = e.target
   root.struct = value
-  render()
+  renderTest()
 })
 
-const btn = document.getElementById('addBtn')
 btn.addEventListener('click', (e) => {
-  addTopicRandly()
+  addTopicRandly(root)
+  renderTest()
 })
+
+// init
+setColor(root)
+renderTest()

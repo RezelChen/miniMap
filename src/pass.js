@@ -76,7 +76,7 @@ const imposeInPos = (tok, outPos) => {
 export const imposeTok = (node, i = 0) => {
   const tok = createTokByLayer(node, i)
   node.tok = tok
-  node.children.forEach((child) => imposeTok(child, i + 1))
+  node.children && node.children.forEach((child) => imposeTok(child, i + 1))
   return node
 }
 

@@ -16,3 +16,10 @@ export const driver = (tok) => {
     render,
   ])
 }
+
+export default (el, obj) => {
+  el.innerHTML = ''   // make sure el is empty
+  const g = driver(obj)
+  const svg = SVG(el).spof().style({ display: 'block' })
+  svg.add(g)
+}

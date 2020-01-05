@@ -22,6 +22,12 @@ export const logErr = (description, fn, ...others) => console.error(description)
 
 export const rand = (n, m) => n + parseInt(Math.random() * m)
 
+export const getRandColor = () => {
+  const randNum = () => rand(100, 150)
+  return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
+}
+
+
 export const getMaxPoint = (...points) => {
   if (points.length === 0) { logErr('Arguments are empty', getMaxPoint) }
   else {

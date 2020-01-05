@@ -1,4 +1,4 @@
-import { rand, logErr, posAdd, isDef } from './util'
+import { rand, logErr, posAdd, isDef, getRandColor } from './util'
 import { getTopicJoint, getGroupJoint, getBranchJoint } from './layoutUtil'
 import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING } from './config'
 import {
@@ -136,6 +136,6 @@ export const createTokByLayer = (node, n) => {
   return new Topic({
     size: layerSize[n],
     margin: [5, 5, 5, 5],
-    color: node.color,
+    color: node.color || getRandColor(),
   })
 }
