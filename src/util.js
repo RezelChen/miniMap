@@ -27,6 +27,13 @@ export const getRandColor = () => {
   return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
 }
 
+export const splitTactic = (arr) => {
+  const rightNum = Math.ceil(arr.length / 2)
+  const right = arr.slice(0, rightNum)
+  const left = arr.slice(rightNum)
+  return [right, left]
+}
+
 
 export const getMaxPoint = (...points) => {
   if (points.length === 0) { logErr('Arguments are empty', getMaxPoint) }

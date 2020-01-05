@@ -1,12 +1,12 @@
-import { logErr, isNull, isEven } from './util'
+import { logErr, isNull, isEven, splitTactic } from './util'
 import { Branch, Group } from './tok'
-import { getOUTS, getIN, getGroupIN, getGroupDir, splitTactic } from './structUtil'
+import { STRUCT_MAP } from './config'
 import {
   BRANCH, TOPIC, GROUP,
-  DOWN, RIGHT, LEFT,
+  
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
-  TREE_L, TREE_R, TIME_H, TIME_UP, TIME_DOWN, TIME_V,
-  FISH_RIGHT_UP, FISH_LEFT_UP, FISH_LEFT_DOWN, FISH_RIGHT_DOWN,
+  TREE_L, TREE_R, TIME_V, TIME_H, TIME_UP, TIME_DOWN, 
+  FISH_RIGHT_UP, FISH_RIGHT_DOWN, FISH_LEFT_UP, FISH_LEFT_DOWN,
   FISH_RIGHT, FISH_LEFT,
 } from './constant'
 
@@ -18,7 +18,7 @@ export const transNode = (node, ctx = MAP) => {
 
   if (node.children === undefined || isNull(node.children)) { return new Branch({ elts: [topic], OUTS: [] }) }
   else {
-    const OUTS = getOUTS(ctx)
+    const OUTS = STRUCT_MAP[ctx].OUTS
 
     switch (ctx) {
 
@@ -56,10 +56,9 @@ export const transNode = (node, ctx = MAP) => {
 }
 
 const transInterCreator = (ctxs) => {
-  const INs = ctxs.map(getIN)
   return (node, i) => {
     const ctx = isEven(i) ? ctxs[0] : ctxs[1]
-    const IN = isEven(i) ? INs[0] : INs[1]
+    const IN = STRUCT_MAP[ctx].IN
     const tok = transNode(node, ctx)
     tok.IN = IN
     return tok
@@ -96,7 +95,7 @@ const transList = (nodes, ctx) => {
 
       case TIME_UP:
       case TIME_DOWN: {
-        const IN = getIN(ctx)
+        const IN = STRUCT_MAP[ctx].IN
         return nodes.map((node) => {
           const tok = transNode(node, LOGIC_R)
           tok.IN = IN
@@ -105,7 +104,7 @@ const transList = (nodes, ctx) => {
       }
 
       default: {
-        const IN = getIN(ctx)
+        const IN = STRUCT_MAP[ctx].IN
         return nodes.map((node) => {
           const tok = transNode(node, ctx)
           tok.IN = IN
@@ -115,9 +114,9 @@ const transList = (nodes, ctx) => {
     }
   }
 
-  const gIN = getGroupIN(ctx)
-  const dir = getGroupDir(ctx)
   const toks = getToks(nodes, ctx)
+  const IN = STRUCT_MAP[ctx].GroupIN
+  const dir = STRUCT_MAP[ctx].GroupDIR
 
-  return new Group({ elts: toks, IN: gIN, dir })
+  return new Group({ elts: toks, IN, dir })
 }
