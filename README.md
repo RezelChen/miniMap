@@ -1,16 +1,19 @@
-### miniMap
+## miniMap
 
-一个简单的脑图应用。(未完成)
+### A simple engine for Mind Map.
+The Layout System is powerful, whcih supports more than 10 structures of Mind Map,
+and easily to create new structure by yourself. 
+What's more, it's less than 1000 lines of code, make you easy to improve it.
 
-设计了全新的布局系统，能够快速构建新的脑图类型。
+### How to Run:
 
-运行方式：
+Make sure you have install `Node.js` and `NPM` before run.
 
 ```
 npm install
-webpack -w
-在浏览器中打开 index.html
-可通过修改 test.js 来调试
+npm start
 ```
 
-[demo地址](https://rezelchen.github.io/miniMap/)
+Then you can change the `test.js` file and open the `index.html` in browser to check the result.
+
+You can also check the online demo by [click here](https://rezelchen.github.io/miniMap/).

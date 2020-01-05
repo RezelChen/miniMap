@@ -114,7 +114,6 @@ export const calGroup = (tok) => {
 export const calBranch = (tok) => {
   const [topic, ...others] = tok.elts
 
-  // outPoints 相对与 topic 位置
   const outPoints = tok.getOutPoints()
   const originPoint = { x: 0, y: 0 }
   const datums = [originPoint, ...outPoints]
@@ -262,11 +261,10 @@ const calToksPos = (toks, joints, datums) => {
     tok.pos = posSub(datums[i], joints[i])
   })
 
-  // 通过计算 cornerPoint 计算 size
   const cp = calTotalCornerPoint(toks)
   const mp = calMarginPoint(toks)
 
-  // 重新计算 tok.pos
+  // recalculate tok.pos
   const oPos = { x: cp.x1, y: cp.y1 }
   toks.forEach((tok) => { tok.pos = posSub(tok.pos, oPos) })
 
