@@ -1,10 +1,11 @@
 import {
   RIGHT, LEFT, DOWN, UP,
   LEFT_DOWN, LEFT_UP, RIGHT_UP, RIGHT_DOWN,
-  RIGHT_INTER, DOWN_INTER,
+  LEFT_INTER, RIGHT_INTER, DOWN_INTER,
   LOGIC_R, LOGIC_L, MAP, ORG, ORG_UP,
   TREE_L, TREE_R, TIME_DOWN, TIME_UP, TIME_H, TIME_V,
-  FISH_RIGHT_UP, FISH_LEFT_UP, FISH_LEFT_DOWN, FISH_RIGHT_DOWN
+  FISH_RIGHT_UP, FISH_LEFT_UP, FISH_LEFT_DOWN, FISH_RIGHT_DOWN,
+  FISH_RIGHT, FISH_LEFT,
 } from './constant'
 import { logErr } from './util'
 
@@ -14,10 +15,12 @@ export const getOUTS = (ctx) => {
     case TIME_H:
     case FISH_RIGHT_UP:
     case FISH_RIGHT_DOWN:
+    case FISH_RIGHT:
       return [RIGHT]
     case LOGIC_L:
     case FISH_LEFT_UP:
     case FISH_LEFT_DOWN:
+    case FISH_LEFT:
       return [LEFT]
     case ORG:
     case TREE_L:
@@ -39,8 +42,10 @@ export const getGroupIN = (ctx) => {
   switch (ctx) {
     case LOGIC_R:
     case TIME_H:
+    case FISH_RIGHT:
       return LEFT
     case LOGIC_L:
+    case FISH_LEFT:
       return RIGHT
     case ORG:
     case TIME_V:
@@ -77,7 +82,8 @@ export const getGroupDir = (ctx) => {
     case ORG_UP:
       return RIGHT
     case TIME_H:
-      return RIGHT_INTER
+    case FISH_RIGHT:
+    return RIGHT_INTER
     case TIME_V:
       return DOWN_INTER
     case FISH_RIGHT_UP:
@@ -88,6 +94,8 @@ export const getGroupDir = (ctx) => {
       return LEFT_UP
     case FISH_LEFT_DOWN:
       return LEFT_DOWN
+    case FISH_LEFT:
+      return LEFT_INTER
     default:
       logErr('Unknown ctx', getGroupDir, ctx)
   }
@@ -101,11 +109,13 @@ export const getIN = (ctx) => {
     case TIME_DOWN:
     case FISH_RIGHT_UP:
     case FISH_RIGHT_DOWN:
+    case FISH_RIGHT:
       return LEFT
     case LOGIC_L:
     case TREE_L:
     case FISH_LEFT_UP:
     case FISH_LEFT_DOWN:
+    case FISH_LEFT:
       return RIGHT
     case ORG:
       return UP
