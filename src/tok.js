@@ -1,4 +1,4 @@
-import { rand, logErr, posAdd, isDef, getRandColor } from './util'
+import { rand, logErr, posAdd, isDef, getRandColor, getTextSize } from './util'
 import { getTopicJoint, getGroupJoint, getBranchJoint } from './layoutUtil'
 import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING } from './config'
 import {
@@ -10,6 +10,7 @@ class Tok {
   constructor (opts) {
     this.pos = { x: 0, y: 0 }
     this.size = opts.size || { width: 0, height: 0 }
+    this.text = opts.text
 
     this.padding = opts.padding || [0, 0, 0, 0]
     this.margin = opts.margin || [0, 0, 0, 0]
@@ -124,18 +125,28 @@ export const createRandTok = () => {
   })
 }
 
+const FONT_FAMILY = 'Helvetica, Arial, sans-serif'
 export const createTokByLayer = (node, n) => {
-  const layerSize = [
-    { width: 100, height: 50 },
-    { width: 60, height: 30 },
-    { width: 40, height: 20 },
-  ]
+  const text = {
+    content: node.topic || 'SubTopic',
+    fontSize: 30,
+    fontFamily: FONT_FAMILY,
+  }
 
-  n = Math.min(n, 2)
+  const size = getTextSize(text.content, text)
+
+  // n = Math.min(n, 2)
+  // const layerSize = [
+  //   { width: 100, height: 50 },
+  //   { width: 60, height: 30 },
+  //   { width: 40, height: 20 },
+  // ]
 
   return new Topic({
-    size: layerSize[n],
+    size,
     margin: [5, 5, 5, 5],
     color: node.color || getRandColor(),
+    text,
+    // padding: [10, 10, 10, 10]
   })
 }

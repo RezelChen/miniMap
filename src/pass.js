@@ -2,6 +2,7 @@ import { posAdd, mapFlat, isDef, rand } from './util'
 import { isTopic, Conn, createTokByLayer } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch } from './layoutUtil'
+import { createRect, createPath, createGroup, createText } from '../lib/svg'
 
 
 //  =========== calTok ===========
@@ -109,39 +110,19 @@ export const exposeConn = (toks) => {
 
 // =========== render ===========
 
-const createRect = (tok) => {
-  const { x, y } = tok.pos
-  const { width, height } = tok.size
-  const fill = tok.color
-
-  const rect = new SVG.Rect().attr({ width, height, fill })
-  rect.translate(x, y).radius(3)
-  return rect
-}
-
-const createPath = (tok) => {
-  const { p1, p2 } = tok
-  const d = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} Z`
-
-  const path = new SVG.Path()
-  path.attr({ d, stroke: 'black' })
-  return path
-}
-
 export const render = (toks) => {
 
-  const Snodes = toks.map((tok) => {
+  const elms = mapFlat(toks, (tok) => {
     switch (tok.type) {
       case TOPIC:
-        return createRect(tok)
+        return [createRect(tok), createText(tok)]
       case CONN:
-        return createPath(tok)
+        return [createPath(tok)]
       default:
         return
     }
-  }).filter(isDef)
+  })
 
-  const g = new SVG.G().data('name', "container")
-  Snodes.forEach((node) => g.add(node))
+  const g = createGroup(elms)
   return g
 }

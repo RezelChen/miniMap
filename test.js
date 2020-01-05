@@ -9,8 +9,8 @@ const root = {
     {
       topic: 'a',
       children: [
-        // { topic: 'a1' }, 
-        { topic: 'a2', children: [{ topic: 'a2.1' }, { topic: 'a2.1' }] }
+        { topic: 'a1' },
+        { topic: 'a2', children: [{ topic: 'a2.1' }, { topic: 'a2.2' }] }
       ]
     },
     {
