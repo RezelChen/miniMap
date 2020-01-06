@@ -6,6 +6,7 @@ import {
   
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
   TREE_L, TREE_R, TIME_V, TIME_H, TIME_UP, TIME_DOWN, 
+  FISH_RIGHT_UP_IN, FISH_RIGHT_DOWN_IN, FISH_LEFT_UP_IN, FISH_LEFT_DOWN_IN,
   FISH_RIGHT_UP, FISH_RIGHT_DOWN, FISH_LEFT_UP, FISH_LEFT_DOWN,
   FISH_RIGHT, FISH_LEFT,
 } from './constant'
@@ -21,36 +22,16 @@ export const transNode = (node, ctx = MAP) => {
     const OUTS = STRUCT_MAP[ctx].OUTS
 
     switch (ctx) {
-
-      case LOGIC_R:
-      case LOGIC_L:
-      case ORG:
-      case ORG_UP:
-      case TREE_L:
-      case TREE_R:
-      case TIME_H:
-      case TIME_V:
-      case TIME_UP:
-      case TIME_DOWN:
-      case FISH_RIGHT_UP:
-      case FISH_RIGHT_DOWN:
-      case FISH_LEFT_UP:
-      case FISH_LEFT_DOWN:
-      case FISH_RIGHT:
-      case FISH_LEFT: {
-        const group = transList(node.children, ctx)
-        return new Branch({ elts: [topic, group], OUTS })
-      }
-
       case MAP: {
         const [right, left] = splitTactic(node.children)
         const rGroup = transList(right, LOGIC_R)
         const lGroup = transList(left, LOGIC_L)
         return new Branch({ elts: [topic, rGroup, lGroup], OUTS })
       }
-
-      default:
-        logErr('Unknown ctx', transTok, ctx)
+      default: {
+        const group = transList(node.children, ctx)
+        return new Branch({ elts: [topic, group], OUTS })
+      }
     }
   }
 }
@@ -82,31 +63,22 @@ const transList = (nodes, ctx) => {
       }
 
       case FISH_RIGHT: {
-        const ctxs = [FISH_RIGHT_UP, FISH_RIGHT_DOWN]
+        const ctxs = [FISH_RIGHT_UP_IN, FISH_RIGHT_DOWN_IN]
         const transNode = transInterCreator(ctxs)
         return nodes.map(transNode)
       }
 
       case FISH_LEFT: {
-        const ctxs = [FISH_LEFT_UP, FISH_LEFT_DOWN]
+        const ctxs = [FISH_LEFT_UP_IN, FISH_LEFT_DOWN_IN]
         const transNode = transInterCreator(ctxs)
         return nodes.map(transNode)
       }
 
-      case TIME_UP:
-      case TIME_DOWN: {
-        const IN = STRUCT_MAP[ctx].IN
-        return nodes.map((node) => {
-          const tok = transNode(node, LOGIC_R)
-          tok.IN = IN
-          return tok
-        })
-      }
-
       default: {
         const IN = STRUCT_MAP[ctx].IN
+        const Child = STRUCT_MAP[ctx].Child || ctx
         return nodes.map((node) => {
-          const tok = transNode(node, ctx)
+          const tok = transNode(node, Child)
           tok.IN = IN
           return tok
         })
