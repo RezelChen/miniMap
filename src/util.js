@@ -16,7 +16,8 @@ export const mapFlat = (arr, fn) => flatten(arr.map(fn))
 export const posAdd = (p1, p2) => { return { x: p1.x + p2.x, y: p1.y + p2.y } }
 export const posSub = (p1, p2) => { return { x: p1.x - p2.x, y: p1.y - p2.y } }
 
-export const isNull = (arr) => arr.length === 0
+export const isNull = (obj) => obj === undefined || obj === null
+export const isEmpty = (arr) => arr.length === 0
 
 export const logErr = (description, fn, ...others) => console.error(description)
 

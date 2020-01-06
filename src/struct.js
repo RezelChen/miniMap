@@ -1,4 +1,4 @@
-import { logErr, isNull, isEven, splitTactic } from './util'
+import { logErr, isNull, isEven, splitTactic, isEmpty } from './util'
 import { Branch, Group } from './tok'
 import { STRUCT_MAP } from './config'
 import {
@@ -12,44 +12,40 @@ import {
 } from './constant'
 
 
-export const transNode = (node, ctx = MAP) => {
-
-  const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
+const transNode0 = (node, struct) => {
   const topic = node.tok
+  const OUTS = STRUCT_MAP[struct].OUTS
+  const IN = STRUCT_MAP[struct].IN
 
-  if (node.children === undefined || isNull(node.children)) { return new Branch({ elts: [topic], OUTS: [] }) }
+  if (isNull(node.children) || isEmpty(node.children)) { return new Branch({ elts: [topic], OUTS: [], IN }) }
   else {
-    const OUTS = STRUCT_MAP[struct].OUTS
-
     switch (struct) {
       case MAP: {
         const [right, left] = splitTactic(node.children)
         const rGroup = transList(right, LOGIC_R)
         const lGroup = transList(left, LOGIC_L)
-        return new Branch({ elts: [topic, rGroup, lGroup], OUTS })
+        return new Branch({ elts: [topic, rGroup, lGroup], OUTS, IN })
       }
       default: {
         const group = transList(node.children, struct)
-        return new Branch({ elts: [topic, group], OUTS })
+        return new Branch({ elts: [topic, group], OUTS, IN })
       }
     }
   }
 }
 
-const transNode0 = (node, ctx) => {
+export const transNode = (node, ctx = MAP) => {
   if (Array.isArray(node)) { return transList(node, ctx) }
   else {
-    const IN = STRUCT_MAP[ctx].IN
-    const tok = transNode(node, ctx)
-    tok.IN = IN
-    return tok
+    const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
+    return transNode0(node, struct)
   }
 }
 
 const transInterCreator = (ctxs) => {
   return (node, i) => {
     const ctx = isEven(i) ? ctxs[0] : ctxs[1]
-    return transNode0(node, ctx)
+    return transNode(node, ctx)
   }
 }
 
@@ -82,7 +78,7 @@ const transList = (nodes, ctx) => {
       }
 
       default: {
-        return nodes.map((node) => transNode0(node, ctx))
+        return nodes.map((node) => transNode(node, ctx))
       }
     }
   }

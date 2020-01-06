@@ -1,6 +1,6 @@
 import render from './src'
 import { MAP } from './src/constant'
-import { rand, isNull, getRandColor } from './src/util'
+import { rand, isNull, getRandColor, isEmpty } from './src/util'
 
 const root = {
   topic: 'hello',
@@ -37,13 +37,14 @@ const addTopicRandly = (root) => {
 
   const iter = (node, depth) => {
     const child = { topic: 'ha', color: getRandColor() }
+    if (isNull(node.children)) { node.children = [] }
 
-    if (node.children === undefined) { node.children = [] }
-    if (isNull(node.children)) { return node.children.push(child) }
-
-    const index = rand(0, node.children.length)
-    if (depth === 0) { return node.children.splice(index, 0, child) }
-    else { return iter(node.children[index], depth - 1) }
+    if (isEmpty(node.children)) { node.children.push(child) }
+    else {
+      const index = rand(0, node.children.length)
+      if (depth === 0) { node.children.splice(index, 0, child) }
+      else { iter(node.children[index], depth - 1) }
+    }
   }
 
   const depth = rand(0, 4)
