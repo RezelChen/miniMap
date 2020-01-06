@@ -50,6 +50,7 @@ export class Group extends Tok {
     super(opts)
     this.type = GROUP
     this.dir = opts.dir
+    this.color = opts.color
   }
 
   getJoint() {
@@ -108,6 +109,7 @@ export class Conn {
 export const isBranch = (tok) => tok.type === BRANCH
 export const isGroup = (tok) => tok.type === GROUP
 export const isTopic = (tok) => tok.type === TOPIC
+export const isPhantom = (tok) => !tok.color
 
 export const createEmptyTok = () => {
   return new Topic({ size: { width: 0, height: 0 }, })

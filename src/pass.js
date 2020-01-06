@@ -1,8 +1,8 @@
 import { posAdd, mapFlat, isDef, rand } from './util'
-import { isTopic, Conn, createTokByLayer } from './tok'
+import { isTopic, Conn, createTokByLayer, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch } from './layoutUtil'
-import { createRect, createPath, createGroup, createText } from '../lib/svg'
+import { createRect, createPath,  createGroup, createText, createG } from '../lib/svg'
 
 
 //  =========== calTok ===========
@@ -91,7 +91,11 @@ export const flattenBranch = (tok) => {
     tok.pos = posAdd(tok.pos, pos)
     tok.parent = null
     if (isTopic(tok)) { return [tok] }
-    else { return mapFlat(tok.elts, (t) => iter(t, tok.pos)) }
+    else {
+      const toks = mapFlat(tok.elts, (t) => iter(t, tok.pos))
+      if (isGroup(tok) && !isPhantom(tok)) { return [tok, ...toks] }
+      else { return toks }
+    }
   }
 
   const originPos = { x: 0, y: 0 }
@@ -118,6 +122,8 @@ export const render = (toks) => {
     switch (tok.type) {
       case TOPIC:
         return [createRect(tok), createText(tok)]
+      case GROUP:
+        return [createGroup(tok)]
       case CONN:
         return [createPath(tok)]
       default:
@@ -125,6 +131,6 @@ export const render = (toks) => {
     }
   })
 
-  const g = createGroup(elms)
+  const g = createG(elms)
   return g
 }

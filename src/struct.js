@@ -1,4 +1,4 @@
-import { logErr, isNull, isEven, splitTactic, isEmpty } from './util'
+import { logErr, isNull, isEven, splitTactic, isEmpty, getRandColor } from './util'
 import { Branch, Group } from './tok'
 import { STRUCT_MAP } from './config'
 import {
@@ -35,7 +35,7 @@ const transNode0 = (node, struct) => {
 }
 
 export const transNode = (node, ctx = MAP) => {
-  if (Array.isArray(node)) { return transList(node, ctx) }
+  if (Array.isArray(node)) { return transList(node, ctx, getRandColor()) }
   else {
     const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
     return transNode0(node, struct)
@@ -49,7 +49,7 @@ const transInterCreator = (ctxs) => {
   }
 }
 
-const transList = (nodes, ctx) => {
+const transList = (nodes, ctx, color) => {
 
   const getToks = (nodes, ctx) => {
     switch (ctx) {
@@ -87,5 +87,5 @@ const transList = (nodes, ctx) => {
   const IN = STRUCT_MAP[ctx].GroupIN
   const dir = STRUCT_MAP[ctx].GroupDIR
 
-  return new Group({ elts: toks, IN, dir })
+  return new Group({ elts: toks, IN, dir, color })
 }
