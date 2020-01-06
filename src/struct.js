@@ -5,7 +5,7 @@ import {
   BRANCH, TOPIC, GROUP,
   
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
-  TREE_L, TREE_R, TIME_V, TIME_H, TIME_UP, TIME_DOWN, 
+  TREE_L, TREE_R, TIME_V, TIME_UP, TIME_DOWN, TIME_H_UP, TIME_H_DOWN, TIME_H,
   FISH_RIGHT_UP_IN, FISH_RIGHT_DOWN_IN, FISH_LEFT_UP_IN, FISH_LEFT_DOWN_IN,
   FISH_RIGHT_UP, FISH_RIGHT_DOWN, FISH_LEFT_UP, FISH_LEFT_DOWN,
   FISH_RIGHT, FISH_LEFT,
@@ -14,14 +14,14 @@ import {
 
 export const transNode = (node, ctx = MAP) => {
 
-  ctx = node.struct || ctx
+  const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
   const topic = node.tok
 
   if (node.children === undefined || isNull(node.children)) { return new Branch({ elts: [topic], OUTS: [] }) }
   else {
-    const OUTS = STRUCT_MAP[ctx].OUTS
+    const OUTS = STRUCT_MAP[struct].OUTS
 
-    switch (ctx) {
+    switch (struct) {
       case MAP: {
         const [right, left] = splitTactic(node.children)
         const rGroup = transList(right, LOGIC_R)
@@ -29,20 +29,27 @@ export const transNode = (node, ctx = MAP) => {
         return new Branch({ elts: [topic, rGroup, lGroup], OUTS })
       }
       default: {
-        const group = transList(node.children, ctx)
+        const group = transList(node.children, struct)
         return new Branch({ elts: [topic, group], OUTS })
       }
     }
   }
 }
 
-const transInterCreator = (ctxs) => {
-  return (node, i) => {
-    const ctx = isEven(i) ? ctxs[0] : ctxs[1]
+const transNode0 = (node, ctx) => {
+  if (Array.isArray(node)) { return transList(node, ctx) }
+  else {
     const IN = STRUCT_MAP[ctx].IN
     const tok = transNode(node, ctx)
     tok.IN = IN
     return tok
+  }
+}
+
+const transInterCreator = (ctxs) => {
+  return (node, i) => {
+    const ctx = isEven(i) ? ctxs[0] : ctxs[1]
+    return transNode0(node, ctx)
   }
 }
 
@@ -51,7 +58,7 @@ const transList = (nodes, ctx) => {
   const getToks = (nodes, ctx) => {
     switch (ctx) {
       case TIME_H: {
-        const ctxs = [TIME_UP, TIME_DOWN]
+        const ctxs = [TIME_H_UP, TIME_H_DOWN]
         const transNode = transInterCreator(ctxs)
         return nodes.map(transNode)
       }
@@ -63,25 +70,19 @@ const transList = (nodes, ctx) => {
       }
 
       case FISH_RIGHT: {
-        const ctxs = [FISH_RIGHT_UP_IN, FISH_RIGHT_DOWN_IN]
+        const ctxs = [FISH_RIGHT_UP, FISH_RIGHT_DOWN]
         const transNode = transInterCreator(ctxs)
         return nodes.map(transNode)
       }
 
       case FISH_LEFT: {
-        const ctxs = [FISH_LEFT_UP_IN, FISH_LEFT_DOWN_IN]
+        const ctxs = [FISH_LEFT_UP, FISH_LEFT_DOWN]
         const transNode = transInterCreator(ctxs)
         return nodes.map(transNode)
       }
 
       default: {
-        const IN = STRUCT_MAP[ctx].IN
-        const Child = STRUCT_MAP[ctx].Child || ctx
-        return nodes.map((node) => {
-          const tok = transNode(node, Child)
-          tok.IN = IN
-          return tok
-        })
+        return nodes.map((node) => transNode0(node, ctx))
       }
     }
   }

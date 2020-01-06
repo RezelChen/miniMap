@@ -30,6 +30,8 @@ export const TREE_L = 'TREE_L'
 export const TREE_R = 'TREE_R'
 export const TIME_UP = 'TIME_UP'
 export const TIME_DOWN = 'TIME_DOWN'
+export const TIME_H_UP = 'TIME_H_UP'
+export const TIME_H_DOWN = 'TIME_H_DOWN'
 export const TIME_H = 'TIME_H'
 export const TIME_V = 'TIME_V'
 

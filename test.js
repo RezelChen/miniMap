@@ -13,7 +13,7 @@ const root = {
         { topic: 'a2', children: [{ topic: 'a2.1' }, { topic: 'a2.2' }] }
       ]
     },
-    {
+    [{
       topic: 'b',
       children: [
         { topic: 'b1' }, 
@@ -24,7 +24,7 @@ const root = {
     {
       topic: 'c',
       children: [{ topic: 'c1' }]
-    },
+    }],
   ]
 }
 

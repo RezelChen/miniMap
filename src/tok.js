@@ -56,6 +56,8 @@ export class Group extends Tok {
     return getGroupJoint(this, this.IN, GROUP_PADDING)
   }
 
+  getTopic () { return this.elts[0] }
+
   getTopics () { return this.elts.map((t) => t.getTopic()) }
 
 }
