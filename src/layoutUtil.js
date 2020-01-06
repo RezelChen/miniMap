@@ -138,16 +138,34 @@ const getRelPos = (tok, relTok) => {
   return iter(tok, { x: 0, y: 0 })
 }
 
+const jointHelp = (tok, topic, dir) => {
+  const ratio = getRatio(dir)
+  const pos = getRelPos(topic, tok)
+  const joint = posAdd(pos, topic.getJoint())
+  
+  switch (dir) {
+    case LEFT_UP:
+    case RIGHT_UP: {
+      const delta = _getDeltaV(ratio, joint.y)
+      return posAdd(joint, delta)
+    }
+    case LEFT_DOWN:
+    case RIGHT_DOWN: {
+      const delta = _getDeltaV(ratio, tok.size.height - joint.y)
+      return posAdd(joint, delta)
+    }
+    default:
+      return joint
+  }
+}
+
 export const getBranchJoint = (tok, dir, delta = 0) => {
   // use the topic's joint as branch joint
-  const topic = tok.getTopic()
-  const pos = getRelPos(topic, tok)
-  const topicJoint = topic.getJoint()
-  const joint = posAdd(pos, topicJoint)
+  const joint = jointHelp(tok, tok.getTopic(), dir)
 
   // the same as getGroupJoint
   const ratio = getRatio(dir)
-  if ([UP, DOWN].includes(dir)) { delta = _getDeltaV(ratio, delta) }
+  if ([UP, DOWN, LEFT_UP, RIGHT_UP, LEFT_DOWN, RIGHT_DOWN].includes(dir)) { delta = _getDeltaV(ratio, delta) }
   else { delta = _getDeltaH(ratio, delta) }
   return posAdd(joint, delta)
 }
@@ -211,6 +229,14 @@ export const getTopicJoint = (tok, dir, delta = 0) => {
       return { x: -delta, y: height / 2 }
     case RIGHT:
       return { x: width + delta, y: height / 2 }
+    case LEFT_UP:
+      return { x: -delta, y: 0 }
+    case LEFT_DOWN:
+      return { x: -delta, y: height }
+    case RIGHT_UP:
+      return { x: width + delta, y: 0 }
+    case RIGHT_DOWN:
+      return { x: width + delta, y: height }
 
     default:
       logErr('Unknown dir', getTopicJoint, dir)

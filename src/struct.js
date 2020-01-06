@@ -16,6 +16,7 @@ const transNode0 = (node, struct) => {
   const topic = node.tok
   const OUTS = STRUCT_MAP[struct].OUTS
   const IN = STRUCT_MAP[struct].IN
+  topic.IN = STRUCT_MAP[struct].TopicIN
 
   if (isNull(node.children) || isEmpty(node.children)) { return new Branch({ elts: [topic], OUTS: [], IN }) }
   else {
