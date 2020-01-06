@@ -1,10 +1,10 @@
 import render from './src'
-import { MAP } from './src/constant'
+import { TIME_H } from './src/constant'
 import { rand, isNull, getRandColor, isEmpty } from './src/util'
 
 const root = {
   topic: 'hello',
-  struct: MAP,
+  struct: TIME_H,
   children: [
     {
       topic: 'a',

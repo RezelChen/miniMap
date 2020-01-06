@@ -161,14 +161,23 @@ const _getGroupJoint = (tok, dir) => {
     return posAdd(pos, t.getJoint())
   }
   
-  // use the first child's joint as group joint
+  // use the first child's joint as group joint,
+  // add delta to make sure group isn't overlay others
+  const ratio = getRatio(dir)
   switch (dir) {
     case LEFT_UP:
+    case RIGHT_UP: {
+      const child = tok.elts[0]
+      const joint = getRelJoint(child)
+      const delta = _getDeltaV(ratio, joint.y)
+      return posAdd(joint, delta)
+    }
     case LEFT_DOWN:
-    case RIGHT_UP:
     case RIGHT_DOWN: {
       const child = tok.elts[0]
-      return getRelJoint(child)
+      const joint = getRelJoint(child)
+      const delta = _getDeltaV(ratio, tok.size.height - joint.y)
+      return posAdd(joint, delta)
     }
   }
 
