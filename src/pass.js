@@ -1,9 +1,9 @@
 import { posAdd, mapFlat, isDef, rand } from './util'
-import { isTopic, Conn, createTokByLayer, isGroup, isPhantom } from './tok'
+import { isTopic, Conn, createTok, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
 import { createRect, createPath,  createGroup, createText, createG } from '../lib/svg'
-import { STRUCT_MAP, CONN_GAP } from './config'
+import { STRUCT_MAP, CONN_GAP, DEFAULT_STYLE } from './config'
 
 
 //  =========== calTok ===========
@@ -84,7 +84,9 @@ export const exposeConn = (tok) => {
 export const imposeTok = (node, i = 0) => {
   if (Array.isArray(node)) { return node.forEach((child) => imposeTok(child, i)) }
 
-  const tok = createTokByLayer(node, i)
+  const index =  Math.min(i, DEFAULT_STYLE.length - 1)
+  const defaultStyle = DEFAULT_STYLE[index]
+  const tok = createTok(node, defaultStyle)
   node.tok = tok
   node.children && node.children.forEach((child) => imposeTok(child, i + 1))
   return node

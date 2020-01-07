@@ -174,3 +174,30 @@ export const GROUP_PADDING = 15
 export const BRANCH_PADDING = 10
 export const CONN_GAP = 10
 export const FONT_FAMILY = 'Helvetica, Arial, sans-serif'
+
+export const DEFAULT_STYLE = [
+  {
+    text: {
+      content: 'Central Topic',
+      fontSize: 24,
+      fontFamily: FONT_FAMILY,
+    },
+    padding: [10, 10, 10, 10],
+  },
+  {
+    text: {
+      content: 'Main Topic',
+      fontSize: 16,
+      fontFamily: FONT_FAMILY,
+    },
+    padding: [10, 10, 10, 10],
+  },
+  {
+    text: {
+      content: 'Subtopic',
+      fontSize: 12,
+      fontFamily: FONT_FAMILY,
+    },
+    padding: [5, 5, 5, 5],
+  },
+]

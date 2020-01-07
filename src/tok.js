@@ -113,45 +113,15 @@ export const isGroup = (tok) => tok.type === GROUP
 export const isTopic = (tok) => tok.type === TOPIC
 export const isPhantom = (tok) => !tok.color
 
-export const createEmptyTok = () => {
-  return new Topic({ size: { width: 0, height: 0 }, })
-}
-
-
-export const createRandTok = () => {
-  const width = rand(20, 30)
-  const height = rand(15, 15)
-
-  // const width = 30
-  // const height = 15
-
-  return new Topic({
-    size: { width, height },
-    margin: [5, 20, 5, 5],
-  })
-}
-
-export const createTokByLayer = (node, n) => {
-  const text = {
-    content: node.topic || 'SubTopic',
-    fontSize: 15,
-    fontFamily: FONT_FAMILY,
-  }
-
+export const createTok = (node, defaultStyle) => {
+  const text = Object.assign({}, defaultStyle.text, node.text)
   const size = getTextSize(text.content, text)
-
-  // n = Math.min(n, 2)
-  // const layerSize = [
-  //   { width: 100, height: 50 },
-  //   { width: 60, height: 30 },
-  //   { width: 40, height: 20 },
-  // ]
 
   return new Topic({
     size: Object.assign({}, size),
     margin: [5, 5, 5, 5],
     color: node.color || getRandColor(),
     text,
-    padding: [5, 5, 5, 5]
+    padding: node.padding || defaultStyle.padding,
   })
 }

@@ -3,15 +3,15 @@ const getTopic = (line) => {
   const match = TOPIC_REG.exec(line)
   if (match === null) { return null }
   else {
-    const topic = match[2]
+    const title = match[2]
     const depth = match[1].length
-    return { topic, children: [], depth }
+    return { text: { content: title }, children: [], depth }
   }
 }
 
 export default (str) => {
   const lines = str.split('\n').map((l) => l.trim()).filter((l) => l !== '')
-  const root = { topic: lines[0], children: [], depth: 0 }
+  const root = { text: { content: lines[0] }, children: [], depth: 0 }
   const exps = lines.slice(1).map(getTopic).filter((exp) => exp)
 
   const iter = (i, ctx) => {

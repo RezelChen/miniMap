@@ -17,7 +17,8 @@ const STRUCTS = [
   { name: 'FISH LEFT', value: CONS.FISH_LEFT },
 ]
 
-const INIT_TEXT = `Central Topic
+const INIT_TEXT = `
+Central Topic
 - Main Topic 1
 -- Subtopic 1.1
 -- Subtopic 1.2
@@ -26,7 +27,12 @@ const INIT_TEXT = `Central Topic
 - Main Topic 2
 -- Subtopic 2.1
 -- Subtopic 2.2
-- Main Topic 3`
+- Main Topic 3
+- Main Topic 4
+- Main Topic 5
+-- Subtopic 5.1
+-- Subtopic 5.2
+`.trim()
 const TEST_DATA = {
   text: INIT_TEXT,
   struct: STRUCTS[0].value,
@@ -80,6 +86,7 @@ const getCurrentIndex = () => {
 }
 
 document.addEventListener('keydown', (e) => {
+  if (e.target !== document.body) { return }
   const index = getCurrentIndex()
   // up
   if (e.keyCode === 38) {
