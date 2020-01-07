@@ -1,6 +1,6 @@
 import { rand, logErr, posAdd, isDef, getRandColor, getTextSize } from './util'
 import { getTopicJoint, getGroupJoint, getBranchJoint } from './layoutUtil'
-import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING } from './config'
+import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING, FONT_FAMILY } from './config'
 import {
   TOPIC, BRANCH, GROUP, CONN,
   LEFT, RIGHT, TOP, BOTTOM
@@ -129,11 +129,10 @@ export const createRandTok = () => {
   })
 }
 
-const FONT_FAMILY = 'Helvetica, Arial, sans-serif'
 export const createTokByLayer = (node, n) => {
   const text = {
     content: node.topic || 'SubTopic',
-    fontSize: 30,
+    fontSize: 15,
     fontFamily: FONT_FAMILY,
   }
 
@@ -147,10 +146,10 @@ export const createTokByLayer = (node, n) => {
   // ]
 
   return new Topic({
-    size,
+    size: Object.assign({}, size),
     margin: [5, 5, 5, 5],
     color: node.color || getRandColor(),
     text,
-    // padding: [10, 10, 10, 10]
+    padding: [5, 5, 5, 5]
   })
 }
