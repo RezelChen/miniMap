@@ -24,8 +24,12 @@ const transNode0 = (node, struct) => {
       case MAP: {
         const [right, left] = splitTactic(node.children)
         const rGroup = transList(right, LOGIC_R)
-        const lGroup = transList(left, LOGIC_L)
-        return new Branch({ elts: [topic, rGroup, lGroup], OUTS, IN, struct })
+        if (isEmpty(left)) {
+          return new Branch({ elts: [topic, rGroup], OUTS: OUTS.slice(0, 1), IN, struct })
+        } else {
+          const lGroup = transList(left, LOGIC_L)
+          return new Branch({ elts: [topic, rGroup, lGroup], OUTS, IN, struct })
+        }
       }
       default: {
         const group = transList(node.children, struct)
