@@ -36,6 +36,11 @@ const renderTest = () => {
   const root = parser(TEST_DATA.text)
   root.struct = TEST_DATA.struct
   setColor(root)
+  const { children } = root
+  if (children.length >= 3) {
+    root.children = [children[0], children.slice(1, 3), ...children.slice(3)]
+  }
+
   render(testEl, root)
 }
 

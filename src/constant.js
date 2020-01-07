@@ -12,7 +12,8 @@ export const LEFT_DOWN = 'LEFT_DOWN'
 export const RIGHT_UP = 'RIGHT_UP'
 export const RIGHT_DOWN = 'RIGHT_DOWN'
 
-export const VERTICAL = 'VERTICAL'
+export const ANGLE_VERT = 'ANGLE_VERT'
+export const ANGLE_HORI = 'ANGLE_HORI'
 
 // export const TOP = 'TOP'
 // export const BOTTOM = 'BOTTOM'

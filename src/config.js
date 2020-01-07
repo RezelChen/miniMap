@@ -3,7 +3,7 @@ import {
   LEFT_DOWN, LEFT_UP, RIGHT_UP, RIGHT_DOWN,
   RIGHT_INTER, LEFT_INTER, DOWN_INTER,
 
-  VERTICAL,
+  ANGLE_VERT, ANGLE_HORI,
 
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
   TREE_L, TREE_R, TIME_V, TIME_UP, TIME_DOWN, TIME_H_UP, TIME_H_DOWN, TIME_H,
@@ -15,50 +15,56 @@ import {
 export const STRUCT_MAP = {
   [MAP]: {
     OUTS: [RIGHT, LEFT],
+    LineStyle: ANGLE_VERT,
   },
   [LOGIC_R]: {
     IN: LEFT,
     OUTS: [RIGHT],
     GroupIN: LEFT,
     GroupDIR: DOWN,
+    LineStyle: ANGLE_VERT,
   },
   [LOGIC_L]: {
     IN: RIGHT,
     OUTS: [LEFT],
     GroupIN: RIGHT,
     GroupDIR: DOWN,
+    LineStyle: ANGLE_VERT,
   },
   [ORG]: {
     IN: UP,
     OUTS: [DOWN],
     GroupIN: UP,
     GroupDIR: RIGHT,
+    LineStyle: ANGLE_HORI,
   },
   [ORG_UP]: {
     IN: DOWN,
     OUTS: [UP],
     GroupIN: DOWN,
     GroupDIR: RIGHT,
+    LineStyle: ANGLE_HORI,
   },
   [TREE_L]: {
     IN: RIGHT,
     OUTS: [DOWN],
     GroupIN: RIGHT_UP,
     GroupDIR: DOWN,
-    LineStyle: VERTICAL,
+    LineStyle: ANGLE_VERT,
   },
   [TREE_R]: {
     IN: LEFT,
     OUTS: [DOWN],
     GroupIN: LEFT_UP,
     GroupDIR: DOWN,
-    LineStyle: VERTICAL,
+    LineStyle: ANGLE_VERT,
   },
   [TIME_V]: {
     IN: UP,
     OUTS: [DOWN],
     GroupIN: UP,
     GroupDIR: DOWN_INTER,
+    LineStyle: ANGLE_VERT,
   },
   [TIME_UP]: {
     IN: LEFT,
@@ -66,7 +72,7 @@ export const STRUCT_MAP = {
     GroupIN: LEFT_DOWN,
     GroupDIR: DOWN,
     Child: LOGIC_R,
-    LineStyle: VERTICAL,
+    LineStyle: ANGLE_VERT,
   },
   [TIME_DOWN]: {
     IN: LEFT,
@@ -74,7 +80,7 @@ export const STRUCT_MAP = {
     GroupIN: LEFT_UP,
     GroupDIR: DOWN,
     Child: LOGIC_R,
-    LineStyle: VERTICAL,
+    LineStyle: ANGLE_VERT,
   },
   [TIME_H_UP]: {
     IN: LEFT,
