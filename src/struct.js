@@ -40,7 +40,8 @@ const transNode0 = (node, struct) => {
 }
 
 export const transNode = (node, ctx = MAP) => {
-  if (Array.isArray(node)) { return transList(node, ctx, getRandColor()) }
+  const color = 'rgb(190, 190, 244)'
+  if (Array.isArray(node)) { return transList(node, ctx, color) }
   else {
     const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
     return transNode0(node, struct)
