@@ -34,18 +34,35 @@
       font-size: 30px;
     }
 
+    .row {
+      height: 30px;
+    }
+
     #test {
-      height: 1000px;
+      width: 700px;
+      height: 600px;
       padding: 10px 10px 10px 100px;
+      border: 1px solid rgb(130, 103, 176);
+      overflow: scroll;
+      margin-left: 210px;
     }
 
     .sel-container {
+      position: relative;
       margin: 0 0 0 auto;
     }
 
     .sel-container p {
       display: inline-block;
       padding-right: 10px;
+    }
+    .sel-container #text-area {
+      position: absolute;
+      top: 30px;
+      left: 0;
+      width: 200px;
+      height: 400px;
+      border: 1px solid rgb(130, 103, 176);
     }
   </style>
   <div class="container">
@@ -81,10 +98,7 @@
             <option value="FISH_LEFT">FISH LEFT</option>
           </select>
       </div>
-      <div class="row">
-          <p>Add Topic randly:</p>
-          <button id="addBtn">add Topic</button>
-      </div>
+      <textarea id="text-area"></textarea>
     </div>
     <div id="test"></div>
   </div>
