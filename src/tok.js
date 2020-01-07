@@ -92,10 +92,11 @@ export class Branch extends Tok {
 }
 
 export class Conn {
-  constructor (p1, p2, style) {
+  constructor (p1, p2, opts = {}) {
     this.points = [p1, p2]
     this.type = CONN
-    this.style = style
+    this.style = opts.style
+    this.dir = opts.dir
   }
 
   generate () {
@@ -103,8 +104,6 @@ export class Conn {
     return {
       p1: posArr[0],
       p2: posArr[1],
-      type: this.type,
-      style: this.style,
     }
   }
 }

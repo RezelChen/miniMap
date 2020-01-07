@@ -1,9 +1,9 @@
 import { posAdd, mapFlat, isDef, rand } from './util'
 import { isTopic, Conn, createTokByLayer, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
-import { calGroup, calBranch } from './layoutUtil'
+import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
 import { createRect, createPath,  createGroup, createText, createG } from '../lib/svg'
-import { STRUCT_MAP } from './config'
+import { STRUCT_MAP, CONN_GAP } from './config'
 
 
 //  =========== calTok ===========
@@ -25,53 +25,58 @@ export const calTok = (tok) => {
   }
 }
 
-//  =========== imposeConnection ===========
+// =========== exposeConn ===========
 
-export const imposeConnection = (tok) => {
-  switch (tok.type) {
-    case TOPIC:
-      break
-    case GROUP: {
-      tok.elts.forEach(imposeConnection)
-      break
-    }
-    case BRANCH: {
-      const [topic, ...others] = tok.elts
-      const outPosArr = tok.getOutPoints().map((point) => {
-        return { tok: topic, pos: point }
-      })
-      const lineStyle = STRUCT_MAP[tok.struct].LineStyle
-      others.forEach(imposeConnection)
-      others.forEach((t, i) => imposeInPos(t, outPosArr[i], lineStyle))
-      topic.connOUTS = tok.createOutConns()
-      break
+export const exposeConn = (tok) => {
+  const conns = []
+
+  const getInPosArr = (tok) => {
+    switch (tok.type) {
+      case TOPIC:
+        return [{ tok, pos: tok.getJoint() }]
+      case GROUP:
+        return mapFlat(tok.elts, getInPosArr)
+      case BRANCH:
+        const topic = tok.getTopic()
+        const pos1 = { tok, pos: tok.getJoint() }
+        const pos2 = { tok: topic, pos: topic.getJoint() }
+        // the path from branch's joint connect to topic
+        conns.push(new Conn(pos1, pos2))
+        return [pos1]
     }
   }
 
-  return tok
-}
-
-// TODO Global the connection
-const imposeInPos = (tok, outPos, style) => {
-  switch (tok.type) {
-    case TOPIC: {
-      const inPos = { tok, pos: tok.getJoint() }
-      tok.connINS.push(new Conn(outPos, inPos, style))
-      break
-    }
-    case GROUP: {
-      tok.elts.forEach((t) => imposeInPos(t, outPos, style))
-      break
-    }
-    case BRANCH: {
-      const inPos = { tok, pos: tok.getJoint() }
-      const [topic, ...others] = tok.elts
-      topic.connINS = []
-      topic.connINS.push(new Conn(outPos, inPos, style))
-      // use the inPos of branch as the outPos of topic
-      imposeInPos(topic, inPos)
+  const iter = (tok) => {
+    switch (tok.type) {
+      case TOPIC:
+        break
+      case GROUP: {
+        tok.elts.forEach(iter)
+        break
+      }
+      case BRANCH: {
+        const { OUTS, LineStyle } = STRUCT_MAP[tok.struct]
+        const [topic, ...others] = tok.elts
+        others.forEach(iter)
+        others.forEach((t, i) => {
+          const dir = OUTS[i]
+          const topicOutPos = { tok: topic, pos: getTopicJoint(topic, dir) }
+          const branchOutPos = { tok: topic, pos: getTopicJoint(topic, dir, CONN_GAP) }
+          const inPosArr = getInPosArr(t)
+          // create lines
+          conns.push(new Conn(topicOutPos, branchOutPos, { dir }))
+          inPosArr.forEach((inPos) => {
+            conns.push(new Conn(branchOutPos, inPos, { dir, style: LineStyle }))
+          })
+        })
+      }
+      default:
+        // TODO log error
     }
   }
+
+  iter(tok)
+  return conns
 }
 
 //  =========== imposeTok ===========
@@ -102,18 +107,6 @@ export const flattenBranch = (tok) => {
 
   const originPos = { x: 0, y: 0 }
   return iter(tok, originPos)
-}
-
-// =========== exposeConn ===========
-export const exposeConn = (toks) => {
-  const genConn = (c) => c.generate()
-  const inToks = toks.filter((tok) => isDef(tok.connINS))
-  const outToks = toks.filter((tok) => isDef(tok.connOUTS))
-
-  const inConns = mapFlat(inToks, (t) => t.connINS.map(genConn))
-  const outConns = mapFlat(outToks, (t) => t.connOUTS.map(genConn))
-
-  return [...inConns, ...outConns, ...toks]
 }
 
 // =========== render ===========
