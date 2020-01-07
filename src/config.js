@@ -3,6 +3,8 @@ import {
   LEFT_DOWN, LEFT_UP, RIGHT_UP, RIGHT_DOWN,
   RIGHT_INTER, LEFT_INTER, DOWN_INTER,
 
+  VERTICAL,
+
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
   TREE_L, TREE_R, TIME_V, TIME_UP, TIME_DOWN, TIME_H_UP, TIME_H_DOWN, TIME_H,
   FISH_RIGHT_UP_IN, FISH_RIGHT_DOWN_IN, FISH_LEFT_UP_IN, FISH_LEFT_DOWN_IN,
@@ -43,12 +45,14 @@ export const STRUCT_MAP = {
     OUTS: [DOWN],
     GroupIN: RIGHT_UP,
     GroupDIR: DOWN,
+    LineStyle: VERTICAL,
   },
   [TREE_R]: {
     IN: LEFT,
     OUTS: [DOWN],
     GroupIN: LEFT_UP,
     GroupDIR: DOWN,
+    LineStyle: VERTICAL,
   },
   [TIME_V]: {
     IN: UP,
@@ -62,6 +66,7 @@ export const STRUCT_MAP = {
     GroupIN: LEFT_DOWN,
     GroupDIR: DOWN,
     Child: LOGIC_R,
+    LineStyle: VERTICAL,
   },
   [TIME_DOWN]: {
     IN: LEFT,
@@ -69,6 +74,7 @@ export const STRUCT_MAP = {
     GroupIN: LEFT_UP,
     GroupDIR: DOWN,
     Child: LOGIC_R,
+    LineStyle: VERTICAL,
   },
   [TIME_H_UP]: {
     IN: LEFT,
@@ -158,7 +164,7 @@ export const STRUCT_MAP = {
   },
 }
 
-export const GROUP_PADDING = 20
+export const GROUP_PADDING = 15
 export const BRANCH_PADDING = 10
 export const CONN_GAP = 10
 export const FONT_FAMILY = 'Helvetica, Arial, sans-serif'

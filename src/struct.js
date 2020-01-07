@@ -18,18 +18,18 @@ const transNode0 = (node, struct) => {
   const IN = STRUCT_MAP[struct].IN
   topic.IN = STRUCT_MAP[struct].TopicIN
 
-  if (isNull(node.children) || isEmpty(node.children)) { return new Branch({ elts: [topic], OUTS: [], IN }) }
+  if (isNull(node.children) || isEmpty(node.children)) { return new Branch({ elts: [topic], OUTS: [], IN, struct }) }
   else {
     switch (struct) {
       case MAP: {
         const [right, left] = splitTactic(node.children)
         const rGroup = transList(right, LOGIC_R)
         const lGroup = transList(left, LOGIC_L)
-        return new Branch({ elts: [topic, rGroup, lGroup], OUTS, IN })
+        return new Branch({ elts: [topic, rGroup, lGroup], OUTS, IN, struct })
       }
       default: {
         const group = transList(node.children, struct)
-        return new Branch({ elts: [topic, group], OUTS, IN })
+        return new Branch({ elts: [topic, group], OUTS, IN, struct })
       }
     }
   }
@@ -88,5 +88,5 @@ const transList = (nodes, ctx, color) => {
   const IN = STRUCT_MAP[ctx].GroupIN
   const dir = STRUCT_MAP[ctx].GroupDIR
 
-  return new Group({ elts: toks, IN, dir, color })
+  return new Group({ elts: toks, IN, dir, color, ctx })
 }

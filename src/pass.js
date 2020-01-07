@@ -3,6 +3,7 @@ import { isTopic, Conn, createTokByLayer, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch } from './layoutUtil'
 import { createRect, createPath,  createGroup, createText, createG } from '../lib/svg'
+import { STRUCT_MAP } from './config'
 
 
 //  =========== calTok ===========
@@ -39,8 +40,9 @@ export const imposeConnection = (tok) => {
       const outPosArr = tok.getOutPoints().map((point) => {
         return { tok: topic, pos: point }
       })
+      const lineStyle = STRUCT_MAP[tok.struct].LineStyle
       others.forEach(imposeConnection)
-      others.forEach((t, i) => imposeInPos(t, outPosArr[i]))
+      others.forEach((t, i) => imposeInPos(t, outPosArr[i], lineStyle))
       topic.connOUTS = tok.createOutConns()
       break
     }
@@ -50,22 +52,22 @@ export const imposeConnection = (tok) => {
 }
 
 // TODO Global the connection
-const imposeInPos = (tok, outPos) => {
+const imposeInPos = (tok, outPos, style) => {
   switch (tok.type) {
     case TOPIC: {
       const inPos = { tok, pos: tok.getJoint() }
-      tok.connINS.push(new Conn(outPos, inPos))
+      tok.connINS.push(new Conn(outPos, inPos, style))
       break
     }
     case GROUP: {
-      tok.elts.forEach((t) => imposeInPos(t, outPos))
+      tok.elts.forEach((t) => imposeInPos(t, outPos, style))
       break
     }
     case BRANCH: {
       const inPos = { tok, pos: tok.getJoint() }
       const [topic, ...others] = tok.elts
       topic.connINS = []
-      topic.connINS.push(new Conn(outPos, inPos))
+      topic.connINS.push(new Conn(outPos, inPos, style))
       // use the inPos of branch as the outPos of topic
       imposeInPos(topic, inPos)
     }

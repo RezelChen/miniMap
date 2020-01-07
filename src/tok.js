@@ -68,6 +68,7 @@ export class Branch extends Tok {
     super(opts)
     this.type = BRANCH
     this.OUTS = opts.OUTS
+    this.struct = opts.struct
   }
 
   getJoint () { return getBranchJoint(this, this.IN, BRANCH_PADDING) }
@@ -91,9 +92,10 @@ export class Branch extends Tok {
 }
 
 export class Conn {
-  constructor (...points) {
-    this.points = points
+  constructor (p1, p2, style) {
+    this.points = [p1, p2]
     this.type = CONN
+    this.style = style
   }
 
   generate () {
@@ -101,7 +103,8 @@ export class Conn {
     return {
       p1: posArr[0],
       p2: posArr[1],
-      type: this.type
+      type: this.type,
+      style: this.style,
     }
   }
 }
