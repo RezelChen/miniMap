@@ -151,7 +151,7 @@ export const calBranch = (tok) => {
 
   // add padding to size
   const p = tok.padding
-  tok.size = { width: size.width + p[1] + p[3], height: size.height + p[0] + p[1] }
+  tok.size = { width: size.width + p[1] + p[3], height: size.height + p[0] + p[2] }
   tok.elts.forEach((t) => {
     t.pos.x += p[3]
     t.pos.y += p[0]
