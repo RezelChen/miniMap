@@ -65,6 +65,7 @@ export const STRUCT_MAP = {
     IN: UP,
     OUTS: [DOWN],
     GroupIN: UP,
+    GroupAlign: UP,
     GroupDIR: DOWN_INTER,
     LineStyle: ANGLE_VERT,
   },
@@ -174,8 +175,7 @@ export const STRUCT_MAP = {
   },
 }
 
-export const GROUP_PADDING = 0
-export const BRANCH_PADDING = 10
+export const BRANCH_PADDING = [10, 10, 10, 10]
 export const CONN_GAP = 10
 export const FONT_FAMILY = 'Helvetica, Arial, sans-serif'
 

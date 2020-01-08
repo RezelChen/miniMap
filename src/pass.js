@@ -1,4 +1,4 @@
-import { posAdd, mapFlat, isDef, rand } from './util'
+import { posAdd, mapFlat } from './util'
 import { isTopic, Conn, createTok, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'

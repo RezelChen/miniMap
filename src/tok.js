@@ -1,9 +1,8 @@
-import { rand, logErr, posAdd, isDef, getRandColor, getTextSize } from './util'
+import { logErr, posAdd, isDef, getRandColor, getTextSize } from './util'
 import { getTopicJoint, getGroupJoint, getBranchJoint, getRelPos } from './layoutUtil'
-import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING, FONT_FAMILY } from './config'
+import { CONN_GAP, BRANCH_PADDING } from './config'
 import {
   TOPIC, BRANCH, GROUP, CONN,
-  LEFT, RIGHT, TOP, BOTTOM
 } from './constant'
 
 class Tok {
@@ -52,7 +51,6 @@ export class Group extends Tok {
     this.dir = opts.dir
     this.align = opts.align
     this.color = opts.color
-    this.padding = opts.padding || GROUP_PADDING
   }
 
   getJoint() {
@@ -78,7 +76,7 @@ export class Branch extends Tok {
     this.type = BRANCH
     this.OUTS = opts.OUTS
     this.struct = opts.struct
-    this.padding = opts.padding || BRANCH_PADDING
+    this.padding = opts.padding || [...BRANCH_PADDING]
   }
 
   getJoint () { return getBranchJoint(this, this.IN) }

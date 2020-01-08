@@ -6,7 +6,6 @@ import {
 import {
   UP, RIGHT, DOWN, LEFT,
   LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP,
-  GROUP, BRANCH,
 } from './constant'
 
 const getDeltaV = (tok1, tok2, ratio) => {
@@ -133,14 +132,8 @@ export const calGroup = (tok) => {
 
   const [size, margin] = calOblique(tok.elts, ratio, fn)
   tok.margin = margin
+  tok.size = { width: size.width, height: size.height }
 
-  // add padding to size
-  const padding = tok.padding
-  tok.size = { width: size.width + padding * 2, height: size.height + padding * 2 }
-  tok.elts.forEach((t) => {
-    t.pos.x += padding
-    t.pos.y += padding
-  })
   return tok
 }
 
@@ -157,11 +150,11 @@ export const calBranch = (tok) => {
   tok.margin = margin
 
   // add padding to size
-  const padding = tok.padding
-  tok.size = { width: size.width + padding * 2, height: size.height + padding * 2 }
+  const p = tok.padding
+  tok.size = { width: size.width + p[1] + p[3], height: size.height + p[0] + p[1] }
   tok.elts.forEach((t) => {
-    t.pos.x += padding
-    t.pos.y += padding
+    t.pos.x += p[3]
+    t.pos.y += p[0]
   })
   return tok
 }
@@ -233,14 +226,12 @@ const _getGroupJoint = (tok, dir) => {
   }
 }
 
-// TODO check child !== undefined
-// Maybe this should prevent when transNode, so check is unnecessarily
 export const getGroupJoint = (tok, inDir) => {
-
   const joint = _getGroupJoint(tok, inDir)
-  const align = tok.align || inDir
-  const ratio = getRatio(align)
+  if (!tok.align) { return joint }
 
+  const align = tok.align
+  const ratio = getRatio(align)
   switch (align) {
     case LEFT: {
       const delta = _getDeltaH(ratio, joint.x)
