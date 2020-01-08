@@ -27,7 +27,7 @@ const getDeltaV0 = (tok1, tok2, ratio) => {
   const dir = ratio.y > 0 ? 1 : -1
 
   const margin = Math.max(tokUp.margin[2], tokDown.margin[0])
-  const dy0 = tokUp.getTopic().size.height - tokUp.getJoint().y
+  const dy0 = tokUp.getChildJoint(DOWN).y - tokUp.getJoint().y
   const dy1 = tokDown.getJoint().y
   const dy = dir * (dy0 + margin + dy1)
 
@@ -53,7 +53,7 @@ const getDeltaH0 = (tok1, tok2, ratio) => {
   const dir = ratio.x > 0 ? 1 : -1
 
   const margin = Math.max(tokLeft.margin[1], tokRight.margin[3])
-  const dx0 = tokLeft.getTopic().size.width - tokLeft.getJoint().x
+  const dx0 = tokLeft.getChildJoint(RIGHT).x - tokLeft.getJoint().x
   const dx1 = tokRight.getJoint().x
   const dx = dir * (dx0 + margin + dx1)
 
@@ -73,7 +73,7 @@ const getDatumsCreator = (getDelta) => {
 }
 
 const getDatumsInterCreator = (getDelta, getDelta0) => {
-  getDelta0 = (tok1, tok2, ratio) => getDelta(tok1.getTopic(), tok2.getTopic(), ratio)
+  // getDelta0 = (tok1, tok2, ratio) => getDelta(tok1.getTopic(), tok2.getTopic(), ratio)
 
   return (toks, ratio) => {
     const d0 = { x: 0, y: 0 }
@@ -166,7 +166,7 @@ export const calBranch = (tok) => {
   return tok
 }
 
-const getRelPos = (tok, relTok) => {
+export const getRelPos = (tok, relTok) => {
 
   const iter = (t, pos) => {
     if (isUndef(t)) { return logErr('Rel is not ancestor', getRelPos, relTok, tok) }

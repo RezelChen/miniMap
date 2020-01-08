@@ -1,5 +1,5 @@
 import { rand, logErr, posAdd, isDef, getRandColor, getTextSize } from './util'
-import { getTopicJoint, getGroupJoint, getBranchJoint } from './layoutUtil'
+import { getTopicJoint, getGroupJoint, getBranchJoint, getRelPos } from './layoutUtil'
 import { GROUP_PADDING, CONN_GAP, BRANCH_PADDING, FONT_FAMILY } from './config'
 import {
   TOPIC, BRANCH, GROUP, CONN,
@@ -63,6 +63,13 @@ export class Group extends Tok {
 
   getTopics () { return this.elts.map((t) => t.getTopic()) }
 
+  getChildJoint (dir) {
+    // TODO use dir to get index of elts
+    const topic = this.elts[this.elts.length-1]
+    const joint = getTopicJoint(topic, dir)
+    return posAdd(getRelPos(topic, this), joint)
+  }
+
 }
 
 export class Branch extends Tok {
@@ -77,6 +84,12 @@ export class Branch extends Tok {
   getJoint () { return getBranchJoint(this, this.IN) }
 
   getTopic () { return this.elts[0] }
+
+  getChildJoint (dir) {
+    const topic = this.getTopic()
+    const joint = getTopicJoint(topic, dir)
+    return posAdd(getRelPos(topic, this), joint)
+  }
 
   getOutPoints () {
     const topic = this.getTopic()

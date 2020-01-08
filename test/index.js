@@ -4,15 +4,15 @@ import parser from './parser'
 import * as CONS from '../src/constant'
 
 const STRUCTS = [
-  { name: 'TIME HORIZON', value: CONS.TIME_H },
-  { name: 'TREE RIGHT', value: CONS.TREE_R },
   { name: 'MAP', value: CONS.MAP },
   { name: 'LOGIC RIGHT', value: CONS.LOGIC_R },
   { name: 'LOGIC LEFT', value: CONS.LOGIC_L },
   { name: 'ORG', value: CONS.ORG },
   { name: 'ORG UP', value: CONS.ORG_UP },
+  { name: 'TREE RIGHT', value: CONS.TREE_R },
   { name: 'TREE LEFT', value: CONS.TREE_L },
   { name: 'TIME VERTICAL', value: CONS.TIME_V },
+  { name: 'TIME HORIZON', value: CONS.TIME_H },
   { name: 'FISH RIGHT', value: CONS.FISH_RIGHT },
   { name: 'FISH LEFT', value: CONS.FISH_LEFT },
 ]
