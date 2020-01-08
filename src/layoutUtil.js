@@ -22,12 +22,38 @@ const getDeltaV = (tok1, tok2, ratio) => {
   return { x: dx, y: dy }
 }
 
+const getDeltaV0 = (tok1, tok2, ratio) => {
+  const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]
+  const dir = ratio.y > 0 ? 1 : -1
+
+  const margin = Math.max(tokUp.margin[2], tokDown.margin[0])
+  const dy0 = tokUp.getTopic().size.height - tokUp.getJoint().y
+  const dy1 = tokDown.getJoint().y
+  const dy = dir * (dy0 + margin + dy1)
+
+  const dx = dy / ratio.y * ratio.x
+  return { x: dx, y: dy }
+}
+
 const getDeltaH = (tok1, tok2, ratio) => {
   const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1]
   const dir = ratio.x > 0 ? 1 : -1
 
   const margin = Math.max(tokLeft.margin[1], tokRight.margin[3])
   const dx0 = tokLeft.size.width - tokLeft.getJoint().x
+  const dx1 = tokRight.getJoint().x
+  const dx = dir * (dx0 + margin + dx1)
+
+  const dy = dx / ratio.x * ratio.y
+  return { x: dx, y: dy }
+}
+
+const getDeltaH0 = (tok1, tok2, ratio) => {
+  const [tokLeft, tokRight] = ratio.x > 0 ? [tok1, tok2] : [tok2, tok1]
+  const dir = ratio.x > 0 ? 1 : -1
+
+  const margin = Math.max(tokLeft.margin[1], tokRight.margin[3])
+  const dx0 = tokLeft.getTopic().size.width - tokLeft.getJoint().x
   const dx1 = tokRight.getJoint().x
   const dx = dir * (dx0 + margin + dx1)
 
@@ -46,8 +72,8 @@ const getDatumsCreator = (getDelta) => {
   }
 }
 
-const getDatumsInterCreator = (getDelta) => {
-  const getDelta0 = (tok1, tok2, ratio) => getDelta(tok1.getTopic(), tok2.getTopic(), ratio)
+const getDatumsInterCreator = (getDelta, getDelta0) => {
+  getDelta0 = (tok1, tok2, ratio) => getDelta(tok1.getTopic(), tok2.getTopic(), ratio)
 
   return (toks, ratio) => {
     const d0 = { x: 0, y: 0 }
@@ -77,8 +103,8 @@ const getDatumsInterCreator = (getDelta) => {
 
 const getDatumsHorizon = getDatumsCreator(getDeltaH)
 const getDatumsVertical = getDatumsCreator(getDeltaV)
-const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH)
-const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV)
+const getDatumsHorizonInter = getDatumsInterCreator(getDeltaH, getDeltaH0)
+const getDatumsVerticalInter = getDatumsInterCreator(getDeltaV, getDeltaV0)
 
 const getDatumsFn = (dir, isInter = false) => {
   const [datumsVert, datumsHori] = isInter ? 
@@ -106,14 +132,20 @@ export const calGroup = (tok) => {
   const fn = getDatumsFn(direction, isDef(inter))
 
   const [size, margin] = calOblique(tok.elts, ratio, fn)
-  tok.size = size
   tok.margin = margin
+
+  // add padding to size
+  const padding = tok.padding
+  tok.size = { width: size.width + padding * 2, height: size.height + padding * 2 }
+  tok.elts.forEach((t) => {
+    t.pos.x += padding
+    t.pos.y += padding
+  })
   return tok
 }
 
 export const calBranch = (tok) => {
   const [topic, ...others] = tok.elts
-
   const outPoints = tok.getOutPoints()
   const originPoint = { x: 0, y: 0 }
   const datums = [originPoint, ...outPoints]
@@ -122,8 +154,15 @@ export const calBranch = (tok) => {
   const joints = [originPoint, ...otherJoints]
 
   const [size, margin] = calToksPos(tok.elts, joints, datums)
-  tok.size = size
   tok.margin = margin
+
+  // add padding to size
+  const padding = tok.padding
+  tok.size = { width: size.width + padding * 2, height: size.height + padding * 2 }
+  tok.elts.forEach((t) => {
+    t.pos.x += padding
+    t.pos.y += padding
+  })
   return tok
 }
 
@@ -138,83 +177,93 @@ const getRelPos = (tok, relTok) => {
   return iter(tok, { x: 0, y: 0 })
 }
 
-const jointHelp = (tok, topic, dir) => {
-  const ratio = getRatio(dir)
+export const getBranchJoint = (tok, dir, d = 0) => {
+  const topic = tok.getTopic()
   const pos = getRelPos(topic, tok)
   const joint = posAdd(pos, topic.getJoint())
-  
+
+  const ratio = getRatio(dir)
   switch (dir) {
+    case LEFT: {
+      const delta = _getDeltaH(ratio, joint.x + d)
+      return posAdd(joint, delta)
+    }
+    case RIGHT: {
+      const delta = _getDeltaH(ratio, tok.size.width - joint.x + d)
+      return posAdd(joint, delta)
+    }
+    case UP:
     case LEFT_UP:
     case RIGHT_UP: {
-      const delta = _getDeltaV(ratio, joint.y)
+      const delta = _getDeltaV(ratio, joint.y + d)
       return posAdd(joint, delta)
     }
+    case DOWN:
     case LEFT_DOWN:
     case RIGHT_DOWN: {
-      const delta = _getDeltaV(ratio, tok.size.height - joint.y)
+      const delta = _getDeltaV(ratio, tok.size.height - joint.y + d)
       return posAdd(joint, delta)
     }
-    default:
-      return joint
   }
 }
 
-export const getBranchJoint = (tok, dir, delta = 0) => {
-  // use the topic's joint as branch joint
-  const joint = jointHelp(tok, tok.getTopic(), dir)
-
-  // the same as getGroupJoint
-  const ratio = getRatio(dir)
-  if ([UP, DOWN, LEFT_UP, RIGHT_UP, LEFT_DOWN, RIGHT_DOWN].includes(dir)) { delta = _getDeltaV(ratio, delta) }
-  else { delta = _getDeltaH(ratio, delta) }
-  return posAdd(joint, delta)
-}
-
-// TODO check child !== undefined
-// Maybe this should prevent when transNode, so check is unnecessarily
 const _getGroupJoint = (tok, dir) => {
-
   const getRelJoint = (t) => {
     const pos = getRelPos(t, tok)
     return posAdd(pos, t.getJoint())
   }
-  
-  // use the first child's joint as group joint,
-  // add delta to make sure group isn't overlay others
-  const ratio = getRatio(dir)
   switch (dir) {
     case LEFT_UP:
-    case RIGHT_UP: {
-      const child = tok.elts[0]
-      const joint = getRelJoint(child)
-      const delta = _getDeltaV(ratio, joint.y)
-      return posAdd(joint, delta)
-    }
+    case RIGHT_UP:
     case LEFT_DOWN:
     case RIGHT_DOWN: {
       const child = tok.elts[0]
-      const joint = getRelJoint(child)
+      return getRelJoint(child)
+    }
+    case UP:
+    case DOWN:
+    case LEFT:
+    case RIGHT: {
+      const joints = tok.elts.map(getRelJoint)
+      const cp = getPointsConrner(joints)
+      const fakeTok = { size: getSize(cp) }
+      const originPos = { x: cp.x1, y: cp.y1 }
+      return posAdd(originPos, getTopicJoint(fakeTok, dir))
+    }
+  }
+}
+
+// TODO check child !== undefined
+// Maybe this should prevent when transNode, so check is unnecessarily
+export const getGroupJoint = (tok, inDir) => {
+
+  const joint = _getGroupJoint(tok, inDir)
+  const align = tok.align || inDir
+  const ratio = getRatio(align)
+
+  switch (align) {
+    case LEFT: {
+      const delta = _getDeltaH(ratio, joint.x)
+      return posAdd(joint, delta)
+    }
+    case RIGHT: {
+      const delta = _getDeltaH(ratio, tok.size.width - joint.x)
+      return posAdd(joint, delta)
+    }
+    case UP:
+    case LEFT_UP:
+    case RIGHT_UP: {
+      const delta = _getDeltaV(ratio, joint.y)
+      return posAdd(joint, delta)
+    }
+    case DOWN:
+    case LEFT_DOWN:
+    case RIGHT_DOWN: {
       const delta = _getDeltaV(ratio, tok.size.height - joint.y)
       return posAdd(joint, delta)
     }
   }
 
-  // Calculate the size of children joints as fakeTok
-  // use this fakeTok's joint as group joint
-  const joints = tok.elts.map(getRelJoint)
-  const cp = getPointsConrner(joints)
-  const fakeTok = { size: getSize(cp) }
-  const originPos = { x: cp.x1, y: cp.y1 }
-  return posAdd(originPos, getTopicJoint(fakeTok, dir))
-}
-
-export const getGroupJoint = (tok, dir, delta = 0) => {
-  const joint = _getGroupJoint(tok, dir)
-
-  const ratio = getRatio(dir)
-  if ([UP, DOWN].includes(dir)) { delta = _getDeltaV(ratio, delta) }
-  else { delta = _getDeltaH(ratio, delta) }
-  return posAdd(joint, delta)
 }
 
 export const getTopicJoint = (tok, dir, delta = 0) => {

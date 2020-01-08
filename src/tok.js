@@ -50,14 +50,16 @@ export class Group extends Tok {
     super(opts)
     this.type = GROUP
     this.dir = opts.dir
+    this.align = opts.align
     this.color = opts.color
+    this.padding = opts.padding || GROUP_PADDING
   }
 
   getJoint() {
-    return getGroupJoint(this, this.IN, GROUP_PADDING)
+    return getGroupJoint(this, this.IN)
   }
 
-  getTopic () { return this.elts[0] }
+  getTopic () { return this.elts[0].getTopic() }
 
   getTopics () { return this.elts.map((t) => t.getTopic()) }
 
@@ -69,9 +71,10 @@ export class Branch extends Tok {
     this.type = BRANCH
     this.OUTS = opts.OUTS
     this.struct = opts.struct
+    this.padding = opts.padding || BRANCH_PADDING
   }
 
-  getJoint () { return getBranchJoint(this, this.IN, BRANCH_PADDING) }
+  getJoint () { return getBranchJoint(this, this.IN) }
 
   getTopic () { return this.elts[0] }
 

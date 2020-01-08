@@ -23,8 +23,8 @@ export default (el, obj) => {
   el.appendChild(svg)
 
   const { width, height } = g.getBBox()
-  const maxWidth = Math.max(CANTAINER.width, width)
-  const maxHeight = Math.max(CANTAINER.height, height)
+  const maxWidth = Math.max(CANTAINER.width, width) + 100
+  const maxHeight = Math.max(CANTAINER.height, height) + 200
   const dx = (maxWidth - width) / 2
   const dy = (maxHeight - height) / 2
 

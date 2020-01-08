@@ -49,6 +49,7 @@ export const STRUCT_MAP = {
     IN: RIGHT,
     OUTS: [DOWN],
     GroupIN: RIGHT_UP,
+    GroupAlign: UP,
     GroupDIR: DOWN,
     LineStyle: ANGLE_VERT,
   },
@@ -56,6 +57,7 @@ export const STRUCT_MAP = {
     IN: LEFT,
     OUTS: [DOWN],
     GroupIN: LEFT_UP,
+    GroupAlign: UP,
     GroupDIR: DOWN,
     LineStyle: ANGLE_VERT,
   },
@@ -70,6 +72,7 @@ export const STRUCT_MAP = {
     IN: LEFT,
     OUTS: [UP],
     GroupIN: LEFT_DOWN,
+    GroupAlign: DOWN,
     GroupDIR: DOWN,
     Child: LOGIC_R,
     LineStyle: ANGLE_VERT,
@@ -78,6 +81,7 @@ export const STRUCT_MAP = {
     IN: LEFT,
     OUTS: [DOWN],
     GroupIN: LEFT_UP,
+    GroupAlign: UP,
     GroupDIR: DOWN,
     Child: LOGIC_R,
     LineStyle: ANGLE_VERT,
@@ -170,9 +174,9 @@ export const STRUCT_MAP = {
   },
 }
 
-export const GROUP_PADDING = 15
+export const GROUP_PADDING = 0
 export const BRANCH_PADDING = 10
-export const CONN_GAP = 10
+export const CONN_GAP = 0
 export const FONT_FAMILY = 'Helvetica, Arial, sans-serif'
 
 export const DEFAULT_STYLE = [

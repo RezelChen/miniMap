@@ -92,6 +92,7 @@ const transList = (nodes, ctx, color) => {
   const toks = getToks(nodes, ctx)
   const IN = STRUCT_MAP[ctx].GroupIN
   const dir = STRUCT_MAP[ctx].GroupDIR
+  const align = STRUCT_MAP[ctx].GroupAlign
 
-  return new Group({ elts: toks, IN, dir, color, ctx })
+  return new Group({ elts: toks, IN, dir, align, color, ctx })
 }
