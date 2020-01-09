@@ -10,13 +10,14 @@ import {
 } from './constant'
 
 
-const transNode0 = (node, struct) => {
-  const topic = node.tok
+const transNode0 = (node, ctx) => {
+  const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
+  const IN = STRUCT_MAP[ctx].IN
   const OUTS = STRUCT_MAP[struct].OUTS
-  const IN = STRUCT_MAP[struct].IN
-  topic.IN = STRUCT_MAP[struct].TopicIN
-  
   const params = { IN, struct }
+
+  const topic = node.tok
+  topic.IN = STRUCT_MAP[struct].TopicIN
   if (isNull(node.children) || isEmpty(node.children)) { return new Branch({ elts: [topic], OUTS: [], ...params }) }
   else {
     switch (struct) {
@@ -42,8 +43,7 @@ export const transNode = (node, ctx = MAP) => {
   const color = 'rgb(190, 190, 244)'
   if (Array.isArray(node)) { return transList(node, ctx, color) }
   else {
-    const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
-    return transNode0(node, struct)
+    return transNode0(node, ctx)
   }
 }
 
