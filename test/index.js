@@ -71,6 +71,7 @@ const textEl = document.getElementById('text-area')
 const renderTest = () => {
   const root = parser(TEST_DATA.text)
   setColor(root)
+  // setRandStruct(root)
   root.struct = TEST_DATA.struct
   const { children } = root
   if (children.length >= 3) {

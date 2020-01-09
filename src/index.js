@@ -1,6 +1,7 @@
 import { render, flattenBranch, imposeTok, exposeConn, imposeConnection, calTok } from './pass'
 import { transNode } from './struct'
-import { createSvg } from '../lib/svg'
+import { initSVG, renderSVG } from '../lib/svg'
+import { setAttribute } from '../lib/vdom'
 
 export const driver = (tok) => { 
   tok = imposeTok(tok)
@@ -11,24 +12,9 @@ export const driver = (tok) => {
   return render([...conns, ...toks])
 }
 
-const CANTAINER = {
-  width: 690,
-  height: 590,
-}
 export default (el, obj) => {
-  el.innerHTML = ''   // make sure el is empty
-  const g = driver(obj)
-  const svg = createSvg()
-  svg.appendChild(g)
-  el.appendChild(svg)
-
-  const { width, height } = g.getBBox()
-  const maxWidth = Math.max(CANTAINER.width, width) + 100
-  const maxHeight = Math.max(CANTAINER.height, height) + 200
-  const dx = (maxWidth - width) / 2
-  const dy = (maxHeight - height) / 2
-
-  g.setAttribute('transform', `translate(${dx} ${dy})`)
-  svg.setAttribute('width', maxWidth)
-  svg.setAttribute('height', maxHeight)
+  const svg = initSVG(el)
+  driver(obj)
+  setAttribute(svg, { width: 2000, height: 2000 })
+  renderSVG()
 }

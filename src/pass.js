@@ -2,7 +2,7 @@ import { posAdd, mapFlat } from './util'
 import { isTopic, Conn, createTok, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from './constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
-import { createRect, createPath,  createGroup, createText, createG } from '../lib/svg'
+import { createRect, createPath,  createGroup, createText } from '../lib/svg'
 import { STRUCT_MAP, CONN_GAP, DEFAULT_STYLE } from './config'
 
 
@@ -114,8 +114,7 @@ export const flattenBranch = (tok) => {
 // =========== render ===========
 
 export const render = (toks) => {
-
-  const elms = mapFlat(toks, (tok) => {
+  const nodes = mapFlat(toks, (tok) => {
     switch (tok.type) {
       case TOPIC:
         return [createRect(tok), createText(tok)]
@@ -128,6 +127,5 @@ export const render = (toks) => {
     }
   })
 
-  const g = createG(elms)
-  return g
+  return nodes
 }
