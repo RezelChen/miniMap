@@ -35,7 +35,8 @@
     }
 
     .row {
-      height: 30px;
+      position: relative;
+      min-height: 30px;
     }
 
     #test {
@@ -57,11 +58,14 @@
     }
     .sel-container #text-area {
       position: absolute;
-      top: 30px;
+      top: 0;
       left: 0;
       width: 200px;
       height: 400px;
       border: 1px solid rgb(130, 103, 176);
+    }
+    .margin-left {
+      margin-left: 15px;
     }
   </style>
   <div class="container">
@@ -79,9 +83,11 @@
           <p>Change Structure:</p>
           <select id="sel"></select>
       </div>
-      <textarea id="text-area"></textarea>
+      <div class="row">
+        <textarea id="text-area"></textarea>
+        <div id="test"></div>
+      </div>
     </div>
-    <div id="test"></div>
   </div>
 
   <script src='./dist/bundle.js'></script>

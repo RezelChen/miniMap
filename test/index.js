@@ -1,5 +1,5 @@
 import render from '../src'
-import { getRandColor } from '../src/util'
+import { getRandColor, rand } from '../src/util'
 import parser from './parser'
 import * as CONS from '../src/constant'
 
@@ -40,22 +40,38 @@ const TEST_DATA = {
 
 const setColor = (() => {
   const colors = []
-  return (data) => {
-    const i = data.depth || 0
+  return (node) => {
+    const i = node.depth || 0
     if (colors[i] === undefined) { colors[i] = getRandColor() }
-    data.color = colors[i]
-    if (data.children) { data.children.forEach(setColor) }
+    node.color = colors[i]
+    if (node.children) { node.children.forEach(setColor) }
   }
 })()
 
+const setRandStruct = (root) => {
+  const structLogArr = []
+
+  const iter = (node) => {
+    node.struct = STRUCTS[rand(0, STRUCTS.length - 1)].value
+    structLogArr.push({
+      title: node.text.content,
+      struct: node.struct,
+    })
+    if (node.children) { node.children.forEach(iter) }
+  }
+
+  iter(root)
+  console.log(structLogArr)
+}
+
 const testEl = document.getElementById('test')
-const sel = document.getElementById('sel')
+const selectorEl = document.getElementById('sel')
 const textEl = document.getElementById('text-area')
 
 const renderTest = () => {
   const root = parser(TEST_DATA.text)
-  root.struct = TEST_DATA.struct
   setColor(root)
+  root.struct = TEST_DATA.struct
   const { children } = root
   if (children.length >= 3) {
     root.children = [children[0], children.slice(1, 3), ...children.slice(3)]
@@ -64,11 +80,11 @@ const renderTest = () => {
   render(testEl, root)
 }
 
-sel.onchange = (e) => {
+selectorEl.onchange = (e) => {
   const { value } = e.target
   TEST_DATA.struct = value
   renderTest()
-  sel.value = value
+  selectorEl.value = value
 }
 
 textEl.addEventListener('change', (e) => {
@@ -92,14 +108,14 @@ document.addEventListener('keydown', (e) => {
   if (e.keyCode === 38) {
     if (index === 0) { return }
     const newStruct = STRUCTS[index-1].value
-    sel.onchange({ target: { value: newStruct } })
+    selectorEl.onchange({ target: { value: newStruct } })
     event.preventDefault()
   }
 
   if (e.keyCode === 40) {
     if (index === STRUCTS.length - 1) { return }
     const newStruct = STRUCTS[index+1].value
-    sel.onchange({ target: { value: newStruct } })
+    selectorEl.onchange({ target: { value: newStruct } })
     event.preventDefault()
   }
 })
@@ -109,7 +125,7 @@ STRUCTS.forEach((s) => {
   const opt = document.createElement('option')
   opt.innerHTML = s.name
   opt.value = s.value
-  sel.appendChild(opt)
+  selectorEl.appendChild(opt)
 })
 textEl.value = TEST_DATA.text
 renderTest()
