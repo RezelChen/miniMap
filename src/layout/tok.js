@@ -1,4 +1,4 @@
-import { logErr, posAdd, isDef, getRandColor, getTextSize } from '../util'
+import { logErr, uuid, posAdd, isDef, getRandColor, getTextSize } from '../util'
 import { getTopicJoint, getGroupJoint, getBranchJoint, getRelPos } from './layoutUtil'
 import { CONN_GAP, BRANCH_PADDING } from './config'
 import {
@@ -7,6 +7,7 @@ import {
 
 class Tok {
   constructor (opts) {
+    this.id = opts.id || uuid()
     this.pos = { x: 0, y: 0 }
     this.size = opts.size || { width: 0, height: 0 }
     this.text = opts.text
@@ -132,6 +133,7 @@ export const createTok = (node, defaultStyle) => {
   const size = getTextSize(text.content, text)
 
   return new Topic({
+    id: node.id,
     size: Object.assign({}, size),
     margin: [5, 5, 5, 5],
     color: node.color || getRandColor(),

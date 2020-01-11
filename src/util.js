@@ -25,6 +25,12 @@ export const rand = (n, m) => n + parseInt(Math.random() * m)
 
 export const nextTick = requestAnimationFrame.bind(window)
 
+// DO NOT use `0` as id, to prevent some strange situations:
+// `const id = id || uuid()` will create a new id if the old one is `0`
+// which is not what we want.
+let COUNT = 0
+export const uuid = () => ++COUNT
+
 export const getRandColor = () => {
   const randNum = () => rand(100, 150)
   return `rgb(${randNum()}, ${randNum()}, ${randNum()})`

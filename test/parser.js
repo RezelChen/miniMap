@@ -1,3 +1,6 @@
+let COUNT = 0
+const uuid = () => ++COUNT
+
 const TOPIC_REG = /^(-+)\s*(.*)$/
 const getTopic = (line) => {
   const match = TOPIC_REG.exec(line)
@@ -5,13 +8,13 @@ const getTopic = (line) => {
   else {
     const title = match[2]
     const depth = match[1].length
-    return { text: { content: title }, children: [], depth }
+    return { id: uuid(), text: { content: title }, children: [], depth }
   }
 }
 
 export default (str) => {
   const lines = str.split('\n').map((l) => l.trim()).filter((l) => l !== '')
-  const root = { text: { content: lines[0] }, children: [], depth: 0 }
+  const root = { id: uuid(), text: { content: lines[0] }, children: [], depth: 0 }
   const exps = lines.slice(1).map(getTopic).filter((exp) => exp)
 
   const iter = (i, ctx) => {
@@ -26,6 +29,7 @@ export default (str) => {
     }
   }
 
+  COUNT = 0   // init COUNT to keep idempotent
   iter(0, root)
   return root
 }
