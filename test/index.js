@@ -1,7 +1,10 @@
-import render from '../src'
 import { getRandColor, rand } from '../src/util'
 import parser from './parser'
 import * as CONS from '../src/constant'
+import miniMap from '../src'
+import { dispatch } from '../lib/ux'
+
+const render = (el, root) => dispatch('INIT_STATE', { el, root })
 
 const STRUCTS = [
   { name: 'MAP', value: CONS.MAP },
