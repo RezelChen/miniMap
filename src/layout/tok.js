@@ -1,9 +1,9 @@
-import { logErr, posAdd, isDef, getRandColor, getTextSize } from './util'
+import { logErr, posAdd, isDef, getRandColor, getTextSize } from '../util'
 import { getTopicJoint, getGroupJoint, getBranchJoint, getRelPos } from './layoutUtil'
 import { CONN_GAP, BRANCH_PADDING } from './config'
 import {
   TOPIC, BRANCH, GROUP, CONN,
-} from './constant'
+} from '../constant'
 
 class Tok {
   constructor (opts) {

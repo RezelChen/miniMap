@@ -2,11 +2,11 @@ import {
   posSub, posAdd, logErr, isUndef, isDef, 
   getMaxPoint, getRatio, _getDeltaV, _getDeltaH,
   getCornerPoint, getPointsConrner,
-} from './util'
+} from '../util'
 import {
   UP, RIGHT, DOWN, LEFT,
   LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP,
-} from './constant'
+} from '../constant'
 
 const getDeltaV = (tok1, tok2, ratio) => {
   const [tokUp, tokDown] = ratio.y > 0 ? [tok1, tok2] : [tok2, tok1]

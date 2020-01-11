@@ -1,8 +1,8 @@
-import { posAdd, mapFlat } from './util'
+import { posAdd, mapFlat } from '../util'
 import { isTopic, Conn, createTok, isGroup, isPhantom } from './tok'
-import { TOPIC, GROUP, BRANCH, CONN } from './constant'
+import { TOPIC, GROUP, BRANCH, CONN } from '../constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
-import { createRect, createPath,  createGroup, createText } from '../lib/svg'
+import { createRect, createPath,  createGroup, createText } from '../../lib/svg'
 import { STRUCT_MAP, CONN_GAP, DEFAULT_STYLE } from './config'
 
 

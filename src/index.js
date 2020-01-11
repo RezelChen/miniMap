@@ -1,5 +1,5 @@
-import { render, flattenBranch, imposeTok, exposeConn, imposeConnection, calTok } from './pass'
-import { transNode } from './struct'
+import { render, flattenBranch, imposeTok, exposeConn, imposeConnection, calTok } from './layout/pass'
+import { transNode } from './layout/struct'
 import { initSVG, renderSVG } from '../lib/svg'
 import { setAttribute } from '../lib/vdom'
 

@@ -10,7 +10,7 @@ import {
   FISH_RIGHT_UP_IN, FISH_RIGHT_DOWN_IN, FISH_LEFT_UP_IN, FISH_LEFT_DOWN_IN,
   FISH_RIGHT_UP, FISH_RIGHT_DOWN, FISH_LEFT_UP, FISH_LEFT_DOWN,
   FISH_RIGHT, FISH_LEFT,
-} from './constant'
+} from '../constant'
 
 export const STRUCT_MAP = {
   [MAP]: {

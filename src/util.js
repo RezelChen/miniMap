@@ -23,6 +23,8 @@ export const logErr = (description, fn, ...others) => console.error(description)
 
 export const rand = (n, m) => n + parseInt(Math.random() * m)
 
+export const nextTick = requestAnimationFrame.bind(window)
+
 export const getRandColor = () => {
   const randNum = () => rand(100, 150)
   return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
