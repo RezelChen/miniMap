@@ -22,6 +22,7 @@ export const ANGLE_HORI = 'ANGLE_HORI'
 export const TOPIC = 'TOPIC'
 export const BRANCH = 'BRANCH'
 export const GROUP = 'GROUP'
+export const BOUNDARY = 'BOUNDARY'
 export const CONN = 'CONN'
 
 export const MAP = 'MAP'

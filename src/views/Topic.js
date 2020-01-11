@@ -4,6 +4,6 @@ import { TOPIC } from '../constant'
 const on = (type, cb) => Event.on(type, TOPIC, cb)
 const off = (type, cb) => Event.off(type, TOPIC, cb)
 
-on('click', (e, topic) => {
-  dispatch('CHANGE_SELECTOR', topic)
+on('click', (e) => {
+  console.log('click topic', e)
 })
