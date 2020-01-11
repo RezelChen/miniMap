@@ -2,7 +2,7 @@ import { posAdd, mapFlat } from '../util'
 import { isTopic, Conn, createTok, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from '../constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
-import { createRect, createPath,  createGroup, createText } from '../../lib/svg'
+import { createTopic, createPath, createBoundary } from '../../lib/svg'
 import { STRUCT_MAP, CONN_GAP, DEFAULT_STYLE } from './config'
 
 
@@ -117,9 +117,9 @@ export const render = (toks) => {
   const nodes = mapFlat(toks, (tok) => {
     switch (tok.type) {
       case TOPIC:
-        return [createRect(tok), createText(tok)]
+        return [createTopic(tok)]
       case GROUP:
-        return [createGroup(tok)]
+        return [createBoundary(tok)]
       case CONN:
         return [createPath(tok)]
       default:
