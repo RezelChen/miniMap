@@ -1,10 +1,18 @@
-import { posAdd, mapFlat } from '../util'
+import { posAdd, mapFlat, posSub } from '../util'
 import { isTopic, Conn, createTok, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from '../constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
 import { createTopic, createPath, createBoundary } from '../../lib/svg'
+import Tween from '../../lib/tween'
 import { STRUCT_MAP, CONN_GAP, DEFAULT_STYLE } from './config'
 
+const TIMING_FUNCTION = Tween.Quad.easeInOut
+export const calDuringPos = (toks, start, during) => {
+  toks.forEach((tok) => {
+    tok.pos.x = TIMING_FUNCTION(start, tok.beginPos.x, tok.endPos.x, during)
+    tok.pos.y = TIMING_FUNCTION(start, tok.beginPos.y, tok.endPos.y, during)
+  })
+}
 
 //  =========== calTok ===========
 
@@ -38,7 +46,7 @@ export const exposeConn = (tok) => {
         return mapFlat(tok.elts, getInPosArr)
       case BRANCH:
         const topic = tok.getTopic()
-        const pos1 = { tok, pos: tok.getJoint() }
+        const pos1 = { tok: topic, pos: posSub(tok.getJoint(), topic.pos) }
         const pos2 = { tok: topic, pos: topic.getJoint() }
         // the path from branch's joint connect to topic
         conns.push(new Conn(pos1, pos2))

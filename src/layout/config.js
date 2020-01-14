@@ -175,6 +175,7 @@ export const STRUCT_MAP = {
   },
 }
 
+export const ANIMATION = true
 export const BRANCH_PADDING = [10, 10, 10, 10]
 export const CONN_GAP = 10
 export const FONT_FAMILY = 'Helvetica, Arial, sans-serif'

@@ -8,7 +8,7 @@ import {
 class Tok {
   constructor (opts) {
     this.id = opts.id || uuid()
-    this.pos = { x: 0, y: 0 }
+    this.pos = opts.pos || { x: 0, y: 0 }
     this.size = opts.size || { width: 0, height: 0 }
     this.text = opts.text
 
