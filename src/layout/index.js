@@ -62,7 +62,6 @@ export const driver = (tok) => {
 
 export default (state) => {
   const { el, root } = state
-  const svg = initSVG(el)
+  initSVG(el)
   driver(root)
-  setAttribute(svg, { width: 2000, height: 2000 })
 }
