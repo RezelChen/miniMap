@@ -9,7 +9,7 @@ What's more, it's less than 1000 lines of code, makes you easy to improve it.
 
 Make sure you have install `Node.js` and `NPM` before run.
 
-```
+```shell
 cd ./miniMap
 npm install
 npm start
