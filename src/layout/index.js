@@ -13,12 +13,12 @@ const imposeBeginEndPos = (toks) => {
   toks.forEach((tok) => {
     const oldTok = LAST_TOKS[tok.id]
     if (oldTok) {
-      tok.beginPos = {...oldTok.pos}
+      tok.beginPos = { ...oldTok.pos }
       tok.endPos = { x: tok.pos.x - tok.beginPos.x, y: tok.pos.y - tok.beginPos.y }
     }
     else {
       tok.beginPos = { x: 0, y: 0 }
-      tok.endPos = {...tok.pos}
+      tok.endPos = { ...tok.pos }
     }
     tok.pos = { ...tok.beginPos }
   })
@@ -28,7 +28,7 @@ const animateTok = (tok) => {
   const conns = exposeConn(tok)
   const toks = flattenBranch(tok)
   imposeBeginEndPos(toks)
-  
+
   initSVG(undefined, { width: 10000, height: 10000 })
   const allToks = [...conns, ...toks]
   render(allToks)
@@ -46,7 +46,7 @@ const animateTok = (tok) => {
   cacheLastToks(toks)
 }
 
-export const driver = (tok) => { 
+export const driver = (tok) => {
   tok = imposeTok(tok)
   tok = transNode(tok)
   tok = calTok(tok)

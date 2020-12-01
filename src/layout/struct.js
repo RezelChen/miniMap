@@ -1,6 +1,6 @@
 import { logErr, isNull, isEven, splitTactic, isEmpty, getRandColor, rand } from '../util'
 import { Branch, Group } from './tok'
-import { STRUCT_MAP } from './config'
+import { STRUCT_MAP, BOUNDARY_COLOR } from './config'
 import {
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
   TREE_L, TREE_R, TIME_V, TIME_UP, TIME_DOWN, TIME_H_UP, TIME_H_DOWN, TIME_H,
@@ -40,8 +40,7 @@ const transNode0 = (node, ctx) => {
 }
 
 export const transNode = (node, ctx = MAP) => {
-  const color = 'rgb(190, 190, 244)'
-  if (Array.isArray(node)) { return transList(node, ctx, color) }
+  if (Array.isArray(node)) { return transList(node, ctx, BOUNDARY_COLOR) }
   else {
     return transNode0(node, ctx)
   }

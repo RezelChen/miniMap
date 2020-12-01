@@ -121,7 +121,7 @@ export const getTextSize = (() => {
   const getFontRatio = (fontSize) => {
     const MINI_SIZE = 12
     if (fontSize <= MINI_SIZE) { return [fontSize, 1] }
-    else { return [MINI_SIZE, fontSize/MINI_SIZE] }
+    else { return [MINI_SIZE, fontSize / MINI_SIZE] }
   }
 
   return (content, { fontStyle, fontWeight, fontSize, fontFamily }) => {
