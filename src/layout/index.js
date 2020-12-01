@@ -1,10 +1,7 @@
 import { render, flattenBranch, imposeTok, exposeConn, calTok, calDuringPos } from './pass'
 import { transNode } from './struct'
-import { initSVG, renderSVG } from '../../lib/svg'
-import { setAttribute } from '../../lib/vdom'
-import { ANIMATION } from './config'
-
-const DURING = 15
+import { initSVG, renderSVG, SVG_UPDATE_MAP } from '../../lib/svg'
+import { ANIMATION, ANIMATION_DURATION } from './config'
 
 let LAST_TOKS = {}
 const cacheLastToks = (toks) => {
@@ -32,15 +29,18 @@ const animateTok = (tok) => {
   const toks = flattenBranch(tok)
   imposeBeginEndPos(toks)
   
+  initSVG(undefined, { width: 10000, height: 10000 })
+  const allToks = [...conns, ...toks]
+  render(allToks)
+  renderSVG()
+
   let start = 0
   const run = () => {
     start++
-    calDuringPos(toks, start, DURING)
-
-    initSVG(undefined, { width: 10000, height: 10000 })
-    render([...conns, ...toks])
-    renderSVG()
-    if (start < DURING) { requestAnimationFrame(run) }
+    calDuringPos(toks, start, ANIMATION_DURATION)
+    allToks.forEach((tok) => SVG_UPDATE_MAP[tok.type](tok))
+    if (start < ANIMATION_DURATION) { window.requestAnimationFrame(run) }
+    else { allToks.forEach((tok) => delete tok.vdom) }
   }
   run()
   cacheLastToks(toks)

@@ -122,18 +122,16 @@ export const flattenBranch = (tok) => {
 // =========== render ===========
 
 export const render = (toks) => {
-  const nodes = mapFlat(toks, (tok) => {
+  toks.forEach((tok) => {
     switch (tok.type) {
       case TOPIC:
-        return [createTopic(tok)]
+        return tok.vdom = createTopic(tok)
       case GROUP:
-        return [createBoundary(tok)]
+        return tok.vdom = createBoundary(tok)
       case CONN:
-        return [createPath(tok)]
+        return tok.vdom = createPath(tok)
       default:
         return
     }
   })
-
-  return nodes
 }
