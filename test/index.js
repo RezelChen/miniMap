@@ -27,10 +27,12 @@ Central Topic
 -- Subtopic 1.2
 --- 1.2.A Topic 
 --- 1.2.B Topic
+[
 - Main Topic 2
 -- Subtopic 2.1
 -- Subtopic 2.2
 - Main Topic 3
+]
 - Main Topic 4
 - Main Topic 5
 -- Subtopic 5.1
@@ -76,10 +78,6 @@ const renderTest = () => {
   setColor(root)
   // setRandStruct(root)
   root.struct = TEST_DATA.struct
-  const { children } = root
-  if (children.length >= 3) {
-    root.children = [children[0], children.slice(1, 3), ...children.slice(3)]
-  }
 
   render(testEl, root)
 }
