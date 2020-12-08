@@ -1,7 +1,7 @@
-import { render, flattenBranch, imposeTok, exposeConn, calTok, calDuringPos } from './pass'
+import { render, flattenBranch, exposeConn, calTok, calDuringPos } from './pass'
 import { transNode } from './struct'
 import { initSVG, renderSVG, SVG_UPDATE_MAP } from '../../lib/svg'
-import { ANIMATION, ANIMATION_DURATION } from './config'
+import { ANIMATION, ANIMATION_DURATION, MIN_CONTAINER_SIZE } from './config'
 
 let LAST_TOKS = {}
 const cacheLastToks = (toks) => {
@@ -24,16 +24,33 @@ const imposeBeginEndPos = (toks) => {
   })
 }
 
-export const driver = (tok) => {
-  tok = imposeTok(tok)
-  tok = transNode(tok)
-  tok = calTok(tok)
+const calContainerSize = (rootSize) => {
+  const width = Math.max(MIN_CONTAINER_SIZE.width, rootSize.width + 100)
+  const height = Math.max(MIN_CONTAINER_SIZE.height, rootSize.height + 100)
+  return { width, height }
+}
 
+const calOriginPos = (containerSize, rootSize) => {
+  const x = (containerSize.width - rootSize.width) / 2
+  const y = (containerSize.height - rootSize.height) / 2
+  return { x, y }
+}
+
+export const driver = (node) => {
+  const tok = transNode(node)
+  calTok(tok)
+
+  // calculate information about container
+  const cSize = calContainerSize(tok.size)
+  const oPos = calOriginPos(cSize, tok.size)
+
+  // expose all toks that need to be rendered
   const conns = exposeConn(tok)
-  const toks = flattenBranch(tok)
+  const toks = flattenBranch(tok, oPos)
   const allToks = [...conns, ...toks]
 
-  initSVG(undefined, { width: 10000, height: 10000 })
+  // render element
+  initSVG(undefined, cSize)
   render(allToks)
   renderSVG()
 

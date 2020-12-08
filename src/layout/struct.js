@@ -1,5 +1,5 @@
 import { logErr, isNull, isEven, splitTactic, isEmpty, isBoundary } from '../util'
-import { Branch, Group } from './tok'
+import { Branch, Group, createTok } from './tok'
 import { STRUCT_MAP, BOUNDARY_COLOR } from './config'
 import {
   MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
@@ -16,7 +16,7 @@ const transNode0 = (node, ctx) => {
   const OUTS = STRUCT_MAP[struct].OUTS
   const params = { IN, struct }
 
-  const topic = node.tok
+  const topic = createTok(node)
   topic.IN = STRUCT_MAP[struct].TopicIN
   if (isNull(node.children) || isEmpty(node.children)) { return new Branch({ elts: [topic], OUTS: [], ...params }) }
   else {

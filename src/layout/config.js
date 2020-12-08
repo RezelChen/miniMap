@@ -182,6 +182,8 @@ export const CONN_GAP = 10
 export const FONT_FAMILY = 'Helvetica, Arial, sans-serif'
 export const BOUNDARY_COLOR = 'rgb(190, 190, 244)'
 
+export const MIN_CONTAINER_SIZE = { width: 695, height: 595 }
+
 export const DEFAULT_STYLE = [
   {
     text: {

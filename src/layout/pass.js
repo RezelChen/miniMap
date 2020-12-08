@@ -1,5 +1,5 @@
 import { posAdd, mapFlat, posSub } from '../util'
-import { isTopic, Conn, createTok, isGroup, isPhantom } from './tok'
+import { isTopic, Conn, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from '../constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
 import { createTopic, createPath, createBoundary } from '../../lib/svg'
@@ -18,16 +18,15 @@ export const calDuringPos = (toks, start, during) => {
 
 export const calTok = (tok) => {
   switch (tok.type) {
-    case TOPIC:
-      return tok
+    case TOPIC: return
     case GROUP:
       tok.elts.forEach(calTok)
       calGroup(tok)
-      return tok
+      return
     case BRANCH:
       tok.elts.forEach(calTok)
       calBranch(tok)
-      return tok
+      return
     default:
       logErr('Unexpect tok.type', calTok, tok)
   }
@@ -87,17 +86,9 @@ export const exposeConn = (tok) => {
   return conns
 }
 
-//  =========== imposeTok ===========
-
-export const imposeTok = (node, i = 0) => {
-  if (node.type == TOPIC) { node.tok = createTok(node) }
-  node.children && node.children.forEach((child) => imposeTok(child))
-  return node
-}
-
 // =========== flattenBranch ===========
 
-export const flattenBranch = (tok) => {
+export const flattenBranch = (tok, originPos = { x: 0, y: 0 }) => {
 
   const iter = (tok, pos) => {
     tok.pos = posAdd(tok.pos, pos)
@@ -110,7 +101,6 @@ export const flattenBranch = (tok) => {
     }
   }
 
-  const originPos = { x: 0, y: 0 }
   return iter(tok, originPos)
 }
 
