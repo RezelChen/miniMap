@@ -16,7 +16,9 @@
     }
 
     p {
-      margin: 5px 0;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
@@ -52,8 +54,7 @@
       margin: 0 0 0 auto;
     }
 
-    .sel-container p {
-      display: inline-block;
+    .sel-container .sel-row p {
       padding-right: 10px;
     }
     .sel-container #text-area {
@@ -79,7 +80,7 @@
       </p>
     </div>
     <div class="sel-container">
-      <div class="row">
+      <div class="sel-row row">
           <p>Change Structure:</p>
           <select id="sel"></select>
       </div>
