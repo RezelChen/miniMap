@@ -24,39 +24,31 @@ const imposeBeginEndPos = (toks) => {
   })
 }
 
-const animateTok = (tok) => {
-  const conns = exposeConn(tok)
-  const toks = flattenBranch(tok)
-  imposeBeginEndPos(toks)
-
-  initSVG(undefined, { width: 10000, height: 10000 })
-  const allToks = [...conns, ...toks]
-  render(allToks)
-  renderSVG()
-
-  let start = 0
-  const run = () => {
-    start++
-    calDuringPos(toks, start, ANIMATION_DURATION)
-    allToks.forEach((tok) => SVG_UPDATE_MAP[tok.type](tok))
-    if (start < ANIMATION_DURATION) { window.requestAnimationFrame(run) }
-    else { allToks.forEach((tok) => delete tok.vdom) }
-  }
-  run()
-  cacheLastToks(toks)
-}
-
 export const driver = (tok) => {
   tok = imposeTok(tok)
   tok = transNode(tok)
   tok = calTok(tok)
-  if (ANIMATION) { return animateTok(tok) }
-  else {
-    const conns = exposeConn(tok)
-    const toks = flattenBranch(tok)
-    initSVG(undefined, { width: 10000, height: 10000 })
-    render([...conns, ...toks])
-    renderSVG()
+
+  const conns = exposeConn(tok)
+  const toks = flattenBranch(tok)
+  const allToks = [...conns, ...toks]
+
+  initSVG(undefined, { width: 10000, height: 10000 })
+  render(allToks)
+  renderSVG()
+
+  if (ANIMATION) {
+    imposeBeginEndPos(toks)
+    let start = 0
+    const run = () => {
+      start++
+      calDuringPos(toks, start, ANIMATION_DURATION)
+      allToks.forEach((tok) => SVG_UPDATE_MAP[tok.type](tok))
+      if (start < ANIMATION_DURATION) { window.requestAnimationFrame(run) }
+      else { allToks.forEach((tok) => delete tok.vdom) }
+    }
+    run()
+    cacheLastToks(toks)
   }
 }
 
