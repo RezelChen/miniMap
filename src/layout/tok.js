@@ -1,9 +1,7 @@
 import { logErr, uuid, posAdd, isDef, getRandColor, getTextSize } from '../util'
 import { getTopicJoint, getGroupJoint, getBranchJoint, getRelPos } from './layoutUtil'
-import { CONN_GAP, BRANCH_PADDING } from './config'
-import {
-  TOPIC, BRANCH, GROUP, CONN,
-} from '../constant'
+import { CONN_GAP, BRANCH_PADDING, DEFAULT_STYLE } from './config'
+import { TOPIC, BRANCH, GROUP, CONN } from '../constant'
 
 class Tok {
   constructor (opts) {
@@ -128,7 +126,9 @@ export const isGroup = (tok) => tok.type === GROUP
 export const isTopic = (tok) => tok.type === TOPIC
 export const isPhantom = (tok) => !tok.color
 
-export const createTok = (node, defaultStyle) => {
+export const createTok = (node) => {
+  const index =  Math.min(node.depth, DEFAULT_STYLE.length - 1)
+  const defaultStyle = DEFAULT_STYLE[index]
   const text = Object.assign({}, defaultStyle.text, node.text)
   const size = getTextSize(text.content, text)
 

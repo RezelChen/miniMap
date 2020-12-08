@@ -4,7 +4,7 @@ import { TOPIC, GROUP, BRANCH, CONN } from '../constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
 import { createTopic, createPath, createBoundary } from '../../lib/svg'
 import Tween from '../../lib/tween'
-import { STRUCT_MAP, CONN_GAP, DEFAULT_STYLE } from './config'
+import { STRUCT_MAP, CONN_GAP } from './config'
 
 const TIMING_FUNCTION = Tween.Quad.easeInOut
 export const calDuringPos = (toks, start, during) => {
@@ -90,13 +90,8 @@ export const exposeConn = (tok) => {
 //  =========== imposeTok ===========
 
 export const imposeTok = (node, i = 0) => {
-  if (Array.isArray(node)) { return node.forEach((child) => imposeTok(child, i)) }
-
-  const index =  Math.min(i, DEFAULT_STYLE.length - 1)
-  const defaultStyle = DEFAULT_STYLE[index]
-  const tok = createTok(node, defaultStyle)
-  node.tok = tok
-  node.children && node.children.forEach((child) => imposeTok(child, i + 1))
+  if (node.type == TOPIC) { node.tok = createTok(node) }
+  node.children && node.children.forEach((child) => imposeTok(child))
   return node
 }
 

@@ -1,6 +1,7 @@
 import {
   UP, RIGHT, DOWN, LEFT,
   LEFT_UP, LEFT_DOWN, RIGHT_DOWN, RIGHT_UP,
+  BOUNDARY,
 } from './constant'
 
 export const isArray = (obj) => obj.length !== undefined
@@ -146,3 +147,5 @@ export const getTextSize = (() => {
     return { width, height }
   }
 })()
+
+export const isBoundary = (node) => node.type == BOUNDARY

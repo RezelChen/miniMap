@@ -1,4 +1,5 @@
-import { isEmpty } from "../src/util"
+import { isEmpty } from '../src/util'
+import { TOPIC, BOUNDARY } from '../src/constant'
 
 let COUNT = 0
 const uuid = () => ++COUNT
@@ -29,7 +30,7 @@ const getTopic = (line) => {
   else {
     const title = match[2]
     const depth = match[1].length
-    return { id: uuid(), text: { content: title }, children: [], depth }
+    return { id: uuid(), type: TOPIC, text: { content: title }, children: [], depth }
   }
 }
 
@@ -37,6 +38,7 @@ const isTopic = (topic) => topic.depth && topic.children
 const isBoundary = Array.isArray
 
 export default (str) => {
+  COUNT = 0   // init COUNT to keep idempotent
   const blocks = getBoundary(str)
   let lines = []
   blocks.forEach((block, i) => {
@@ -47,7 +49,7 @@ export default (str) => {
   })
 
   // const lines = str.split('\n').map((l) => l.trim()).filter((l) => l !== '')
-  const root = { id: uuid(), text: { content: lines[0] }, children: [], depth: 0 }
+  const root = { id: uuid(), type: TOPIC, text: { content: lines[0] }, children: [], depth: 0 }
   const exps = lines.slice(1).map(getTopic).filter((exp) => exp)
 
   const iter = (exps, i, ctx) => {
@@ -70,17 +72,15 @@ export default (str) => {
         else {
           // check boundary depth with first element of boundary
           if (exp[0].depth <= ctx.depth) { return i }
-          // 
-          const ctx1 = { depth: 0, children: [] }
-          iter(exp, 0, ctx1)
-          ctx.children.push(ctx1.children)
+          const boundary = { id: uuid(), type: BOUNDARY, text: { content: 'boundary' },  depth: 0, children: [] }
+          iter(exp, 0, boundary)
+          ctx.children.push(boundary)
           i += 1
         }
       }
     }
   }
 
-  COUNT = 0   // init COUNT to keep idempotent
   iter(exps, 0, root)
   return root
 }
