@@ -2,9 +2,14 @@ import { logErr, uuid, posAdd, isDef, getRandColor, getTextSize } from '../util'
 import { getTopicJoint, getGroupJoint, getBranchJoint, getRelPos } from './layoutUtil'
 import { CONN_GAP, BRANCH_PADDING, DEFAULT_STYLE } from './config'
 import { TOPIC, BRANCH, GROUP, CONN } from '../constant'
+import { poolRegister, POOL_MAP } from '../../lib/pool'
 
 class Tok {
   constructor (opts) {
+    this.init(opts)
+  }
+
+  init (opts) {
     this.id = opts.id || uuid()
     this.pos = opts.pos || { x: 0, y: 0 }
     this.size = opts.size || { width: 0, height: 0 }
@@ -30,6 +35,11 @@ export class Topic extends Tok {
 
   constructor (opts) {
     super(opts)
+    this.init(opts, false)
+  }
+
+  init (opts, createMode = true) {
+    if (createMode) { super.init(opts) }
     this.type = TOPIC
     this.color = opts.color
   }
@@ -46,6 +56,11 @@ export class Topic extends Tok {
 export class Group extends Tok {
   constructor (opts) {
     super(opts)
+    this.init(opts, false)
+  }
+
+  init (opts, createMode = true) {
+    if (createMode) { super.init(opts) }
     this.type = GROUP
     this.dir = opts.dir
     this.align = opts.align
@@ -72,6 +87,11 @@ export class Group extends Tok {
 export class Branch extends Tok {
   constructor (opts) {
     super(opts)
+    this.init(opts, false)
+  }
+
+  init (opts, createMode = true) {
+    if (createMode) { super.init(opts) }
     this.type = BRANCH
     this.OUTS = opts.OUTS
     this.struct = opts.struct
@@ -98,14 +118,18 @@ export class Branch extends Tok {
     return this.OUTS.map((out) => {
       const p1 = { tok: topic, pos: getTopicJoint(topic, out) }
       const p2 = { tok: topic, pos: getTopicJoint(topic, out, CONN_GAP) }
-      return new Conn(p1, p2)
+      return POOL_MAP['Conn'].create(p1, p2)
     })
   }
 
 }
 
 export class Conn {
-  constructor (p1, p2, opts = {}) {
+  constructor (...args) {
+    this.init(...args)
+  }
+
+  init (p1, p2, opts = {}) {
     this.points = [p1, p2]
     this.type = CONN
     this.style = opts.style
@@ -121,6 +145,11 @@ export class Conn {
   }
 }
 
+poolRegister(Topic)
+poolRegister(Group)
+poolRegister(Branch)
+poolRegister(Conn)
+
 export const isBranch = (tok) => tok.type === BRANCH
 export const isGroup = (tok) => tok.type === GROUP
 export const isTopic = (tok) => tok.type === TOPIC
@@ -132,12 +161,13 @@ export const createTok = (node) => {
   const text = Object.assign({}, defaultStyle.text, node.text)
   const size = getTextSize(text.content, text)
 
-  return new Topic({
+  const opts = {
     id: node.id,
     size: Object.assign({}, size),
     margin: [5, 5, 5, 5],
     color: node.color || getRandColor(),
     text,
     padding: node.padding || defaultStyle.padding,
-  })
+  }
+  return POOL_MAP['Topic'].create(opts)
 }

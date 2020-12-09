@@ -5,6 +5,9 @@ import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
 import { createTopic, createPath, createBoundary } from '../../lib/svg'
 import Tween from '../../lib/tween'
 import { STRUCT_MAP, CONN_GAP } from './config'
+import { POOL_MAP } from '../../lib/pool'
+
+const ConnPool = POOL_MAP['Conn']
 
 const TIMING_FUNCTION = Tween.Quad.easeInOut
 export const calDuringPos = (toks, start, during) => {
@@ -48,7 +51,7 @@ export const exposeConn = (tok) => {
         const pos1 = { tok: topic, pos: posSub(tok.getJoint(), topic.pos) }
         const pos2 = { tok: topic, pos: topic.getJoint() }
         // the path from branch's joint connect to topic
-        conns.push(new Conn(pos1, pos2))
+        conns.push(ConnPool.create(pos1, pos2))
         return [pos1]
     }
   }
@@ -71,9 +74,9 @@ export const exposeConn = (tok) => {
           const branchOutPos = { tok: topic, pos: getTopicJoint(topic, dir, CONN_GAP) }
           const inPosArr = getInPosArr(t)
           // create lines
-          conns.push(new Conn(topicOutPos, branchOutPos, { dir }))
+          conns.push(ConnPool.create(topicOutPos, branchOutPos, { dir }))
           inPosArr.forEach((inPos) => {
-            conns.push(new Conn(branchOutPos, inPos, { dir, style: LineStyle }))
+            conns.push(ConnPool.create(branchOutPos, inPos, { dir, style: LineStyle }))
           })
         })
       }

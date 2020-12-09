@@ -2,6 +2,7 @@ import { render, flattenBranch, exposeConn, calTok, calDuringPos } from './pass'
 import { transNode } from './struct'
 import { initSVG, renderSVG, SVG_UPDATE_MAP } from '../../lib/svg'
 import { ANIMATION, ANIMATION_DURATION, MIN_CONTAINER_SIZE } from './config'
+import { POOL_MAP } from '../../lib/pool'
 
 let LAST_TOKPOS = {}
 const cacheLastToks = (toks) => {
@@ -63,7 +64,10 @@ export const driver = (node) => {
       calDuringPos(toks, start, ANIMATION_DURATION)
       allToks.forEach((tok) => SVG_UPDATE_MAP[tok.type](tok))
       if (start < ANIMATION_DURATION) { window.requestAnimationFrame(run) }
-      else { allToks.forEach((tok) => delete tok.vdom) }
+      else {
+        allToks.forEach((tok) => delete tok.vdom)
+        Object.keys(POOL_MAP).forEach((key) => POOL_MAP[key].finish())
+      }
     }
     run()
     cacheLastToks(toks)

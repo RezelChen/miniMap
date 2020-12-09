@@ -1,3 +1,4 @@
+import { POOL_MAP } from '../../lib/pool'
 import { logErr, isNull, isEven, splitTactic, isEmpty, isBoundary } from '../util'
 import { Branch, Group, createTok } from './tok'
 import { STRUCT_MAP, BOUNDARY_COLOR } from './config'
@@ -9,6 +10,7 @@ import {
   FISH_RIGHT, FISH_LEFT,
 } from '../constant'
 
+const branchPool = POOL_MAP['Branch']
 
 const transNode0 = (node, ctx) => {
   const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
@@ -18,22 +20,22 @@ const transNode0 = (node, ctx) => {
 
   const topic = createTok(node)
   topic.IN = STRUCT_MAP[struct].TopicIN
-  if (isNull(node.children) || isEmpty(node.children)) { return new Branch({ elts: [topic], OUTS: [], ...params }) }
+  if (isNull(node.children) || isEmpty(node.children)) { return branchPool.create({ elts: [topic], OUTS: [], ...params }) }
   else {
     switch (struct) {
       case MAP: {
         const [right, left] = splitTactic(node.children)
         const rGroup = transList(right, LOGIC_R)
         if (isEmpty(left)) {
-          return new Branch({ elts: [topic, rGroup], OUTS: OUTS.slice(0, 1), ...params })
+          return branchPool.create({ elts: [topic, rGroup], OUTS: OUTS.slice(0, 1), ...params })
         } else {
           const lGroup = transList(left, LOGIC_L)
-          return new Branch({ elts: [topic, rGroup, lGroup], OUTS, ...params })
+          return branchPool.create({ elts: [topic, rGroup, lGroup], OUTS, ...params })
         }
       }
       default: {
         const group = transList(node.children, struct)
-        return new Branch({ elts: [topic, group], OUTS, ...params })
+        return branchPool.create({ elts: [topic, group], OUTS, ...params })
       }
     }
   }
@@ -90,5 +92,5 @@ const transList = (nodes, ctx, opts = {}) => {
   const dir = STRUCT_MAP[ctx].GroupDIR
   const align = STRUCT_MAP[ctx].GroupAlign
 
-  return new Group({ elts: toks, IN, dir, align, ctx, ...opts })
+  return POOL_MAP['Group'].create({ elts: toks, IN, dir, align, ctx, ...opts })
 }
