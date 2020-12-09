@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>miniMap</title>
+</head>
+
+<body>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    p {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 1024px;
+      margin: 0 auto;
+    }
+
+    .description {
+      padding: 20px 100px;
+      text-align: center;
+      color: rgb(130, 103, 176);
+    }
+
+    .description span {
+      font-size: 30px;
+    }
+
+    .row {
+      position: relative;
+      min-height: 30px;
+    }
+
+    #test {
+      width: 700px;
+      height: 600px;
+      border: 1px solid rgb(130, 103, 176);
+      overflow: scroll;
+      margin-left: 210px;
+    }
+
+    .sel-container {
+      position: relative;
+      margin: 0 0 0 auto;
+    }
+
+    .sel-container .sel-row p {
+      padding-right: 10px;
+    }
+    .sel-container #text-area {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 400px;
+      border: 1px solid rgb(130, 103, 176);
+    }
+    .margin-left {
+      margin-left: 15px;
+    }
+  </style>
+  <div class="container">
+    <div class="description">
+      <p>Here is a demo for
+        <span>miniMap</span>
+      </p>
+      <p>
+        You can get more infomation by
+        <a target="_blank" href="https://github.com/RezelChen/miniMap">click me</a>
+      </p>
+    </div>
+    <div class="sel-container">
+      <div class="sel-row row">
+          <p>Change Structure:</p>
+          <select id="sel"></select>
+      </div>
+      <div class="row">
+        <textarea id="text-area"></textarea>
+        <div id="test"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src='./dist/bundle.js'></script>
+</body>
+
+</html>
