@@ -11,10 +11,17 @@ const ConnPool = POOL_MAP['Conn']
 
 const TIMING_FUNCTION = Tween.Quad.easeInOut
 export const calDuringPos = (toks, start, during) => {
-  toks.forEach((tok) => {
-    tok.pos.x = TIMING_FUNCTION(start, tok.beginPos.x, tok.endPos.x, during)
-    tok.pos.y = TIMING_FUNCTION(start, tok.beginPos.y, tok.endPos.y, during)
-  })
+  if (start == during) {
+    toks.forEach((tok) => {
+      tok.pos.x = tok.endPos.x
+      tok.pos.y = tok.endPos.y
+    })
+  } else {
+    toks.forEach((tok) => {
+      tok.pos.x = TIMING_FUNCTION(start, tok.beginPos.x, tok.endPos.x, during)
+      tok.pos.y = TIMING_FUNCTION(start, tok.beginPos.y, tok.endPos.y, during)
+    })
+  }
 }
 
 //  =========== calTok ===========

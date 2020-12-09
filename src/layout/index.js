@@ -58,18 +58,18 @@ export const driver = (node) => {
   renderSVG()
 
   if (ANIMATION) {
-    let start = 0
+    const start = window.performance.now()
     const run = () => {
-      start++
-      calDuringPos(toks, start, ANIMATION_DURATION)
+      const now = Math.min(Math.ceil(window.performance.now() - start), ANIMATION_DURATION)
+      calDuringPos(toks, now, ANIMATION_DURATION)
       allToks.forEach((tok) => SVG_UPDATE_MAP[tok.type](tok))
-      if (start < ANIMATION_DURATION) { window.requestAnimationFrame(run) }
+      if (now < ANIMATION_DURATION) { window.requestAnimationFrame(run) }
       else {
         allToks.forEach((tok) => delete tok.vdom)
         Object.keys(POOL_MAP).forEach((key) => POOL_MAP[key].finish())
       }
     }
-    run()
+    window.requestAnimationFrame(run)
     cacheLastToks(toks)
   }
 }

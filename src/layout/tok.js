@@ -137,11 +137,7 @@ export class Conn {
   }
 
   generate () {
-    const posArr = this.points.map((p) => posAdd(p.tok.pos, p.pos))
-    return {
-      p1: posArr[0],
-      p2: posArr[1],
-    }
+    return this.points.map((p) => posAdd(p.tok.pos, p.pos))
   }
 }
 
