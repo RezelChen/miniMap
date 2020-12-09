@@ -1,11 +1,10 @@
 import { POOL_MAP } from '../../lib/pool'
-import { logErr, isNull, isEven, splitTactic, isEmpty, isBoundary } from '../util'
-import { Branch, Group, createTok } from './tok'
+import { isNull, isEven, splitTactic, isEmpty, isBoundary } from '../util'
+import { createTok } from './tok'
 import { STRUCT_MAP, BOUNDARY_COLOR } from './config'
 import {
-  MAP, LOGIC_R, LOGIC_L, ORG, ORG_UP,
-  TREE_L, TREE_R, TIME_V, TIME_UP, TIME_DOWN, TIME_H_UP, TIME_H_DOWN, TIME_H,
-  FISH_RIGHT_UP_IN, FISH_RIGHT_DOWN_IN, FISH_LEFT_UP_IN, FISH_LEFT_DOWN_IN,
+  MAP, LOGIC_R, LOGIC_L,
+  TREE_L, TREE_R, TIME_V, TIME_H_UP, TIME_H_DOWN, TIME_H,
   FISH_RIGHT_UP, FISH_RIGHT_DOWN, FISH_LEFT_UP, FISH_LEFT_DOWN,
   FISH_RIGHT, FISH_LEFT,
 } from '../constant'
@@ -53,41 +52,20 @@ const transInterCreator = (ctxs) => {
   }
 }
 
+const INTER_CTX_MAP = {
+  [TIME_H]: [TIME_H_UP, TIME_H_DOWN],
+  [TIME_V]: [TREE_R, TREE_L],
+  [FISH_RIGHT]: [FISH_RIGHT_UP, FISH_RIGHT_DOWN],
+  [FISH_LEFT]: [FISH_LEFT_UP, FISH_LEFT_DOWN],
+}
+
 const transList = (nodes, ctx, opts = {}) => {
 
-  const getToks = (nodes, ctx) => {
-    switch (ctx) {
-      case TIME_H: {
-        const ctxs = [TIME_H_UP, TIME_H_DOWN]
-        const transNode = transInterCreator(ctxs)
-        return nodes.map(transNode)
-      }
+  // trans nodes by ctx
+  const interCtxs = INTER_CTX_MAP[ctx]
+  const transFn = interCtxs ? transInterCreator(interCtxs) : (node) => transNode(node, ctx)
+  const toks = nodes.map(transFn)
 
-      case TIME_V: {
-        const ctxs = [TREE_R, TREE_L]
-        const transNode = transInterCreator(ctxs)
-        return nodes.map(transNode)
-      }
-
-      case FISH_RIGHT: {
-        const ctxs = [FISH_RIGHT_UP, FISH_RIGHT_DOWN]
-        const transNode = transInterCreator(ctxs)
-        return nodes.map(transNode)
-      }
-
-      case FISH_LEFT: {
-        const ctxs = [FISH_LEFT_UP, FISH_LEFT_DOWN]
-        const transNode = transInterCreator(ctxs)
-        return nodes.map(transNode)
-      }
-
-      default: {
-        return nodes.map((node) => transNode(node, ctx))
-      }
-    }
-  }
-
-  const toks = getToks(nodes, ctx)
   const IN = STRUCT_MAP[ctx].GroupIN
   const dir = STRUCT_MAP[ctx].GroupDIR
   const align = STRUCT_MAP[ctx].GroupAlign
