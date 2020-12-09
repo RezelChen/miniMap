@@ -3,17 +3,17 @@ import { transNode } from './struct'
 import { initSVG, renderSVG, SVG_UPDATE_MAP } from '../../lib/svg'
 import { ANIMATION, ANIMATION_DURATION, MIN_CONTAINER_SIZE } from './config'
 
-let LAST_TOKS = {}
+let LAST_TOKPOS = {}
 const cacheLastToks = (toks) => {
-  LAST_TOKS = {}
-  toks.forEach((tok) => LAST_TOKS[tok.id] = tok)
+  LAST_TOKPOS = {}
+  toks.forEach((tok) => LAST_TOKPOS[tok.id] = tok.pos)
 }
 
 const imposeBeginEndPos = (toks) => {
   toks.forEach((tok) => {
-    const oldTok = LAST_TOKS[tok.id]
-    if (oldTok) {
-      tok.beginPos = { ...oldTok.pos }
+    const oldPos = LAST_TOKPOS[tok.id]
+    if (oldPos) {
+      tok.beginPos = oldPos
       tok.endPos = { x: tok.pos.x - tok.beginPos.x, y: tok.pos.y - tok.beginPos.y }
     }
     else {
@@ -49,13 +49,14 @@ export const driver = (node) => {
   const toks = flattenBranch(tok, oPos)
   const allToks = [...conns, ...toks]
 
+  if (ANIMATION) { imposeBeginEndPos(toks) }
+
   // render element
   initSVG(undefined, cSize)
   render(allToks)
   renderSVG()
 
   if (ANIMATION) {
-    imposeBeginEndPos(toks)
     let start = 0
     const run = () => {
       start++
