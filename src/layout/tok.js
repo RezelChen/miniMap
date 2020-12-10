@@ -5,9 +5,7 @@ import { TOPIC, BRANCH, GROUP, CONN } from '../constant'
 import { poolRegister, POOL_MAP } from '../../lib/pool'
 
 class Tok {
-  constructor (opts) {
-    this.init(opts)
-  }
+  constructor (opts) { this.init(opts) }
 
   init (opts) {
     this.id = opts.id || uuid()
@@ -33,13 +31,10 @@ class Tok {
 
 export class Topic extends Tok {
 
-  constructor (opts) {
-    super(opts)
-    this.init(opts, false)
-  }
+  constructor (opts) { super(opts) }
 
-  init (opts, createMode = true) {
-    if (createMode) { super.init(opts) }
+  init (opts) {
+    super.init(opts)
     this.type = TOPIC
     this.color = opts.color
   }
@@ -54,13 +49,10 @@ export class Topic extends Tok {
 }
 
 export class Group extends Tok {
-  constructor (opts) {
-    super(opts)
-    this.init(opts, false)
-  }
+  constructor (opts) { super(opts) }
 
-  init (opts, createMode = true) {
-    if (createMode) { super.init(opts) }
+  init (opts) {
+    super.init(opts)
     this.type = GROUP
     this.dir = opts.dir
     this.align = opts.align
@@ -85,13 +77,10 @@ export class Group extends Tok {
 }
 
 export class Branch extends Tok {
-  constructor (opts) {
-    super(opts)
-    this.init(opts, false)
-  }
+  constructor (opts) { super(opts) }
 
-  init (opts, createMode = true) {
-    if (createMode) { super.init(opts) }
+  init (opts) {
+    super.init(opts)
     this.type = BRANCH
     this.OUTS = opts.OUTS
     this.struct = opts.struct
