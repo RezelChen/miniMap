@@ -24,6 +24,28 @@ export const calDuringPos = (toks, start, during) => {
   }
 }
 
+export const calConnDuringPos = (conns, start, during) => {
+  if (start == during) {
+    conns.forEach((conn) => {
+      conn.points.forEach((point, i) => {
+        const begin = conn.beginPoints[i]
+        const end = conn.endPoints[i]
+        point.pos.x = begin.x + end.x
+        point.pos.y = begin.y + end.y
+      })
+    })
+  } else {
+    conns.forEach((conn) => {
+      conn.points.forEach((point, i) => {
+        const begin = conn.beginPoints[i]
+        const end = conn.endPoints[i]
+        point.pos.x = TIMING_FUNCTION(start, begin.x, end.x, during)
+        point.pos.y = TIMING_FUNCTION(start, begin.y, end.y, during)
+      })
+    })
+  }
+}
+
 //  =========== calTok ===========
 
 export const calTok = (tok) => {
@@ -80,8 +102,9 @@ export const exposeConn = (tok) => {
           const inPosArr = getInPosArr(t)
           // create lines
           inPosArr.forEach(([pos1, pos2]) => {
+            const id = `${topicOutPos.tok.id}-${pos2.tok.id}`
             const points = [topicOutPos, branchOutPos, pos1, pos2]
-            const conn = ConnPool.create(points, LineStyle)
+            const conn = ConnPool.create(id, points, LineStyle)
             conns.push(conn)
           })
         })

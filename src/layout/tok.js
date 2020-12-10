@@ -110,9 +110,10 @@ export class Branch extends Tok {
 }
 
 export class Conn {
-  constructor (points, style) { this.init(points, style) }
+  constructor (id, points, style) { this.init(id, points, style) }
 
-  init (points, style) {
+  init (id, points, style) {
+    this.id = id
     this.type = CONN
     this.points = points
     this.style = style

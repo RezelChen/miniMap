@@ -1,27 +1,47 @@
-import { render, flattenBranch, exposeConn, calTok, calDuringPos } from './pass'
+import { render, flattenBranch, exposeConn, calTok, calDuringPos, calConnDuringPos } from './pass'
 import { transNode } from './struct'
 import { initSVG, renderSVG, SVG_UPDATE_MAP } from '../../lib/svg'
 import { ANIMATION, ANIMATION_DURATION, MIN_CONTAINER_SIZE } from './config'
 import { POOL_MAP } from '../../lib/pool'
+import { posSub } from '../util'
 
-let LAST_TOKPOS = {}
+const LAST_TOK_POS = {}
+const LAST_CONN_POS = {}
 const cacheLastToks = (toks) => {
-  LAST_TOKPOS = {}
-  toks.forEach((tok) => LAST_TOKPOS[tok.id] = tok.pos)
+  Object.keys(LAST_TOK_POS).forEach((id) => delete LAST_TOK_POS[id])
+  toks.forEach((tok) => LAST_TOK_POS[tok.id] = tok.pos)
 }
 
-const imposeBeginEndPos = (toks) => {
+const cacheLastConns = (conns) => {
+  Object.keys(LAST_CONN_POS).forEach((id) => delete LAST_CONN_POS[id])
+  conns.forEach((conn) => LAST_CONN_POS[conn.id] = conn.points.map((p) => p.pos))
+}
+
+const imposeToksBeginEndPos = (toks) => {
   toks.forEach((tok) => {
-    const oldPos = LAST_TOKPOS[tok.id]
+    const oldPos = LAST_TOK_POS[tok.id]
     if (oldPos) {
       tok.beginPos = oldPos
-      tok.endPos = { x: tok.pos.x - tok.beginPos.x, y: tok.pos.y - tok.beginPos.y }
-    }
-    else {
+      tok.endPos = posSub(tok.pos, oldPos)
+    } else {
       tok.beginPos = { x: 0, y: 0 }
       tok.endPos = { ...tok.pos }
     }
     tok.pos = { ...tok.beginPos }
+  })
+}
+
+const imposeConnsBeginEndPos = (conns) => {
+  conns.forEach((conn) => {
+    const oldPoints = LAST_CONN_POS[conn.id]
+    if (oldPoints) {
+      conn.beginPoints = oldPoints
+      conn.endPoints = conn.points.map((p, i) => posSub(p.pos, oldPoints[i]))
+    } else {
+      conn.beginPoints = [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }]
+      conn.endPoints = conn.points.map((p) => p.pos)
+    }
+    conn.points = conn.points.map((p, i) => { return { tok: p.tok, pos: { ...conn.beginPoints[i] } } })
   })
 }
 
@@ -50,7 +70,10 @@ export const driver = (node) => {
   const toks = flattenBranch(tok, oPos)
   const allToks = [...conns, ...toks]
 
-  if (ANIMATION) { imposeBeginEndPos(toks) }
+  if (ANIMATION) {
+    imposeToksBeginEndPos(toks)
+    imposeConnsBeginEndPos(conns)
+  }
 
   // render element
   initSVG(undefined, cSize)
@@ -62,6 +85,7 @@ export const driver = (node) => {
     const run = () => {
       const now = Math.min(Math.ceil(window.performance.now() - start), ANIMATION_DURATION)
       calDuringPos(toks, now, ANIMATION_DURATION)
+      calConnDuringPos(conns, now, ANIMATION_DURATION)
       allToks.forEach((tok) => SVG_UPDATE_MAP[tok.type](tok))
       if (now < ANIMATION_DURATION) { window.requestAnimationFrame(run) }
       else {
@@ -71,6 +95,7 @@ export const driver = (node) => {
     }
     window.requestAnimationFrame(run)
     cacheLastToks(toks)
+    cacheLastConns(conns)
   }
 }
 
