@@ -15,26 +15,24 @@ const transNode0 = (node, ctx) => {
   const struct = node.struct || STRUCT_MAP[ctx].Child || ctx
   const IN = STRUCT_MAP[ctx].IN
   const OUTS = STRUCT_MAP[struct].OUTS
-  const params = { IN, struct }
 
-  const topic = createTok(node)
-  topic.IN = STRUCT_MAP[struct].TopicIN
-  if (isNull(node.children) || isEmpty(node.children)) { return branchPool.create({ elts: [topic], OUTS: [], ...params }) }
+  const topic = createTok(node, STRUCT_MAP[struct].TopicIN)
+  if (isNull(node.children) || isEmpty(node.children)) { return branchPool.create({ elts: [topic], OUTS: [], IN, struct }) }
   else {
     switch (struct) {
       case MAP: {
         const [right, left] = splitTactic(node.children)
         const rGroup = transList(right, LOGIC_R)
         if (isEmpty(left)) {
-          return branchPool.create({ elts: [topic, rGroup], OUTS: [OUTS[0]], ...params })
+          return branchPool.create({ elts: [topic, rGroup], OUTS: [OUTS[0]], IN, struct })
         } else {
           const lGroup = transList(left, LOGIC_L)
-          return branchPool.create({ elts: [topic, rGroup, lGroup], OUTS, ...params })
+          return branchPool.create({ elts: [topic, rGroup, lGroup], OUTS, IN, struct })
         }
       }
       default: {
         const group = transList(node.children, struct)
-        return branchPool.create({ elts: [topic, group], OUTS, ...params })
+        return branchPool.create({ elts: [topic, group], OUTS, IN, struct })
       }
     }
   }

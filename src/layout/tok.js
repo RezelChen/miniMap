@@ -4,6 +4,9 @@ import { CONN_GAP, BRANCH_PADDING, DEFAULT_STYLE } from './config'
 import { TOPIC, BRANCH, GROUP, CONN } from '../constant'
 import { poolRegister, POOL_MAP } from '../../lib/pool'
 
+const DEFAULT_PADDING = [0, 0, 0, 0]
+const DEFAULT_MARGIN = [0, 0, 0, 0]
+
 class Tok {
   constructor (opts) { this.init(opts) }
 
@@ -11,13 +14,9 @@ class Tok {
     this.id = opts.id || uuid()
     this.pos = opts.pos || { x: 0, y: 0 }
     this.size = opts.size || { width: 0, height: 0 }
-    this.text = opts.text
 
-    this.padding = opts.padding || [0, 0, 0, 0]
-    this.margin = opts.margin || [0, 0, 0, 0]
-    const [top, right, bottom, left] = this.padding
-    this.size.width += left + right
-    this.size.height += top + bottom
+    this.padding = opts.padding || DEFAULT_PADDING
+    this.margin = opts.margin || DEFAULT_MARGIN
 
     this.elts = opts.elts || []
     this.elts.forEach((elt) => elt.parent = this)
@@ -35,6 +34,12 @@ export class Topic extends Tok {
 
   init (opts) {
     super.init(opts)
+
+    const [top, right, bottom, left] = this.padding
+    this.size.width += left + right
+    this.size.height += top + bottom
+
+    this.text = opts.text
     this.type = TOPIC
     this.color = opts.color
   }
@@ -84,7 +89,7 @@ export class Branch extends Tok {
     this.type = BRANCH
     this.OUTS = opts.OUTS
     this.struct = opts.struct
-    this.padding = opts.padding || [...BRANCH_PADDING]
+    this.padding = opts.padding || BRANCH_PADDING
   }
 
   getJoint () { return getBranchJoint(this, this.IN) }
@@ -114,9 +119,7 @@ export class Branch extends Tok {
 }
 
 export class Conn {
-  constructor (...args) {
-    this.init(...args)
-  }
+  constructor (p1, p2, opts) { this.init(p1, p2, opts) }
 
   init (p1, p2, opts = {}) {
     this.points = [p1, p2]
@@ -140,19 +143,20 @@ export const isGroup = (tok) => tok.type === GROUP
 export const isTopic = (tok) => tok.type === TOPIC
 export const isPhantom = (tok) => !tok.color
 
-export const createTok = (node) => {
+export const createTok = (node, IN) => {
   const index =  Math.min(node.depth, DEFAULT_STYLE.length - 1)
   const defaultStyle = DEFAULT_STYLE[index]
-  const text = Object.assign({}, defaultStyle.text, node.text)
+  const text = { ...defaultStyle.text, ...node.text }
   const size = getTextSize(text.content, text)
 
   const opts = {
     id: node.id,
-    size: Object.assign({}, size),
-    margin: [5, 5, 5, 5],
-    color: node.color || getRandColor(),
+    size,
     text,
+    color: node.color || getRandColor(),
+    margin: node.margin || defaultStyle.margin,
     padding: node.padding || defaultStyle.padding,
+    IN,
   }
   return POOL_MAP['Topic'].create(opts)
 }

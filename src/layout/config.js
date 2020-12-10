@@ -192,6 +192,7 @@ export const DEFAULT_STYLE = [
       fontFamily: FONT_FAMILY,
     },
     padding: [10, 10, 10, 10],
+    margin: [5, 5, 5, 5],
   },
   {
     text: {
@@ -200,6 +201,7 @@ export const DEFAULT_STYLE = [
       fontFamily: FONT_FAMILY,
     },
     padding: [10, 10, 10, 10],
+    margin: [5, 5, 5, 5],
   },
   {
     text: {
@@ -208,5 +210,6 @@ export const DEFAULT_STYLE = [
       fontFamily: FONT_FAMILY,
     },
     padding: [5, 5, 5, 5],
+    margin: [5, 5, 5, 5],
   },
 ]
