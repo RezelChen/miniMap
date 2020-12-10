@@ -1,12 +1,5 @@
-import { isEmpty } from '../src/util'
+import { isEmpty, uuidCreator } from '../src/util'
 import { TOPIC, BOUNDARY } from '../src/constant'
-
-const uuidCreator = (prefix) => {
-  let count = 0
-  const fn = () => prefix + count++
-  fn.init = () => count = 0
-  return fn
-}
 
 const uuid1 = uuidCreator('t-')
 const uuid2 = uuidCreator('b-')

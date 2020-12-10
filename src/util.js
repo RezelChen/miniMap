@@ -38,6 +38,14 @@ export const uuid = () => {
   return id
 }
 
+// pseudorandom uuid
+export const uuidCreator = (prefix) => {
+  let count = 0
+  const fn = () => prefix + count++
+  fn.init = () => count = 0
+  return fn
+}
+
 export const getRandColor = () => {
   const randNum = () => rand(100, 150)
   return `rgb(${randNum()}, ${randNum()}, ${randNum()})`
