@@ -13,8 +13,8 @@ const TIMING_FUNCTION = Tween.Quad.easeInOut
 export const calDuringPos = (toks, start, during) => {
   if (start == during) {
     toks.forEach((tok) => {
-      tok.pos.x = tok.endPos.x
-      tok.pos.y = tok.endPos.y
+      tok.pos.x = tok.beginPos.x + tok.endPos.x
+      tok.pos.y = tok.beginPos.y + tok.endPos.y
     })
   } else {
     toks.forEach((tok) => {
