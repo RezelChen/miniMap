@@ -107,28 +107,18 @@ export class Branch extends Tok {
     return this.OUTS.map((out) => getTopicJoint(topic, out, CONN_GAP))
   }
 
-  createOutConns () {
-    const topic = this.getTopic()
-    return this.OUTS.map((out) => {
-      const p1 = { tok: topic, pos: getTopicJoint(topic, out) }
-      const p2 = { tok: topic, pos: getTopicJoint(topic, out, CONN_GAP) }
-      return POOL_MAP['Conn'].create(p1, p2)
-    })
-  }
-
 }
 
 export class Conn {
-  constructor (p1, p2, opts) { this.init(p1, p2, opts) }
+  constructor (points, style) { this.init(points, style) }
 
-  init (p1, p2, opts = {}) {
-    this.points = [p1, p2]
+  init (points, style) {
     this.type = CONN
-    this.style = opts.style
-    this.dir = opts.dir
+    this.points = points
+    this.style = style
   }
 
-  generate () {
+  getPoints () {
     return this.points.map((p) => posAdd(p.tok.pos, p.pos))
   }
 }

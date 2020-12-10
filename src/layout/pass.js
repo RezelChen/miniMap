@@ -1,5 +1,5 @@
 import { posAdd, mapFlat, posSub } from '../util'
-import { isTopic, Conn, isGroup, isPhantom } from './tok'
+import { isTopic, isGroup, isPhantom } from './tok'
 import { TOPIC, GROUP, BRANCH, CONN } from '../constant'
 import { calGroup, calBranch, getTopicJoint } from './layoutUtil'
 import { createTopic, createPath, createBoundary } from '../../lib/svg'
@@ -57,9 +57,7 @@ export const exposeConn = (tok) => {
         const topic = tok.getTopic()
         const pos1 = { tok: topic, pos: posSub(tok.getJoint(), topic.pos) }
         const pos2 = { tok: topic, pos: topic.getJoint() }
-        // the path from branch's joint connect to topic
-        conns.push(ConnPool.create(pos1, pos2))
-        return [pos1]
+        return [[pos1, pos2]]
     }
   }
 
@@ -81,9 +79,10 @@ export const exposeConn = (tok) => {
           const branchOutPos = { tok: topic, pos: getTopicJoint(topic, dir, CONN_GAP) }
           const inPosArr = getInPosArr(t)
           // create lines
-          conns.push(ConnPool.create(topicOutPos, branchOutPos, { dir }))
-          inPosArr.forEach((inPos) => {
-            conns.push(ConnPool.create(branchOutPos, inPos, { dir, style: LineStyle }))
+          inPosArr.forEach(([pos1, pos2]) => {
+            const points = [topicOutPos, branchOutPos, pos1, pos2]
+            const conn = ConnPool.create(points, LineStyle)
+            conns.push(conn)
           })
         })
       }
