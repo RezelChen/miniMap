@@ -132,24 +132,16 @@ export const getPointsConrner = (pots) => {
 export const getTextSize = (() => {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
-
-  const getFontRatio = (fontSize) => {
-    const MINI_SIZE = 12
-    if (fontSize <= MINI_SIZE) { return [fontSize, 1] }
-    else { return [MINI_SIZE, fontSize / MINI_SIZE] }
-  }
+  const getWidth = (width, line) => Math.max(width, ctx.measureText(line).width)
 
   return (content, { fontStyle, fontWeight, fontSize, fontFamily }) => {
-    const [fontSize1, ratio] = getFontRatio(fontSize)
-    const fontSizePx = fontSize1 + 'px'
-    const fontArr = [fontStyle, fontWeight, fontSizePx, fontFamily]
 
     // set ctx attributes before measureText
+    const fontArr = [fontStyle, fontWeight, fontSize + 'px', fontFamily]
     ctx.font = fontArr.filter(item => item).join(' ')
-    const lines = content.split('\n')
-    const widthArr = lines.map((line) => ctx.measureText(line).width)
 
-    const width = Math.ceil(Math.max(...widthArr) * ratio)
+    const lines = content.split('\n')
+    const width = Math.ceil(lines.reduce(getWidth, 0))
     const height = Math.ceil(lines.length * fontSize)
 
     return { width, height }
