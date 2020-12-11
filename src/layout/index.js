@@ -21,13 +21,9 @@ const cacheLastConns = (conns) => {
 const imposeToksBeginEndPos = (toks) => {
   toks.forEach((tok) => {
     const oldPos = LAST_TOK_POS[tok.id]
-    if (oldPos) {
-      tok.beginPos = oldPos
-      tok.endPos = posSub(tok.pos, oldPos)
-    } else {
-      tok.beginPos = { x: 0, y: 0 }
-      tok.endPos = { ...tok.pos }
-    }
+    if (oldPos) { tok.beginPos = oldPos }
+    else { tok.beginPos = tok.parent ? { ...tok.parent.pos } : { x: 0, y: 0 } }
+    tok.endPos = posSub(tok.pos, tok.beginPos)
     tok.pos = { ...tok.beginPos }
   })
 }
@@ -81,6 +77,8 @@ export const driver = (rootId) => {
   initSVG(undefined, cSize)
   render(allToks)
   renderSVG()
+
+  toks.forEach((tok) => delete tok.parent)
 
   if (ANIMATION) {
     const start = window.performance.now()

@@ -124,7 +124,6 @@ export const flattenBranch = (tok, originPos = { x: 0, y: 0 }) => {
 
   const iter = (tok, pos) => {
     tok.pos = posAdd(tok.pos, pos)
-    tok.parent = null
     if (isTopic(tok)) { return [tok] }
     else {
       const toks = mapFlat(tok.elts, (t) => iter(t, tok.pos))

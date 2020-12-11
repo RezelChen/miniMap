@@ -1,4 +1,4 @@
-import { isEmpty, uuidCreator } from '../src/util'
+import { isEmpty, uuidCreator, getRandColor } from '../src/util'
 import { TOPIC, BOUNDARY } from '../src/constant'
 
 const uuid1 = uuidCreator('t-')
@@ -39,7 +39,7 @@ const isTopic = (topic) => topic.depth && topic.children
 const isBoundary = Array.isArray
 
 const DEFAULT_TITLE = 'New Topic'
-export const createTopic = () => { return { id: uuid1(), type: TOPIC, text: { content: DEFAULT_TITLE }, children: [] } }
+export const createTopic = () => { return { id: uuid1(), type: TOPIC, text: { content: DEFAULT_TITLE }, color: getRandColor(), children: [] } }
 
 export default (str) => {
   uuid1.init()
