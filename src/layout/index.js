@@ -1,9 +1,10 @@
+import { POOL_MAP } from '../../lib/pool'
+import { initSVG, renderSVG, SVG_UPDATE_MAP } from '../../lib/svg'
+import store from '../store'
+import { posSub } from '../util'
+import { ANIMATION, ANIMATION_DURATION, MIN_CONTAINER_SIZE } from './config'
 import { render, flattenBranch, exposeConn, calTok, calDuringPos, calConnDuringPos } from './pass'
 import { transNode } from './struct'
-import { initSVG, renderSVG, SVG_UPDATE_MAP } from '../../lib/svg'
-import { ANIMATION, ANIMATION_DURATION, MIN_CONTAINER_SIZE } from './config'
-import { POOL_MAP } from '../../lib/pool'
-import { posSub } from '../util'
 
 const LAST_TOK_POS = {}
 const LAST_CONN_POS = {}
@@ -57,7 +58,8 @@ const calOriginPos = (containerSize, rootSize) => {
   return { x, y }
 }
 
-export const driver = (node) => {
+export const driver = (rootId) => {
+  const node = store.state.nodeMap[rootId]
   const tok = transNode(node)
   calTok(tok)
 

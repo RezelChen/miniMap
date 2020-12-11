@@ -1,13 +1,14 @@
 import { POOL_MAP } from '../../lib/pool'
-import { isNull, splitTactic, isEmpty, isBoundary } from '../util'
-import { createTok } from './tok'
-import { STRUCT_MAP, BOUNDARY_COLOR } from './config'
 import {
   MAP, LOGIC_R, LOGIC_L,
   TREE_L, TREE_R, TIME_V, TIME_H_UP, TIME_H_DOWN, TIME_H,
   FISH_RIGHT_UP, FISH_RIGHT_DOWN, FISH_LEFT_UP, FISH_LEFT_DOWN,
   FISH_RIGHT, FISH_LEFT,
 } from '../constant'
+import store from '../store'
+import { isNull, splitTactic, isEmpty, isBoundary } from '../util'
+import { STRUCT_MAP, BOUNDARY_COLOR } from './config'
+import { createTok } from './tok'
 
 const branchPool = POOL_MAP['Branch']
 
@@ -52,7 +53,8 @@ const transInterCreator = (ctxs) => {
   }
 }
 
-const transList = (nodes, ctx, opts = {}) => {
+const transList = (nodeIds, ctx, opts = {}) => {
+  const nodes = nodeIds.map((id) => store.state.nodeMap[id])
 
   // trans nodes by ctx
   const interCtxs = INTER_CTX_MAP[ctx]
