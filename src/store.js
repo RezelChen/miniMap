@@ -1,4 +1,6 @@
-import { isBoundary, isEmpty, removeItem } from './util'
+import { createTopic } from '../test/parser'
+import { isBoundary, removeItem } from './util'
+
 const normalize = (root) => {
   const nodeMap = {}
   const iter = (node) => {
@@ -54,6 +56,13 @@ export default {
       removeItem(parent.children, node.id)
       removeNode(node.id)
     },
+    APPEND_CHILD (state, id, child) {
+      const node = state.nodeMap[id]
+      child.depth = node.depth + 1
+      child.parent = id
+      state.nodeMap[child.id] = child
+      node.children.push(child.id)
+    },
   },
   actions: {
     async INIT_STATE ({ commit }, { el, root }) {
@@ -71,6 +80,9 @@ export default {
     },
     async REMOVE_TOPIC ({ commit }, id) {
       commit('REMOVE_NODE', id)
+    },
+    async ADD_TOPIC ({ commit }, id) {
+      commit('APPEND_CHILD', id, createTopic())
     },
   },
 }

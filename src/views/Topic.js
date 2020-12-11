@@ -12,6 +12,6 @@ on('dblclick', (e, id) => {
   // dispatch('UPDAT_TOPIC', id, { text: { content: 'Hello World' } })
   // dispatch('UPDATE_ROOT', id)
   // const parentId = store.state.nodeMap[id].parent
-  dispatch('REMOVE_TOPIC', id)
+  dispatch('ADD_TOPIC', id)
   return false
 })

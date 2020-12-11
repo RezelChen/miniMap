@@ -38,6 +38,9 @@ const getTopic = (line) => {
 const isTopic = (topic) => topic.depth && topic.children
 const isBoundary = Array.isArray
 
+const DEFAULT_TITLE = 'New Topic'
+export const createTopic = () => { return { id: uuid1(), type: TOPIC, text: { content: DEFAULT_TITLE }, children: [] } }
+
 export default (str) => {
   uuid1.init()
   uuid2.init()
